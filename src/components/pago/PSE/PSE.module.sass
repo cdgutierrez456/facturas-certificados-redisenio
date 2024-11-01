@@ -1,0 +1,176 @@
+.Payment
+  width: 95%
+  &__title
+    background-color: white
+    color: $color-primary
+    font-size: 35px
+    margin: 0
+    padding: 2rem
+    border-top-right-radius: 20px
+    width: 100%
+  &__form
+    background-color: white
+    padding: 2rem
+    border-radius: 0 0 8px 8px 
+    width: 100%
+    display: flex
+    justify-content: space-around
+    align-items: center
+    flex-wrap: wrap
+  &__group
+    background-color: white
+    margin-bottom: 1.5rem
+    width: 40%
+    & label
+      display: block
+      font-size: 0.875rem
+      color: #1f2937
+      margin-bottom: 0.5rem
+    &_errorInput
+      width: 90%
+      padding: 0.75rem
+      font-size: 1rem
+      border: 1px solid red
+      border-radius: 4px
+      outline: none
+      color: #111827
+      &:focus 
+        border-color: #3b82f6
+    &_input 
+      width: 90%
+      padding: 0.75rem
+      font-size: 1rem
+      border: 1px solid #d3dae8
+      border-radius: 4px
+      outline: none
+      color: #111827
+      &:focus 
+        border-color: #3b82f6
+    &_doc
+      display: flex
+      align-items: center
+      border: 1px solid #d1d5db
+      border-radius: 8px
+      padding: 0.5rem
+      width: 92%
+      &_select
+        border: none
+        outline: none
+        padding-right: 0.5rem
+        background: none
+        color: #4b5563
+        font-size: 1rem
+        margin-right: 0.5rem
+      &_num
+        border: none !important
+        outline: none
+        flex: 1 /* Ocupa el espacio restante */
+        color: #4b5563
+        font-size: 1rem 
+      &:focus-within
+        border-color: #3b82f6  
+    &_errorDocument 
+      display: flex
+      align-items: center
+      border: 1px solid red
+      border-radius: 8px
+      padding: 0.5rem
+      width: 92%
+      &_select
+        border: none
+        outline: none
+        padding-right: 0.5rem
+        background: none
+        color: #4b5563
+        font-size: 1rem
+        margin-right: 0.5rem
+      &_num
+        border: none !important
+        outline: none
+        flex: 1 /* Ocupa el espacio restante */
+        color: #4b5563
+        font-size: 1rem 
+      &:focus-within
+        border-color: #3b82f6
+
+  &__phone
+    display: flex
+    align-items: center
+    width: 95%
+
+    & span 
+      padding: 0.75rem
+      font-size: 1rem
+      background-color: white
+      border: 1px solid #d3dae8
+      border-right: none
+      border-radius: 4px 0 0 4px
+      color: #6b7280
+      width: 20%
+      height: 18px
+
+    &_inputPhone 
+      width: 80%
+      height: 18px
+      padding: 0.75rem
+      font-size: 1rem
+      border: 1px solid #d3dae8
+      border-radius:0 4px 4px 0
+      border-left: none
+      outline: none
+      color: #111827
+      &:focus 
+        border-color: #3b82f6
+    &_errorPhone 
+      width: 80%
+      height: 18px
+      padding: 0.75rem
+      font-size: 1rem
+      border: 1px solid red
+      border-radius:0 4px 4px 0
+      border-left: none
+      outline: none
+      color: #111827
+      &:focus 
+        border-color: #3b82f6
+    
+  &__checkbox
+    display: flex
+    align-items: center
+    justify-content: flex-start
+    font-size: 0.875rem
+    color: #1f2937
+    width: 40%
+
+    & input 
+      margin-right: 0.5rem
+      width: 20%
+
+    & label 
+      cursor: pointer
+      width: 80%
+
+  &__button 
+    display: block
+    width: 40%
+    padding: 0.75rem
+    background-color: $color-secondary
+    color: $color-primary
+    font-size: 1rem
+    font-weight: bold
+    text-align: center
+    border: none
+    border-radius: 50px
+    cursor: pointer
+    transition: background-color 0.3s
+
+    &:hover
+      background-color: $color-primary
+      color: $color-secondary
+
+
+.errorCheckbox 
+  outline: 2px solid red // o el estilo que desees para el checkbox
+
+    
+  

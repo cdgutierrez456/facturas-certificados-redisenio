@@ -1,39 +1,13 @@
 "use client";
-import { FaEdit, FaTrash } from "react-icons/fa";
 import { useEffect, useState } from "react";
 import { useSearchParams } from "next/navigation";
-import styles from "./DescripcionP.module.sass";
-import { useRouter } from "next/navigation";
+import styles from "./Pago.module.sass";
 
-export const DescriptionP = () => {
-  const router = useRouter();
+export const Pago = () => {
   const [facturaData, setFacturaData] = useState<any[]>([]); // Array para almacenar los datos
-  const [isEditing, setIsEditing] = useState(false); // Para abrir o cerrar el modal
-  const [currentFactura, setCurrentFactura] = useState(null);
 
   const searchParams = useSearchParams();
   const dataLlegada = searchParams.get("data");
-
-  const handleEdit = (index: any) => {
-    setCurrentFactura(index);
-    setIsEditing(true);
-  };
-
-  const handleAdd = () => {
-    setCurrentFactura(null); // null indica que es una nueva factura
-    setIsEditing(true);
-  };
-
-  const handleDelete = (index: any) => {
-    const updatedData = facturaData.filter((_, i) => i !== index);
-    setFacturaData(updatedData);
-  };
-
-  const payHandler = () => {
-    router.push(
-      `/payment?data=${encodeURIComponent(JSON.stringify(facturaData))}`
-    );
-  }
 
   useEffect(() => {
     if (dataLlegada && typeof dataLlegada === "string") {
@@ -64,8 +38,6 @@ export const DescriptionP = () => {
             <th>Método de consulta</th>
             <th>Número de consulta</th>
             <th>Valor a pagar por factura</th>
-            <th>Editar</th>
-            <th>Eliminar</th>
           </tr>
         </thead>
         <tbody>
@@ -75,30 +47,12 @@ export const DescriptionP = () => {
               <td>{factura.method}</td>
               <td>{factura.value}</td>
               <td>$ {factura.payValue = 50000}</td>
-              <td>
-                <button onClick={() => handleEdit(index)}>
-                  <FaEdit />
-                </button>
-              </td>
-              <td>
-                <button onClick={() => handleDelete(index)}>
-                  <FaTrash />
-                </button>
-              </td>
             </tr>
           ))}
         </tbody>
       </table>
       <div className={styles.DescriptionP__total}>
         <strong>Total a pagar: </strong> ${totalPagar.toLocaleString('es-CO')} COP
-      </div>
-      <div className={styles.DescriptionP__actions}>
-        <button onClick={handleAdd} className={styles.DescriptionP__add}>
-          + Adicionar otra factura
-        </button>
-        <button className={styles.DescriptionP__pay} onClick={payHandler}>
-          Confirmar Pago
-        </button>
       </div>
     </section>
   );
