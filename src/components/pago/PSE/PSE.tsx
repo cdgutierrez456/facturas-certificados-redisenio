@@ -2,6 +2,7 @@
 import React, { useState } from "react";
 import styles from "./PSE.module.sass";
 import Swal from "sweetalert2";
+import {TransactionModal} from "../Modal/Modal";
 
 export const PSE = () => {
   const [formData, setFormData] = useState({
@@ -26,6 +27,18 @@ export const PSE = () => {
     phone: false,
     termsAccepted: false,
   });
+
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const transactionData = {
+    date: "19 / 02 / 2023",
+    amount: "$440.000",
+    paymentId: "15252dfdd",
+    paymentMethod: "PSE",
+    status: "APROBADO",
+    requestId: "125263asdsad",
+    email: "manugomez@hotmail.com",
+  };
 
   const handleChange = (e: any) => {
     const { name, value, type, checked } = e.target;
@@ -132,16 +145,36 @@ export const PSE = () => {
     if (valid) {
       // Si todo está correcto, muestra éxito
       Swal.fire({
-        title: "Formulario enviado",
-        text: "Tu formulario ha sido enviado con éxito.",
-        icon: "success",
-        confirmButtonText: "Aceptar",
+        title: "Enviando formulario...",
+        text: "Por favor espera",
+        allowOutsideClick: false,
+        didOpen: () => {
+          Swal.showLoading(); // Muestra el spinner
+        },
       });
 
-      // Puedes manejar el envío del formulario aquí, o limpiar los campos después del éxito
-      console.log("Form data:", formData);
+      setTimeout(() => {
+        Swal.fire({
+          title: "Formulario enviado",
+          text: "Tu formulario ha sido enviado con éxito.",
+          icon: "success",
+          confirmButtonText: "Aceptar",
+        })
+    
+        // Aquí puedes manejar el envío del formulario o limpiar los campos después del éxito
+        console.log("Form data:", formData)
+        openModal()
+      }, 5000) // 5 segundos de espera
     }
-  };
+  }
+
+  const openModal = () => {
+    setIsModalOpen(true);
+  }
+
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+  }
 
   return (
     <section className={styles.Payment}>
@@ -260,6 +293,11 @@ export const PSE = () => {
           Pagar
         </button>
       </form>
+      <TransactionModal
+        isOpen={isModalOpen}
+        onClose={handleCloseModal}
+        transaction={transactionData}
+      />
     </section>
   );
 };
