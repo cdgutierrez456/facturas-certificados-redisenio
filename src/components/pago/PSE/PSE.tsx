@@ -37,7 +37,7 @@ export const PSE = () => {
     paymentMethod: "PSE",
     status: "APROBADO",
     requestId: "125263asdsad",
-    email: "manugomez@hotmail.com",
+    email: formData.email,
   };
 
   const handleChange = (e: any) => {
@@ -149,9 +149,9 @@ export const PSE = () => {
         text: "Por favor espera",
         allowOutsideClick: false,
         didOpen: () => {
-          Swal.showLoading(); // Muestra el spinner
+          Swal.showLoading(null) // Muestra el spinner
         },
-      });
+      })
 
       setTimeout(() => {
         Swal.fire({
