@@ -1,6 +1,7 @@
 import { Pago } from "app/components/pago/Pago";
 import { PSE } from "app/components/pago/PSE";
 import styles from "./Payment.module.sass";
+export const dynamic = 'force-dynamic';
 
 export default function DescripcionPago(){
   return (
