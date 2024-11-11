@@ -65,7 +65,12 @@ export const ConsultaFactura = ({ setConsultationMethod, setInputValue, handleAd
             Agregar
           </button>
         </div>
-
+        
+        {selectedOption === "referencia"? <div className={styles.ConsultaF__barCode}>
+          <img src="/images/9185570.png" alt="codigo Barras" />
+          <p>(415)999999999999999(820)<span>12345678</span>(3900)9999999999(96)20200615</p>
+          <p>El numero de referencia lo encuentras en el codigo de barras entre los numeros (8020) y (3900)</p>
+          </div> :null}
         {/* Opción Número de Celular */}
         <div className={styles.ConsultaF__form__option}>
           <input
