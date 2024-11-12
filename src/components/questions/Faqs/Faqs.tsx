@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import { db } from 'app/services/firebase/serviciosFaqs'
 import { collection, query, onSnapshot } from 'firebase/firestore'
+import styles from './Faqs.module.sass'
 
 export const FAQs = () => {
   const [faqs, setFaqs] = useState([])
@@ -18,7 +19,7 @@ export const FAQs = () => {
   }, [])
 
   return (
-    <div className="faqs">
+    <div className={styles.faqs}>
       {faqs.map(faq => (
         <div key={faq.id} className="faq-item">
           <p><strong>Pregunta:</strong> {faq.question}</p>

@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { db } from 'app/services/firebase/serviciosFaqs';
 import { collection, addDoc } from 'firebase/firestore';
+import styles from './AdminF.module.sass'
 
 export const AdminPanel = () => {
   const [question, setQuestion] = useState('')
@@ -18,7 +19,7 @@ export const AdminPanel = () => {
   };
 
   return (
-    <div className="admin-panel">
+    <div className={styles.adminPanel}>
       <input 
         type="text" 
         placeholder="Pregunta" 
