@@ -14,7 +14,7 @@ export const Header = async () => {
               </Link>
             </li>
             <li>
-              <Link href="/questions">
+              <Link href="/faqs">
                 Preguntas frecuentes
               </Link>
             </li>

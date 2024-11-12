@@ -1,27 +1,43 @@
 .faqs
-  display: flex
-  flex-direction: column
-  align-items: center
-  gap: 1.5rem
-  padding: 2rem
-  max-width: 800px
+  width: 90%
   margin: 2rem auto
-  background-color: #f9f9f9
-  border-radius: 8px
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1)
+  font-family: Arial, sans-serif
+  color: #333
 
-  .faq-item
-    background-color: #fff
+  .title
+    font-size: 1.8rem
+    color: $color-primary
+    margin-bottom: 1.5rem
+    text-align: center
+
+  .faq_item
+    width: 90%
+    background: #f4f8fc
+    border-radius: 8px
+    margin-bottom: 1rem
     padding: 1rem
-    border: 1px solid #ddd
-    border-radius: 6px
-    width: 100%
-    box-sizing: border-box
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1)
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1)
+    cursor: pointer
+    transition: background 0.3s ease, transform 0.2s ease
 
-    p
+    &.expanded
+      background: #e0ecfa
+      transform: scale(1.02)
+
+    .question
+      display: flex
+      align-items: center
+      justify-content: space-between
       font-size: 1rem
-      margin-bottom: 0.5rem
-
-    strong
       font-weight: bold
+      color: #3366CC
+
+    .icon
+      font-size: 1.2rem
+      color: #555
+
+    .answer
+      font-size: 0.9rem
+      color: #555
+      margin-top: 0.5rem
+      line-height: 1.6

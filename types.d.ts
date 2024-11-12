@@ -3,6 +3,12 @@ interface ErrorPageProps {
     reset: () => void;
   }
 
+interface FAQ {
+    id: string;
+    question: string;
+    answer: string;
+  }
+
 interface InfConsult {
   operator: string;
   method: string;

@@ -1,13 +1,13 @@
-"use client";
-import { useEffect, useState } from "react";
-import { useSearchParams } from "next/navigation";
-import styles from "./Pago.module.sass";
+"use client"
+import { useEffect, useState } from "react"
+import { useSearchParams } from "next/navigation"
+import styles from "./Pago.module.sass"
 
 export const Pago = () => {
   const [facturaData, setFacturaData] = useState<any[]>([]); // Array para almacenar los datos
 
-  const searchParams = useSearchParams();
-  const dataLlegada = searchParams.get("data");
+  const searchParams = useSearchParams()
+  const dataLlegada = searchParams.get("data")
 
   useEffect(() => {
     if (dataLlegada && typeof dataLlegada === "string") {
