@@ -1,53 +1,118 @@
 .adminPanel
   display: flex
-  gap: 2rem
+  flex-direction: column
+  align-items: center
+  max-width: 600px
+  margin: 2rem auto
+  padding: 2rem
+  background-color: #ffffff  // Fondo blanco
+  border-radius: 8px
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1)
 
-  .editor
-    width: 50%
-    
-    textarea
-      width: 100%
-      height: 300px
-      padding: 1rem
-      font-size: 1rem
-      border: 1px solid #ccc
-    
-    button 
-      margin-top: 1rem
-      padding: 0.5rem 1rem
-      font-size: 1rem
-      cursor: pointer
-
-  .preview 
-    width: 50%
-
-    h3 
-      font-size: 1.5rem
-      margin-bottom: 1rem
-    
-    h1, h2, p 
-      margin: 0.5rem 0
-    
-    img 
-      max-width: 100%
-      height: auto
-
-  .postsList
+  input,
+  textarea
     width: 100%
+    padding: 0.8rem
+    margin: 0.5rem 0
+    border: 1px solid #ccc
+    border-radius: 4px
+    font-size: 1rem
+    background-color: #fff  // Fondo blanco para los campos
+    color: #333  // Color de texto oscuro para contraste
+
+  button
+    padding: 0.8rem 1.2rem
+    background-color: #0073e6
+    color: white
+    font-size: 1rem
+    border: none
+    border-radius: 4px
+    cursor: pointer
+    margin-top: 1rem
+
+    &:hover
+      background-color: #005bb5
+
+  .faq_item
+    width: 90%
+    background: #f4f8fc
+    border-radius: 8px
+    margin-bottom: 1rem
+    padding: 1rem
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1)
+    cursor: pointer
+    transition: background 0.3s ease, transform 0.2s ease
+
+  .preview
+    margin-top: 2rem
+    background-color: #ffffff  // Fondo blanco
+    padding: 1rem
+    border-radius: 6px
+    width: 100%
+    box-sizing: border-box
+    display: flex
+    justify-content: center
+    align-items: center
+    flex-direction: column
 
     h3
-      font-size: 1.2rem
-      margin-top: 1rem
+      font-size: 1.5rem
+      margin-bottom: 1rem
 
-    ul
-      list-style: none
-      padding: 0
-      
-      li
-        cursor: pointer
-        padding: 0.5rem 0
-        font-size: 1rem
-        color: #0070f3
-        
-        &:hover
-          text-decoration: underline
+  .postList
+    width: 100%
+    display: flex
+    flex-wrap: wrap
+    justify-content: space-between
+
+  .postCard
+    width: 100%
+    max-width: 400px
+    margin-bottom: 1.5rem
+    background: #fff  // Fondo blanco para las tarjetas
+    border-radius: 8px
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1)
+    overflow: hidden
+    display: flex
+    flex-direction: column
+
+  .postCardImage
+    width: 100%
+    height: 200px
+    object-fit: cover
+
+  .postCardContent
+    padding: 1rem
+    flex-grow: 1
+
+    h4
+      font-size: 1.2rem
+      font-weight: bold
+      margin-bottom: 0.5rem
+      color: #333  // Títulos en color oscuro para contraste
+
+    p
+      font-size: 1rem
+      margin-bottom: 1rem
+      color: #555  // Texto de párrafos en gris para suavizar
+
+    .formattedContent
+      margin-top: 1rem
+      font-size: 0.9rem
+
+  .cardActions
+    display: flex
+    justify-content: space-between
+    margin-top: 1rem
+
+  .cardActionButton
+    padding: 0.5rem 1rem
+    font-size: 0.9rem
+    background-color: #0073e6
+    color: white
+    border: none
+    border-radius: 4px
+    cursor: pointer
+
+    &:hover
+      background-color: #005bb5
