@@ -10,6 +10,7 @@ import {
   onSnapshot,
 } from "firebase/firestore";
 import styles from "./AdminBlogg.module.sass";
+import { PostList } from "app/components/blogg/PostCards";
 
 const AdminPanel = () => {
   const [content, setContent] = useState("");
@@ -23,7 +24,7 @@ const AdminPanel = () => {
   // Obtener todos los posts
   useEffect(() => {
     const postsCollection = collection(db, "posts");
-    
+
     const unsubscribe = onSnapshot(postsCollection, (querySnapshot) => {
       const postsData = querySnapshot.docs.map((doc) => ({
         id: doc.id,
@@ -186,77 +187,61 @@ const AdminPanel = () => {
   return (
     <div className={styles.adminPanel}>
       <h2>Admin Panel</h2>
+      <div className={styles.container}>
+        <form action="">
+          {/* Formulario para agregar/editar el post */}
+          <input
+            type="text"
+            placeholder="Image URI"
+            value={imgUri}
+            onChange={(e) => setImgUri(e.target.value)}
+          />
+          <input
+            type="text"
+            placeholder="Main Title"
+            value={mainTitle}
+            onChange={(e) => setMainTitle(e.target.value)}
+          />
+          <textarea
+            placeholder="Brief Description"
+            value={briefDescription}
+            onChange={(e) => setBriefDescription(e.target.value)}
+          />
+          <textarea
+            placeholder="Post Content"
+            value={content}
+            onChange={handleContentChange}
+          />
+          <button onClick={handleAddPost}>Add Post</button>
+        </form>
 
-      {/* Formulario para agregar/editar el post */}
-      <input
-        type="text"
-        placeholder="Image URI"
-        value={imgUri}
-        onChange={(e) => setImgUri(e.target.value)}
-      />
-      <input
-        type="text"
-        placeholder="Main Title"
-        value={mainTitle}
-        onChange={(e) => setMainTitle(e.target.value)}
-      />
-      <textarea
-        placeholder="Brief Description"
-        value={briefDescription}
-        onChange={(e) => setBriefDescription(e.target.value)}
-      />
-      <textarea
-        placeholder="Post Content"
-        value={content}
-        onChange={handleContentChange}
-      />
-      <button onClick={handleAddPost}>Add Post</button>
-
-      {/* Vista previa del post */}
-      <div className={styles.preview}>
-        <h3>Post Preview</h3>
-        <div className={styles.card}>
+        {/* Vista previa del post */}
+        <div className={styles.preview}>
+          <h3>Post Preview</h3>
           {imgUri && (
-            <img src={imgUri} alt="Post Image" className={styles.cardImage} />
+            <img
+              src={imgUri}
+              alt="Preview of Post"
+              className={styles.cardImage}
+            />
           )}
           <div className={styles.cardContent}>
-            <h4>{mainTitle || "Main Title"}</h4>
+            <h2>{mainTitle || "Main Title"}</h2>
             <p>{briefDescription || "Brief description of the post."}</p>
             <div
               className={styles.formattedContent}
               dangerouslySetInnerHTML={{
-                __html: formattedContent,
+                __html: formattedContent || "<p>Preview content here...</p>",
               }}
             />
           </div>
         </div>
       </div>
-
-      {/* Lista de publicaciones */}
-      <div className={styles.postList}>
-        <h3>Existing Posts</h3>
-        {posts.map((post) => (
-          <div key={post.id} className={styles.postCard}>
-            {post.imgUri && (
-              <img
-                src={post.imgUri}
-                alt="Post Image"
-                className={styles.postCardImage}
-              />
-            )}
-            <div className={styles.postCardContent}>
-              <h4>{post.mainTitle}</h4>
-              <p>{post.briefDescription}</p>
-              <div className={styles.cardActions}>
-                <button onClick={() => handleEditPost(post)}>Edit</button>
-                <button onClick={() => handleDeletePost(post.id)}>
-                  Delete
-                </button>
-              </div>
-            </div>
-          </div>
-        ))}
-      </div>
+      <PostList
+        posts={posts}
+        onEdit={handleEditPost}
+        onDelete={handleDeletePost}
+      />
     </div>
   );
 };

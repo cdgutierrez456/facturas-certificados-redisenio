@@ -2,16 +2,22 @@
   display: flex
   flex-direction: column
   align-items: center
-  max-width: 600px
+  width: 70%
   margin: 2rem auto
   padding: 2rem
   background-color: #ffffff  // Fondo blanco
   border-radius: 8px
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1)
 
-  input,
-  textarea
-    width: 100%
+  h2
+    color: $color-primary
+
+  form
+    margin-top: 2rem
+    padding: 1rem
+
+  input
+    width: 90%
     padding: 0.8rem
     margin: 0.5rem 0
     border: 1px solid #ccc
@@ -19,6 +25,17 @@
     font-size: 1rem
     background-color: #fff  // Fondo blanco para los campos
     color: #333  // Color de texto oscuro para contraste
+
+  textarea
+    width: 90%
+    padding: 0.8rem
+    margin: 0.5rem 0
+    border: 1px solid #ccc
+    border-radius: 4px
+    font-size: 1rem
+    background-color: #fff  // Fondo blanco para los campos
+    color: #333
+    height: 200px
 
   button
     padding: 0.8rem 1.2rem
@@ -48,7 +65,7 @@
     background-color: #ffffff  // Fondo blanco
     padding: 1rem
     border-radius: 6px
-    width: 100%
+    width: 45%
     box-sizing: border-box
     display: flex
     justify-content: center
@@ -58,6 +75,12 @@
     h3
       font-size: 1.5rem
       margin-bottom: 1rem
+      color: $color-primary
+
+    img
+      width: 100%
+      height: 150px
+      object-fit: cover
 
   .postList
     width: 100%
@@ -96,23 +119,17 @@
       margin-bottom: 1rem
       color: #555  // Texto de párrafos en gris para suavizar
 
-    .formattedContent
-      margin-top: 1rem
-      font-size: 0.9rem
+.formattedContent
+  margin-top: 1rem
+  font-size: 0.9rem
+  color: black
 
-  .cardActions
-    display: flex
-    justify-content: space-between
-    margin-top: 1rem
+.container
+  display: flex
+  justify-content: space-between
+  form
+    width: 45%
 
-  .cardActionButton
-    padding: 0.5rem 1rem
-    font-size: 0.9rem
-    background-color: #0073e6
-    color: white
-    border: none
-    border-radius: 4px
-    cursor: pointer
-
-    &:hover
-      background-color: #005bb5
+.cardContent
+  h4, p
+    color: black
