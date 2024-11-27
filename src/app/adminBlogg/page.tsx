@@ -13,7 +13,6 @@ import styles from "./AdminBlogg.module.sass";
 import { PostList } from "app/components/blogg/PostCards";
 
 const AdminPanel = () => {
-  const [content, setContent] = useState("");
   const [formattedContent, setFormattedContent] = useState<string>("");
   const [posts, setPosts] = useState<any[]>([]);
   const [imgUri, setImgUri] = useState("");
@@ -39,7 +38,7 @@ const AdminPanel = () => {
 
   const handleContentChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     const input = e.target.value;
-    setContent(input);
+    setFormattedContent(input);
     formatContent(input);
   };
 
@@ -113,8 +112,12 @@ const AdminPanel = () => {
   };
 
   const handleAddPost = async () => {
+    console.log(imgUri,
+      mainTitle,
+      briefDescription,
+      formattedContent,)
     try {
-      if (!mainTitle || !content || !briefDescription) {
+      if (!mainTitle || !formatContent || !briefDescription) {
         alert("Please fill in all the fields.");
         return;
       }
@@ -128,7 +131,6 @@ const AdminPanel = () => {
           imgUri,
           mainTitle,
           briefDescription,
-          content,
           formattedContent,
         });
       }
@@ -137,7 +139,6 @@ const AdminPanel = () => {
       setImgUri("");
       setMainTitle("");
       setBriefDescription("");
-      setContent("");
       setFormattedContent("");
       setEditingPostId(null); // Resetear el ID del post en edición
     } catch (error) {
@@ -152,17 +153,15 @@ const AdminPanel = () => {
         imgUri,
         mainTitle,
         briefDescription,
-        content,
         formattedContent,
       });
       // Después de actualizar el post, podemos limpiar los campos si es necesario
-      setImgUri("");
-      setMainTitle("");
-      setBriefDescription("");
-      setContent("");
-      setFormattedContent("");
+      setImgUri("")
+      setMainTitle("")
+      setBriefDescription("")
+      setFormattedContent("")
     } catch (error) {
-      console.error("Error updating document:", error);
+      console.error("Error updating document:", error)
     }
   };
 
@@ -176,13 +175,12 @@ const AdminPanel = () => {
   };
 
   const handleEditPost = (post: any) => {
-    setEditingPostId(post.id); // Establecer el ID del post en edición
-    setImgUri(post.imgUri);
-    setMainTitle(post.mainTitle);
-    setBriefDescription(post.briefDescription);
-    setContent(post.content);
-    setFormattedContent(post.formattedContent);
-  };
+    setEditingPostId(post.id) // Establecer el ID del post en edición
+    setImgUri(post.imgUri)
+    setMainTitle(post.mainTitle)
+    setBriefDescription(post.briefDescription)
+    setFormattedContent(post.formattedContent)
+  }
 
   return (
     <div className={styles.adminPanel}>
@@ -209,10 +207,10 @@ const AdminPanel = () => {
           />
           <textarea
             placeholder="Post Content"
-            value={content}
+            value={formattedContent}
             onChange={handleContentChange}
           />
-          <button onClick={handleAddPost}>Add Post</button>
+          <button type="button" onClick={handleAddPost}>Add Post</button>
         </form>
 
         {/* Vista previa del post */}

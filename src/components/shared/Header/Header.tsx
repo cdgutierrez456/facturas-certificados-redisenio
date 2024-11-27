@@ -19,7 +19,7 @@ export const Header = async () => {
               </Link>
             </li>
             <li>
-              <Link href="/blog">
+              <Link href="/blogg">
                 Blog
               </Link>
             </li>
