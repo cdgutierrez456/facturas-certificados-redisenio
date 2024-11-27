@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useParams } from "next/navigation";
 import { db } from "app/services/firebase/serviciosFaqs";
-import { doc, getDoc } from "firebase/firestore";
+import { collection, doc, getDoc } from "firebase/firestore";
 import styles from "./Post.module.sass";
 
 type Post = {
@@ -15,9 +15,10 @@ type Post = {
 };
 
 const PostPage = () => {
-  const { id } = useParams();
+  const params = useParams();
   const router = useRouter();
   const [post, setPost] = useState<Post | null>(null);
+  const id = Array.isArray(params?.id) ? params.id[0] : params.id;
 
   useEffect(() => {
     if (!id) return;
