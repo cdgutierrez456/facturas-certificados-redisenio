@@ -14,6 +14,7 @@ type Post = {
 
 const Posts = () => {
   const [posts, setPosts] = useState<Post[]>([]);
+  const [filter, setFilter] = useState<string>("");
   const router = useRouter();
 
   // Obtener todos los posts
@@ -32,9 +33,25 @@ const Posts = () => {
     return () => unsubscribe();
   }, []);
 
+  // Filtrar posts por el valor del filtro
+  const filteredPosts = posts.filter((post) =>
+    post.mainTitle.toLowerCase().includes(filter.toLowerCase())
+  );
+
   return (
     <div className={styles.posts}>
-      {posts.map((post) => (
+      {/* Input para el filtro */}
+      <div className={styles.filter}>
+        <input
+          type="text"
+          placeholder="Buscar por título..."
+          value={filter}
+          onChange={(e) => setFilter(e.target.value)} // Actualiza el estado del filtro
+          className={styles.filterInput}
+        />
+      </div>
+      <div className={styles.posts2}>
+      {filteredPosts.map((post) => (
         <div
           key={post.id}
           className={styles.card}
@@ -53,6 +70,7 @@ const Posts = () => {
           </div>
         </div>
       ))}
+      </div>
     </div>
   );
 };

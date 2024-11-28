@@ -1,11 +1,19 @@
 .posts
   display: flex
+  flex-direction: column
+  justify-content: center
+  gap: 2rem
+  width: 100%
+  padding-bottom: 5%
+  padding-top: 5%
+  background-color: #DCE0F2
+
+.posts2
+  display: flex
   flex-wrap: wrap
   justify-content: center
   gap: 2rem
   width: 100%
-  height: 100wh
-  padding: 2rem
   background-color: #DCE0F2
 
 .card
@@ -42,3 +50,18 @@
   p
     font-size: 1rem
     color: #666
+
+.filter
+  margin-bottom: 1rem
+  text-align: center
+
+.filterInput
+  width: 40%
+  padding: 0.5rem
+  font-size: 1rem
+  border: 1px solid #ccc
+  border-radius: 4px
+  outline: none
+
+  &:focus
+    border-color: #0073e6

@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useParams } from "next/navigation";
 import { db } from "app/services/firebase/serviciosFaqs";
-import { collection, doc, getDoc } from "firebase/firestore";
+import { doc, getDoc } from "firebase/firestore";
 import styles from "./Post.module.sass";
 
 type Post = {
@@ -40,17 +40,23 @@ const PostPage = () => {
 
   return (
     <div className={styles.post}>
-      {post.imgUri && (
-        <img src={post.imgUri} alt={post.mainTitle} className={styles.image} />
-      )}
-      <h1>{post.mainTitle}</h1>
-      <p>{post.briefDescription}</p>
-      <div
-        className={styles.content}
-        dangerouslySetInnerHTML={{ __html: post.formattedContent }}
-      />
+      <div className={styles.post2}>
+        {post.imgUri && (
+          <img
+            src={post.imgUri}
+            alt={post.mainTitle}
+            className={styles.image}
+          />
+        )}
+        <h1>{post.mainTitle}</h1>
+        <p>{post.briefDescription}</p>
+        <div
+          className={styles.content}
+          dangerouslySetInnerHTML={{ __html: post.formattedContent }}
+        />
+      </div>
     </div>
-  );
-};
+  )
+}
 
 export default PostPage;

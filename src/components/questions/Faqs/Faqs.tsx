@@ -6,6 +6,7 @@ import styles from './Faqs.module.sass';
 export const FAQs = () => {
   const [faqs, setFaqs] = useState<FAQ[]>([]);
   const [expanded, setExpanded] = useState<string | null>(null);
+  const [filter, setFilter] = useState<string>('')
 
   useEffect(() => {
     const q = query(collection(db, 'faqs'));
@@ -23,10 +24,26 @@ export const FAQs = () => {
     setExpanded(expanded === id ? null : id);
   };
 
+  // Filtrar preguntas basadas en el filtro
+  const filteredFaqs = faqs.filter((faq) =>
+    faq.question.toLowerCase().includes(filter.toLowerCase())
+  );
+
   return (
     <div className={styles.faqs}>
       
-      {faqs.map(faq => (
+      {/* Input para filtrar preguntas */}
+      <div className={styles.filter}>
+        <input
+          type="text"
+          placeholder="Buscar preguntas..."
+          value={filter}
+          onChange={(e) => setFilter(e.target.value)} // Actualizar el estado del filtro
+          className={styles.filterInput}
+        />
+      </div>
+
+      {filteredFaqs.map(faq => (
         <div
           key={faq.id}
           className={`${styles.faq_item} ${expanded === faq.id ? styles.expanded : ''}`}
