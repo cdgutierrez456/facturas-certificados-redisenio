@@ -20,7 +20,8 @@ interface ItemConsult{
   barcode: string;
   reference: string;
   method: string;
-  code_agreement: string
+  code_agreement: string;
+  code_bank: string
 }
 
 interface results {

@@ -1,7 +1,7 @@
 import { env } from "app/config/env";
 import { megaRedUrls } from "app/services/megaRed/urls";
 
-export const realizarConsulta = async (barcodigo:String, referencia:String, metodo:String, codigoA:String ) => {
+export const realizarConsulta = async (barcodigo:String, referencia:String, metodo:String, codigoA:String, codigoB:String ) => {
     
   try {
     const apiUrl = megaRedUrls.consult
@@ -19,7 +19,8 @@ export const realizarConsulta = async (barcodigo:String, referencia:String, meto
         barcode: barcodigo,
         reference: referencia,
         method: metodo,
-        code_agreement: codigoA
+        code_agreement: codigoA,
+        code_bank: codigoB
       }),
     });
 

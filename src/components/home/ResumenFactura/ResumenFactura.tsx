@@ -16,19 +16,19 @@ export const ResumenFactura = ({ data, onEdit, onDelete, onAdd }: any) => {
   };
 
   const operadoresManual = {
-    Claro: "1",
-    Movistar: "2",
-    Tigo: "3",
-    Virgin: "4",
-    Wom: "5",
+    Claro: "14",
+    Movistar: "17",
+    Tigo: "299",
+    Virgin: "383",
+    Wom: "3771",
   };
 
   const operadoresAut = {
-    Claro: "2",
-    Movistar: "3",
-    Tigo: "4",
-    Virgin: "5",
-    Wom: "6",
+    Claro: "7707175320010",
+    Movistar: "7707176960178",
+    Tigo: "7707316035001",
+    Virgin: "NA",
+    Wom: "7709998570573",
   };
 
   let createConsult = data.map((factura: InfConsult) => {
@@ -41,6 +41,7 @@ export const ResumenFactura = ({ data, onEdit, onDelete, onAdd }: any) => {
         factura.method == "reference"
           ? operadoresManual[operadorKey]
           : operadoresAut[operadorKey],
+      code_bank: "0"
     };
   });
 
@@ -54,7 +55,8 @@ export const ResumenFactura = ({ data, onEdit, onDelete, onAdd }: any) => {
           factura.barcode,
           factura.reference,
           factura.method,
-          factura.code_agreement
+          factura.code_agreement,
+          factura.code_bank,
         )
       );
 
