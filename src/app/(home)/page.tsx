@@ -6,12 +6,13 @@ import { ResumenFactura } from "app/components/home/ResumenFactura"
 import {ModalEditar} from "app/components/home/ModalEditar";
 
 export default function Home() {
-  const [selectedOperator, setSelectedOperator] = useState<string | null>(null);
-  const [consultationMethod, setConsultationMethod] = useState<string>("reference");
-  const [inputValue, setInputValue] = useState<string>("");
-  const [facturaData, setFacturaData] = useState<any[]>([]); // Array para almacenar los datos
-  const [isEditing, setIsEditing] = useState(false); // Para abrir o cerrar el modal
-  const [currentFactura, setCurrentFactura] = useState(null); // Factura a editar o agregar
+  const [selectedOperator, setSelectedOperator] = useState<string | null>(null)
+  const [consultationMethod, setConsultationMethod] = useState<string>("reference")
+  const [inputValue, setInputValue] = useState<string>("")
+  const [facturaData, setFacturaData] = useState<any[]>([]) // Array para almacenar los datos
+  const [isEditing, setIsEditing] = useState(false) // Para abrir o cerrar el modal
+  const [currentFactura, setCurrentFactura] = useState(null) // Factura a editar o agregar
+
 
   const handleSaveFactura = (updatedFactura: any) => {
     if (currentFactura != null) {
@@ -21,27 +22,27 @@ export default function Home() {
       );
 
       console.log(updatedData)
-      setFacturaData(updatedData);
+      setFacturaData(updatedData)
     } else {
       // Agrega una nueva factura si currentFactura es null
-      setFacturaData([...facturaData, updatedFactura]);
+      setFacturaData([...facturaData, updatedFactura])
     }
-    setIsEditing(false); // Cierra el modal después de guardar
-  };
+    setIsEditing(false) // Cierra el modal después de guardar
+  }
 
   const handleAddClick = () => {
     const newEntry = {
       operator: selectedOperator,
       method: consultationMethod,
       value: inputValue,
-    };
+    }
   
     // Agrega el nuevo objeto al array
-    setFacturaData((prevData) => [...prevData, newEntry]);
+    setFacturaData((prevData) => [...prevData, newEntry])
   
     // Limpia los valores después de agregar
-    setInputValue(""); // Limpia el input
-  };
+    setInputValue("") // Limpia el input
+  }
 
   const handleEdit = (index:any) => {
     setCurrentFactura(index);
@@ -61,12 +62,16 @@ export default function Home() {
 
   return (
     <main>
+      {facturaData.length == 0 ?
       <Operadores setSelectedOperator={setSelectedOperator} />
+      :null}
+      {facturaData.length == 0 ?
       <ConsultaFactura 
-        setConsultationMethod={setConsultationMethod} 
-        setInputValue={setInputValue} 
-        handleAddClick={handleAddClick}
+      setConsultationMethod={setConsultationMethod} 
+      setInputValue={setInputValue} 
+      handleAddClick={handleAddClick}
       />
+      :null}
       {facturaData.length > 0 ? <ResumenFactura data={facturaData} onEdit={handleEdit} 
         onDelete={handleDelete} 
         onAdd={handleAdd}/> : <br /> }
