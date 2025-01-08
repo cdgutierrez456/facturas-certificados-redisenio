@@ -64,13 +64,22 @@ export const ResumenFactura = ({ data, onEdit, onDelete, onAdd }: any) => {
       const resultados = await Promise.all(consultas);
 
       console.log("Resultados de todas las consultas:", resultados);
-      results.data = results.data.filter((item: any) => item !== undefined);
-      console.log(results);
+      results.data = resultados.filter((item: any) => item !== undefined);
+      console.log(results.data[0].data.data_pay.amount);
+
+      const mappedResponse = {
+        method : data[0].method,
+        operator : data[0].operator,
+        value : data[0].value,
+        amount: results.data[0].data.data_pay.amount // Asignamos el `amount` de la respuesta
+      }
+
+      data[0] = mappedResponse
+
     } catch (error) {
       console.error("Error en la ejecución de consultas:", error);
       results.error = error;
     } finally {
-      console.log(data)
       setIsLoading(false); // Desactiva el loader
       router.push(
         `/descripcion?data=${encodeURIComponent(JSON.stringify(data))}`

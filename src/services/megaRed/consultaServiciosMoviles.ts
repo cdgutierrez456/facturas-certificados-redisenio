@@ -1,26 +1,16 @@
-import { env } from "app/config/env";
-import { megaRedUrls } from "app/services/megaRed/urls";
-
-export const realizarConsulta = async (barcodigo:String, referencia:String, metodo:String, codigoA:String, codigoB:String ) => {
-    
+export const realizarConsulta = async (barcodigo: string, referencia: string, metodo: string, codigoA: string, codigoB: string) => {
   try {
-    const apiUrl = megaRedUrls.consult
-    const apiToken = "Bearer "+env.MEGARED_TOKEN
-    const version = env.MEGARED_VERSION
-
-    const response = await fetch(apiUrl, {
+    const response = await fetch("/api/proxy", {
       method: "POST",
       headers: {
-        v: version,
         "Content-Type": "application/json",
-        Authorization: apiToken,
       },
       body: JSON.stringify({
         barcode: barcodigo,
         reference: referencia,
         method: metodo,
         code_agreement: codigoA,
-        code_bank: codigoB
+        code_bank: codigoB,
       }),
     });
 
@@ -30,7 +20,7 @@ export const realizarConsulta = async (barcodigo:String, referencia:String, meto
 
     const data = await response.json();
     console.log("Respuesta:", data);
-    return data
+    return data;
   } catch (error) {
     console.error("Error:", error);
   }
