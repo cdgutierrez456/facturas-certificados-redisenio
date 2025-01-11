@@ -50,42 +50,50 @@ export const ResumenFactura = ({ data, onEdit, onDelete, onAdd }: any) => {
   const ejecutarConsultas = async () => {
     setIsLoading(true);
     try {
+      // Ejecuta todas las consultas
       const consultas = createConsult.map((factura: ItemConsult) =>
         realizarConsulta(
           factura.barcode,
           factura.reference,
           factura.method,
           factura.code_agreement,
-          factura.code_bank,
+          factura.code_bank
         )
       );
-
-      await delay(2000);
-      const resultados = await Promise.all(consultas);
-
+  
+      // Si necesitas manejar errores individualmente
+      const resultados = await Promise.allSettled(consultas);
+  
       console.log("Resultados de todas las consultas:", resultados);
-      results.data = resultados.filter((item: any) => item !== undefined);
-      console.log(results.data[0].data.data_pay.amount);
-
-      const mappedResponse = {
-        method : data[0].method,
-        operator : data[0].operator,
-        value : data[0].value,
-        amount: results.data[0].data.data_pay.amount // Asignamos el `amount` de la respuesta
-      }
-
-      data[0] = mappedResponse
-
+  
+      // Filtra solo las consultas exitosas
+      const datosExitosos = resultados
+        .filter((resultado) => resultado.status === "fulfilled")
+        .map((resultado: any) => resultado.value);
+  
+      results.data = datosExitosos;
+  
+      console.log("Datos exitosos:", results.data);
+  
+      // Mapea cada respuesta
+      const mappedResponses = datosExitosos.map((response, index) => ({
+        method: data[index].method,
+        operator: data[index].operator,
+        value: data[index].value,
+        amount: response.data.data_pay.amount, // Asignamos el `amount` de cada respuesta
+      }))
+  
+      console.log("Respuestas mapeadas:", mappedResponses);
+  
+      data = mappedResponses; // Actualiza los datos con las respuestas mapeadas
     } catch (error) {
       console.error("Error en la ejecución de consultas:", error);
       results.error = error;
     } finally {
       setIsLoading(false); // Desactiva el loader
-      router.push(
-        `/descripcion?data=${encodeURIComponent(JSON.stringify(data))}`
-      );
+      router.push(`/descripcion?data=${encodeURIComponent(JSON.stringify(data))}`);
     }
-  };
+  }
 
   const consultaHandler = async () => {
     await ejecutarConsultas();
