@@ -1,5 +1,5 @@
 import { env } from "app/config/env";
 
 export const megaRedUrls = {
-    consult:`${env.MEGARED_HOSTNAME}/pay_invoices/consult/`
+    consult:`https://appv2_api.megared.net.co/pay_invoices/consult/`
 }
