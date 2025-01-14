@@ -13,7 +13,7 @@ export async function POST(req) {
     const { barcode, reference, method, code_agreement, code_bank } = body;
 
     const apiUrl = megaRedUrls.consult; // URL al back de QA
-    const apiToken = "Bearer " + env.MEGARED_TOKEN;
+    const apiToken = "Bearer " + "c2337eca385cb3116b88c3451a86d18d05ba5a04";
     const version = env.MEGARED_VERSION;
 
     console.log("Preparando solicitud al backend de QA...");
