@@ -36,7 +36,7 @@ export const ResumenFactura = ({ data, onEdit, onDelete, onAdd }: any) => {
     return {
       barcode: factura.method == "reference" ? "" : factura.value,
       reference: factura.method == "reference" ? factura.value : "",
-      method: factura.method == "reference" ? "MANUAL" : "AUTOMATIC",
+      method: factura.method == "reference" ? "MANUAL" : "MANUAL",
       code_agreement:
         factura.method == "reference"
           ? operadoresManual[operadorKey]

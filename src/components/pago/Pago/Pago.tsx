@@ -27,7 +27,7 @@ export const Pago = () => {
     }
   }, []);
 
-  const totalPagar = facturaData.reduce((total, item) => total + item.payValue, 0);
+  const totalPagar = facturaData.reduce((total, item) => total + item.amount, 0);
 
   return (
     <section className={styles.DescriptionP}>
@@ -46,7 +46,7 @@ export const Pago = () => {
               <td>{factura.operator}</td>
               <td>{factura.method}</td>
               <td>{factura.value}</td>
-              <td>$ {factura.payValue = 50000}</td>
+              <td>$ {factura.amount}</td>
             </tr>
           ))}
         </tbody>

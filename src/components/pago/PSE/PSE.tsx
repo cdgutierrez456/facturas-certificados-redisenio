@@ -1,10 +1,22 @@
-"use client";
-import React, { useState } from "react";
-import styles from "./PSE.module.sass";
-import Swal from "sweetalert2";
-import {TransactionModal} from "../Modal/Modal";
+"use client"
+import React, { useState } from "react"
+import styles from "./PSE.module.sass"
+import Swal from "sweetalert2"
+import {TransactionModal} from "../Modal/Modal"
+import { consultarBancos, consultarLlave, realizarLoging } from "app/services/megaPagos/consultasMegaPagos"
 
 export const PSE = () => {
+  const results: results = {
+    data: "",
+    error: "",
+  }
+
+  const megaPagos: megaPagos = {
+    bearer: "",
+    bancos:[],
+    publicKey: ""
+  }
+
   const [formData, setFormData] = useState({
     name: "",
     tipoDoc: "CC",
@@ -15,7 +27,7 @@ export const PSE = () => {
     confirmEmail: "",
     phone: "",
     termsAccepted: false,
-  });
+  })
 
   const [errors, setErrors] = useState({
     name: false,
@@ -26,7 +38,7 @@ export const PSE = () => {
     confirmEmail: false,
     phone: false,
     termsAccepted: false,
-  });
+  })
 
   const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -38,7 +50,7 @@ export const PSE = () => {
     status: "APROBADO",
     requestId: "125263asdsad",
     email: formData.email,
-  };
+  }
 
   const handleChange = (e: any) => {
     const { name, value, type, checked } = e.target;
@@ -47,7 +59,7 @@ export const PSE = () => {
       [name]: type === "checkbox" ? checked : value,
     });
     setErrors({ ...errors, [name]: false });
-  };
+  }
 
   const handleSubmit = (e:any) => {
     e.preventDefault();
@@ -75,7 +87,7 @@ export const PSE = () => {
         text: "Los correos electrónicos no coinciden",
         icon: "error",
         confirmButtonText: "Aceptar",
-      });
+      })
     }
 
     // Validación de otros campos (puedes agregar más validaciones según sea necesario)
@@ -87,7 +99,7 @@ export const PSE = () => {
         text: "Campo Nombre sin Informacion",
         icon: "error",
         confirmButtonText: "Aceptar",
-      });
+      })
     }
     if (!formData.document) {
       newErrors.document = true;
@@ -137,7 +149,7 @@ export const PSE = () => {
         text: "Ingresa tu numero de celular",
         icon: "error",
         confirmButtonText: "Aceptar",
-      });
+      })
     }
 
     setErrors(newErrors); // Actualiza el estado de errores
@@ -163,6 +175,7 @@ export const PSE = () => {
     
         // Aquí puedes manejar el envío del formulario o limpiar los campos después del éxito
         console.log("Form data:", formData)
+
         openModal()
       }, 5000) // 5 segundos de espera
     }
@@ -174,6 +187,44 @@ export const PSE = () => {
 
   const handleCloseModal = () => {
     setIsModalOpen(false);
+  }
+
+  const ejecutarConsultas = async () => {
+    try {
+      // Ejecuta todas las consultas
+      const consulta = await realizarLoging()
+  
+      console.log("Resultados de todas las consultas:", consulta.data.token.accessToken)
+
+      results.data = consulta.data.token.accessToken
+
+      megaPagos.bearer = results.data
+
+      const banks = await consultarBancos(results.data)
+
+      console.log("bancks: " , banks)
+
+      results.data = banks.data
+      megaPagos.bancos = results.data
+
+      console.log(megaPagos.bancos)
+
+      const keys = await consultarLlave()
+
+      console.log("llave: " , keys.data.public_key)
+
+      results.data = keys.data.public_key
+      megaPagos.publicKey = results.data
+  
+    } catch (error) {
+      console.error("Error en la ejecución de consultas:", error);
+    } finally {
+      //llamar bancos
+    }
+  }
+
+  const consultaHandler = async () => {
+    await ejecutarConsultas();
   }
 
   return (
@@ -291,6 +342,10 @@ export const PSE = () => {
 
         <button type="submit" className={styles.Payment__button}>
           Pagar
+        </button>
+
+        <button onClick={consultaHandler} className={styles.Payment__button}>
+          Pagar 2
         </button>
       </form>
       <TransactionModal

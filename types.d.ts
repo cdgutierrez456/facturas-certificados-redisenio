@@ -27,4 +27,10 @@ interface ItemConsult{
 interface results {
   data: any;
   error: any;
-} 
+}
+
+interface megaPagos{
+  bearer: any;
+  bancos: any;
+  publicKey: any
+}

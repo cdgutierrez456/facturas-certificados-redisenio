@@ -1,4 +1,10 @@
-export const realizarConsulta = async (barcodigo: string, referencia: string, metodo: string, codigoA: string, codigoB: string) => {
+export const realizarConsulta = async (
+  barcodigo: string, 
+  referencia: string, 
+  metodo: string, 
+  codigoA: string, 
+  codigoB: string
+  ) => {
   try {
     const response = await fetch("/api/proxy", {
       method: "POST",
@@ -24,4 +30,4 @@ export const realizarConsulta = async (barcodigo: string, referencia: string, me
   } catch (error) {
     console.error("Error:", error);
   }
-};
+}
