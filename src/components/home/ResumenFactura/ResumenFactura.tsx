@@ -24,7 +24,7 @@ export const ResumenFactura = ({ data, onEdit, onDelete, onAdd }: any) => {
   };
 
   const operadoresAut = {
-    Claro: "7707175320010",
+    Claro: "14",
     Movistar: "7707176960178",
     Tigo: "7707316035001",
     Virgin: "NA",
@@ -35,7 +35,7 @@ export const ResumenFactura = ({ data, onEdit, onDelete, onAdd }: any) => {
     const operadorKey = factura.operator as keyof typeof operadoresManual;
     return {
       barcode: factura.method == "reference" ? "" : factura.value,
-      reference: factura.method == "reference" ? factura.value : "",
+      reference: factura.value,
       method: factura.method == "reference" ? "MANUAL" : "MANUAL",
       code_agreement:
         factura.method == "reference"

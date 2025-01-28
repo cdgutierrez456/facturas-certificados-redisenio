@@ -1,27 +1,33 @@
-"use client"
-import React, { useEffect, useState } from "react"
-import styles from "./PSE.module.sass"
-import Swal from "sweetalert2"
-import { TransactionModal } from "../Modal/Modal"
+"use client";
+import React, { useEffect, useState } from "react";
+import styles from "./PSE.module.sass";
+import Swal from "sweetalert2";
+import { TransactionModal } from "../Modal/Modal";
 import {
   consultarBancos,
   consultarLlave,
   realizarLoging,
-} from "app/services/megaPagos/consultasMegaPagos"
-import forge from "node-forge"
+  realizarPagoPSE,
+} from "app/services/megaPagos/consultasMegaPagos";
+import forge from "node-forge";
+import CryptoJS from "crypto-js";
 
 export const PSE = () => {
   const [resultado, setResultado] = useState<any | null>(null)
   const [error, setError] = useState<string | null>(null)
   const [megaPagos, setMegaPagos] = useState({
     bearer: "",
-    bancos: [{
-      financialInstitutionCode: "",
-      financialInstitutionName: "",
-    }],
+    bancos: [
+      {
+        financialInstitutionCode: "",
+        financialInstitutionName: "",
+      },
+    ],
     publicKey: "",
-  });
-  const [formType, setFormType] = useState<"natural" | "juridica" | "">("")
+  })
+  const [formType, setFormType] = useState<"natural" | "juridica" | "">(
+    "natural"
+  )
   const [formData, setFormData] = useState({
     tipoId: "",
     identificacion: "",
@@ -33,7 +39,7 @@ export const PSE = () => {
     nit: "",
     empresa: "",
     banco: "",
-    terminos: false
+    terminos: false,
   })
 
   const [errors, setErrors] = useState({
@@ -47,7 +53,7 @@ export const PSE = () => {
     nit: false,
     empresa: false,
     banco: false,
-    terminos: false
+    terminos: false,
   })
 
   const results: results = {
@@ -56,7 +62,7 @@ export const PSE = () => {
   }
 
   const [isModalOpen, setIsModalOpen] = useState(false);
-  
+
   const transactionData = {
     date: "19 / 02 / 2023",
     amount: "$440.000",
@@ -64,10 +70,10 @@ export const PSE = () => {
     paymentMethod: "PSE",
     status: "APROBADO",
     requestId: "125263asdsad",
-    email: "some@loqueseañero",
+    email: "some@hotmail",
   }
 
-  const handleSubmit = (e:any) => {
+  const handleSubmit = async (e: any) => {
     e.preventDefault();
     let valid = true;
     const newErrors = { ...errors };
@@ -93,7 +99,7 @@ export const PSE = () => {
         text: "Los correos electrónicos no coinciden",
         icon: "error",
         confirmButtonText: "Aceptar",
-      })
+      });
     }
 
     // Validación de otros campos (puedes agregar más validaciones según sea necesario)
@@ -105,7 +111,7 @@ export const PSE = () => {
         text: "Campo Nombre sin Informacion",
         icon: "error",
         confirmButtonText: "Aceptar",
-      })
+      });
     }
     if (!formData.identificacion) {
       newErrors.identificacion = true;
@@ -136,7 +142,7 @@ export const PSE = () => {
         text: "Ingresa tu numero de celular",
         icon: "error",
         confirmButtonText: "Aceptar",
-      })
+      });
     }
 
     setErrors(newErrors); // Actualiza el estado de errores
@@ -148,9 +154,13 @@ export const PSE = () => {
         text: "Por favor espera",
         allowOutsideClick: false,
         didOpen: () => {
-          Swal.showLoading(null) // Muestra el spinner
+          Swal.showLoading(null); // Muestra el spinner
         },
-      })
+      });
+
+      const resultadoEncriptado = await manejarEncriptacion();
+
+      await crearPago(resultadoEncriptado);
 
       setTimeout(() => {
         Swal.fire({
@@ -158,53 +168,62 @@ export const PSE = () => {
           text: "Tu formulario ha sido enviado con éxito.",
           icon: "success",
           confirmButtonText: "Aceptar",
-        })
-    
-        // Aquí puedes manejar el envío del formulario o limpiar los campos después del éxito
-        console.log("Form data:", formData)
+        });
 
-        openModal()
-      }, 5000) // 5 segundos de espera
+        // Aquí puedes manejar el envío del formulario o limpiar los campos después del éxito
+        console.log("Form data:", formData);
+
+        openModal();
+      }, 5000); // 5 segundos de espera
     }
   }
 
   const openModal = () => {
     setIsModalOpen(true);
-  };
+  }
 
   const handleCloseModal = () => {
     setIsModalOpen(false);
-  };
-  
+  }
+
+  const crearPago = async (resultadoEncriptado: any) => {
+    console.log("PAGO..............1", megaPagos.bearer);
+    console.log("PAGO..............2", resultado);
+    const pago = await realizarPagoPSE(megaPagos.bearer, resultadoEncriptado);
+    console.log("PAGO..............", pago);
+  }
+
   const ejecutarConsultas = async () => {
     try {
       // Ejecuta todas las consultas
-      const consulta = await realizarLoging()
-  
-      console.log("Resultados de todas las consultas:", consulta.data.token.accessToken)
+      const consulta = await realizarLoging();
 
-      results.data = consulta.data.token.accessToken
+      console.log(
+        "Resultados de todas las consultas:",
+        consulta.data.token.accessToken
+      );
 
-      megaPagos.bearer = results.data
+      results.data = consulta.data.token.accessToken;
 
-      const banks = await consultarBancos(results.data)
+      megaPagos.bearer = results.data;
 
-      console.log("bancks: " , banks)
+      const banks = await consultarBancos(results.data);
 
-      results.data = banks.data
-      megaPagos.bancos = results.data
+      console.log("banks: ", banks);
 
-      console.log(megaPagos.bancos)
+      results.data = banks.data;
+      megaPagos.bancos = results.data;
 
-      const keys = await consultarLlave()
+      console.log(megaPagos.bancos);
 
-      console.log("llave: " , keys.data.public_key)
+      const keys = await consultarLlave();
 
-      results.data = keys.data.public_key
-      megaPagos.publicKey = results.data
+      console.log("llave: ", keys.data.public_key);
 
-      setMegaPagos(megaPagos)
-  
+      results.data = keys.data.public_key;
+      megaPagos.publicKey = results.data;
+
+      setMegaPagos(megaPagos);
     } catch (error) {
       console.error("Error en la ejecución de consultas:", error);
     } finally {
@@ -236,94 +255,98 @@ export const PSE = () => {
     return forge.util.encode64(encryptedKey); // Codificar el resultado en Base64
   };
 
+  // Función para codificar en Base64
+  const codificarBase64 = (data: any): string => {
+    const jsonString = JSON.stringify(data); // Convertir a cadena JSON
+    const wordArray = CryptoJS.enc.Utf8.parse(jsonString); // Crear un WordArray desde UTF-8
+    return CryptoJS.enc.Base64.stringify(wordArray); // Convertir a Base64
+  }
+
+  const construirBodyBase64 = (encryptedKey: string, encryptedData: string): string => {
+    const resultadoEncriptado = { encryptedKey, encryptedData };
+    return codificarBase64(resultadoEncriptado);
+  };
+
   const manejarEncriptacion = async () => {
     try {
       // Paso 1: Obtener la llave pública desde la API
-      const publicKeyBase64 = megaPagos.publicKey;
+      const publicKeyBase64 = megaPagos.publicKey
 
-      // Paso 2: Generar una llave aleatoria
-      const randomKey = generarLlaveAleatoria();
+      // Paso 2: Generar una llave aleatoria de 256 bits
+      const randomKey = generarLlaveAleatoria()
 
       // Paso 3: Datos de ejemplo para encriptar
       const data = {
         extraData: {
-          idusuario: "1383",
+          idusuario: "recaudodefacturas@gmail.com",
           idtipooperacion: 5,
-          idtiposolicitud: 5,
+          idtiposolicitud: 6,
           linkcode: "-1",
           solicitudenvio: "N",
-          externalurl: "http://linkcomercio.com",
+          externalurl: "https://pagos-rose.vercel.app/",
         },
         step1: {
-          name: "Producto",
-          description: "Producto Nuevo",
-          value: 6000,
+          name: "Servicios Moviles",
+          description: "Pago Servicios Moviles",
+          value: 10000.58,
           in_stock: true,
           idimpuesto: 21,
           shipping_cost: 0,
-          requested_units: 2,
-          total_amount: 12000,
+          requested_units: 1,
+          total_amount: 10000.58,
           payment_amount: 0,
         },
         step3: {
           terms_and_conditions: true,
           payment_method: "pse",
-          biller_name: "Pedro Perez",
-          biller_email: "pepe@mail.com",
-          biller_address: "calle 1",
+          biller_name: formData.nombre,
+          biller_email: formData.email,
+          biller_address: formData.direccion,
           payment_info: {
-            pse_bank: "1022",
+            pse_bank: formData.banco,
             pse_person_type: "person",
-            pse_document: "1053859249",
-            pse_name: "Pedro Perez",
-            pse_phone: "321456789",
-            pse_document_type: "CedulaDeCiudadania",
+            pse_document: formData.identificacion,
+            pse_name: formData.nombre,
+            pse_phone: formData.celular,
+            pse_document_type: formData.tipoId,
           },
         },
-      };
+      }
 
       // Paso 4: Encriptar los datos con AES
-      const encryptedData = encriptarAES(data, randomKey);
+      const encryptedData = encriptarAES(data, randomKey)
 
       // Paso 5: Encriptar la llave aleatoria con RSA
-      const encryptedKey = encriptarRSA(randomKey, publicKeyBase64);
+      const encryptedKey = encriptarRSA(randomKey, publicKeyBase64)
 
       // Construir el objeto final
       const resultadoEncriptado = {
         encryptedKey,
         encryptedData,
-      };
+      }
+
+      // Paso 6: Codificar el resultado en Base64
+      const resultadoBase64 = construirBodyBase64(resultadoEncriptado.encryptedKey, resultadoEncriptado.encryptedData)
 
       // Actualizar el estado con el resultado
-      setResultado(resultadoEncriptado);
-      setError(null);
+      setResultado(resultadoBase64)
+      setError(null)
+      return resultadoBase64
     } catch (err: any) {
-      console.error("Error en el proceso de encriptación:", err);
-      setError(err.message);
+      console.error("Error en el proceso de encriptación:", err)
+      setError(err.message)
     }
-  };
-
-  const bankOptions = [
-    {
-      financialInstitutionCode: "0",
-      financialInstitutionName: "A continuación seleccione su banco",
-    },
-    {
-      financialInstitutionCode: "1815",
-      financialInstitutionName: "ALIANZA FIDUCIARIA",
-    },
-    // Agrega más bancos aquí
-  ]
+  }
 
   const handleInputChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
   ) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
-  }
+  };
 
-  const clearForm = () => setFormData(
-    {
+  const clearForm = () =>
+    setFormData({
       tipoId: "0",
       identificacion: "0",
       nombre: "0",
@@ -334,10 +357,8 @@ export const PSE = () => {
       nit: "0",
       empresa: "",
       banco: "",
-      terminos: false
-    }
-  )
-
+      terminos: false,
+    });
 
   return (
     <section className={styles.Payment}>
@@ -348,19 +369,16 @@ export const PSE = () => {
           <select
             name="formType"
             value={formType}
-            onChange={(e) =>{
-              setFormType(e.target.value as "natural" | "juridica")
-              clearForm()
-            
-            }
-            }
+            onChange={(e) => {
+              setFormType(e.target.value as "natural" | "juridica");
+              clearForm();
+            }}
             className={
               errors.email
                 ? styles.Payment__group_errorInput
                 : styles.Payment__group_input
             }
           >
-            <option value="">Seleccione</option>
             <option value="natural">Persona Natural</option>
             <option value="juridica">Persona Jurídica</option>
           </select>
@@ -450,19 +468,19 @@ export const PSE = () => {
 
             <div className={styles.Payment__group}>
               <label>Direccion</label>
-          
-                <input
-                  type="text"
-                  name="direccion"
-                  value={formData.direccion}
-                  onChange={handleInputChange}
-                  placeholder="Ingresar dígitos"
-                  className={
-                    errors.confirmEmail
+
+              <input
+                type="text"
+                name="direccion"
+                value={formData.direccion}
+                onChange={handleInputChange}
+                placeholder="Ingresar dígitos"
+                className={
+                  errors.confirmEmail
                     ? styles.Payment__group_errorInput
                     : styles.Payment__group_input
-                  }
-                />
+                }
+              />
             </div>
 
             <div className={styles.Payment__group}>
@@ -509,8 +527,7 @@ export const PSE = () => {
                     : styles.Payment__group_input
                 }
               >
-                {
-                megaPagos.bancos.map((bank) => (
+                {megaPagos.bancos.map((bank) => (
                   <option
                     key={bank.financialInstitutionCode}
                     value={bank.financialInstitutionCode}
@@ -570,7 +587,7 @@ export const PSE = () => {
                 }
               />
             </div>
-            
+
             <div className={styles.Payment__group}>
               <label>Celular</label>
               <div className={styles.Payment__phone}>
@@ -592,19 +609,19 @@ export const PSE = () => {
 
             <div className={styles.Payment__group}>
               <label>Direccion</label>
-          
-                <input
-                  type="text"
-                  name="direccion"
-                  value={formData.direccion}
-                  onChange={handleInputChange}
-                  placeholder="Ingresar dígitos"
-                  className={
-                    errors.confirmEmail
+
+              <input
+                type="text"
+                name="direccion"
+                value={formData.direccion}
+                onChange={handleInputChange}
+                placeholder="Ingresar dígitos"
+                className={
+                  errors.confirmEmail
                     ? styles.Payment__group_errorInput
                     : styles.Payment__group_input
-                  }
-                />
+                }
+              />
             </div>
 
             <div className={styles.Payment__group}>
@@ -651,7 +668,7 @@ export const PSE = () => {
                     : styles.Payment__group_input
                 }
               >
-                {bankOptions.map((bank) => (
+                {megaPagos.bancos.map((bank) => (
                   <option
                     key={bank.financialInstitutionCode}
                     value={bank.financialInstitutionCode}
@@ -690,5 +707,5 @@ export const PSE = () => {
         transaction={transactionData}
       />
     </section>
-  )
-}
+  );
+};
