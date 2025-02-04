@@ -10,7 +10,6 @@ import {
   realizarPagoPSE,
 } from "app/services/megaPagos/consultasMegaPagos";
 import forge from "node-forge";
-import CryptoJS from "crypto-js";
 
 export const PSE = () => {
   const [resultado, setResultado] = useState<any | null>(null)
@@ -187,8 +186,8 @@ export const PSE = () => {
   }
 
   const crearPago = async (resultadoEncriptado: any) => {
-    console.log("PAGO..............1", megaPagos.bearer);
-    console.log("PAGO..............2", resultado);
+    console.log("PAGO..............1 ", megaPagos.bearer)
+    console.log("PAGO..............2 ", resultadoEncriptado)
     const pago = await realizarPagoPSE(megaPagos.bearer, resultadoEncriptado);
     console.log("PAGO..............", pago);
   }
@@ -238,42 +237,51 @@ export const PSE = () => {
 
   // Función para generar una llave aleatoria
   const generarLlaveAleatoria = (): string => {
-    return CryptoJS.lib.WordArray.random(32).toString(CryptoJS.enc.Base64); // Genera una llave aleatoria de 256 bits
-  };
+    return forge.random.getBytesSync(32) // se usa plana
+  }
 
   // Función para encriptar con AES
-  const encriptarAES = (data: any, key: string): string => {
-    return CryptoJS.AES.encrypt(JSON.stringify(data), key).toString();
-  };
+  const encriptarAES = (value: any, key: string): string => {
+    const keyBytes = forge.util.createBuffer(key)
+    // Generate a random IV
+    const iv = forge.random.getBytesSync(16)
+    // Create a cipher object
+    const cipherObject = forge.cipher.createCipher('AES-CBC', keyBytes)
+
+    cipherObject.start({ iv: iv })
+    cipherObject.update(forge.util.createBuffer(value, 'utf8'))
+    cipherObject.finish()
+  
+    const ciphertext = cipherObject.output.getBytes()
+    const ivBase64 = forge.util.encode64(iv)
+    const ciphertextBase64 = forge.util.encode64(ciphertext)
+
+  return forge.util.encode64(JSON.stringify({ iv: ivBase64, value: ciphertextBase64 }))
+  }
 
   // Función para encriptar la llave aleatoria con la llave pública usando RSA
   const encriptarRSA = (key: string, publicKeyBase64: string): string => {
-    const publicKeyPem = forge.util.decode64(publicKeyBase64); // Decodificar de Base64 a PEM
-    const publicKey = forge.pki.publicKeyFromPem(publicKeyPem); // Crear la llave pública RSA
+    const publicKey = forge.pki.publicKeyFromPem(publicKeyBase64); // Crear la llave pública RSA
 
-    const encryptedKey = publicKey.encrypt(key, "RSA-OAEP"); // Encriptar con RSA-OAEP
-    return forge.util.encode64(encryptedKey); // Codificar el resultado en Base64
-  };
-
-  // Función para codificar en Base64
-  const codificarBase64 = (data: any): string => {
-    const jsonString = JSON.stringify(data); // Convertir a cadena JSON
-    const wordArray = CryptoJS.enc.Utf8.parse(jsonString); // Crear un WordArray desde UTF-8
-    return CryptoJS.enc.Base64.stringify(wordArray); // Convertir a Base64
+    const encryptedKey = publicKey.encrypt(key, "RSA-OAEP", {
+      md: forge.md.sha256.create(),
+      mgf1: {
+      md: forge.md.sha1.create()
+      }
+      }) // Encriptar con RSA-OAEP
+    return forge.util.encode64(encryptedKey)
   }
-
-  const construirBodyBase64 = (encryptedKey: string, encryptedData: string): string => {
-    const resultadoEncriptado = { encryptedKey, encryptedData };
-    return codificarBase64(resultadoEncriptado);
-  };
 
   const manejarEncriptacion = async () => {
     try {
       // Paso 1: Obtener la llave pública desde la API
       const publicKeyBase64 = megaPagos.publicKey
-
+      console.log("Publica ñero", publicKeyBase64)
+      const derBytes = Buffer.from(publicKeyBase64, 'base64').toString('ascii')
+      console.log("Publica decode ", derBytes)
       // Paso 2: Generar una llave aleatoria de 256 bits
       const randomKey = generarLlaveAleatoria()
+      console.log("ramdomKey ", randomKey)
 
       // Paso 3: Datos de ejemplo para encriptar
       const data = {
@@ -313,11 +321,15 @@ export const PSE = () => {
         },
       }
 
+      const dataString = JSON.stringify(data)
+
       // Paso 4: Encriptar los datos con AES
-      const encryptedData = encriptarAES(data, randomKey)
+      const encryptedData = encriptarAES(dataString, randomKey)
+      console.log("data encriptada", encryptedData)
 
       // Paso 5: Encriptar la llave aleatoria con RSA
-      const encryptedKey = encriptarRSA(randomKey, publicKeyBase64)
+      const encryptedKey = encriptarRSA(randomKey, derBytes)
+      console.log("Key encriptada", encryptedKey)
 
       // Construir el objeto final
       const resultadoEncriptado = {
@@ -326,7 +338,7 @@ export const PSE = () => {
       }
 
       // Paso 6: Codificar el resultado en Base64
-      const resultadoBase64 = construirBodyBase64(resultadoEncriptado.encryptedKey, resultadoEncriptado.encryptedData)
+      const resultadoBase64 = forge.util.encode64(JSON.stringify(resultadoEncriptado))
 
       // Actualizar el estado con el resultado
       setResultado(resultadoBase64)

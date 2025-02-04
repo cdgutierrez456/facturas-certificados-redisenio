@@ -83,13 +83,16 @@ export const realizarLoging = async (
     token: string, 
     data: string
     ) => {
+      console.log("data " + data)
     try {
+      const bodyJSON = JSON.stringify({ data });
+      console.log("bdJ " + bodyJSON)
       const response = await fetch("/api/proxyPSE", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
           Authorization: "Bearer " + token
-        },body: data,
+        },body: bodyJSON
       })
   
       if (!response.ok) {
