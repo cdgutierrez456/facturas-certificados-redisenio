@@ -12,8 +12,8 @@ import {
 import forge from "node-forge";
 
 export const PSE = () => {
-  const [resultado, setResultado] = useState<any | null>(null)
-  const [error, setError] = useState<string | null>(null)
+  const [resultado, setResultado] = useState<any | null>(null);
+  const [error, setError] = useState<string | null>(null);
   const [megaPagos, setMegaPagos] = useState({
     bearer: "",
     bancos: [
@@ -23,10 +23,14 @@ export const PSE = () => {
       },
     ],
     publicKey: "",
-  })
+    idCliente: "",
+    codeTrazabilidad: "",
+    pseURL:"",
+    tansactionId:""
+  });
   const [formType, setFormType] = useState<"natural" | "juridica" | "">(
     "natural"
-  )
+  );
   const [formData, setFormData] = useState({
     tipoId: "",
     identificacion: "",
@@ -39,7 +43,7 @@ export const PSE = () => {
     empresa: "",
     banco: "",
     terminos: false,
-  })
+  });
 
   const [errors, setErrors] = useState({
     tipoId: false,
@@ -53,12 +57,12 @@ export const PSE = () => {
     empresa: false,
     banco: false,
     terminos: false,
-  })
+  });
 
   const results: results = {
     data: "",
     error: "",
-  }
+  };
 
   const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -70,7 +74,7 @@ export const PSE = () => {
     status: "APROBADO",
     requestId: "125263asdsad",
     email: "some@hotmail",
-  }
+  };
 
   const handleSubmit = async (e: any) => {
     e.preventDefault();
@@ -175,21 +179,26 @@ export const PSE = () => {
         openModal();
       }, 5000); // 5 segundos de espera
     }
-  }
+  };
 
   const openModal = () => {
     setIsModalOpen(true);
-  }
+  };
 
   const handleCloseModal = () => {
     setIsModalOpen(false);
   }
 
   const crearPago = async (resultadoEncriptado: any) => {
-    console.log("PAGO..............1 ", megaPagos.bearer)
-    console.log("PAGO..............2 ", resultadoEncriptado)
-    const pago = await realizarPagoPSE(megaPagos.bearer, resultadoEncriptado);
-    console.log("PAGO..............", pago);
+    const pago = await realizarPagoPSE(megaPagos.bearer, resultadoEncriptado)
+    megaPagos.codeTrazabilidad = pago.data.trazabilityCode
+    megaPagos.tansactionId = pago.data.transactionId
+    megaPagos.pseURL = pago.data.pseURL
+
+    setMegaPagos(megaPagos)
+
+    window.open(megaPagos.pseURL, "_blank", "width=800,height=600,scrollbars=yes,resizable=yes");
+
   }
 
   const ejecutarConsultas = async () => {
@@ -197,27 +206,17 @@ export const PSE = () => {
       // Ejecuta todas las consultas
       const consulta = await realizarLoging();
 
-      console.log(
-        "Resultados de todas las consultas:",
-        consulta.data.token.accessToken
-      );
-
       results.data = consulta.data.token.accessToken;
 
       megaPagos.bearer = results.data;
+      megaPagos.idCliente = consulta.data.comercio.idusuario;
 
       const banks = await consultarBancos(results.data);
-
-      console.log("banks: ", banks);
 
       results.data = banks.data;
       megaPagos.bancos = results.data;
 
-      console.log(megaPagos.bancos);
-
       const keys = await consultarLlave();
-
-      console.log("llave: ", keys.data.public_key);
 
       results.data = keys.data.public_key;
       megaPagos.publicKey = results.data;
@@ -232,31 +231,33 @@ export const PSE = () => {
 
   // Ejecutar la función solo una vez al montar el componente
   useEffect(() => {
-    ejecutarConsultas();
+    ejecutarConsultas()
   }, []); // Array vacío asegura que se ejecuta solo una vez
 
   // Función para generar una llave aleatoria
   const generarLlaveAleatoria = (): string => {
-    return forge.random.getBytesSync(32) // se usa plana
+    return forge.random.getBytesSync(32); // se usa plana
   }
 
   // Función para encriptar con AES
   const encriptarAES = (value: any, key: string): string => {
-    const keyBytes = forge.util.createBuffer(key)
+    const keyBytes = forge.util.createBuffer(key);
     // Generate a random IV
-    const iv = forge.random.getBytesSync(16)
+    const iv = forge.random.getBytesSync(16);
     // Create a cipher object
-    const cipherObject = forge.cipher.createCipher('AES-CBC', keyBytes)
+    const cipherObject = forge.cipher.createCipher("AES-CBC", keyBytes);
 
-    cipherObject.start({ iv: iv })
-    cipherObject.update(forge.util.createBuffer(value, 'utf8'))
-    cipherObject.finish()
-  
-    const ciphertext = cipherObject.output.getBytes()
-    const ivBase64 = forge.util.encode64(iv)
-    const ciphertextBase64 = forge.util.encode64(ciphertext)
+    cipherObject.start({ iv: iv });
+    cipherObject.update(forge.util.createBuffer(value, "utf8"));
+    cipherObject.finish();
 
-  return forge.util.encode64(JSON.stringify({ iv: ivBase64, value: ciphertextBase64 }))
+    const ciphertext = cipherObject.output.getBytes();
+    const ivBase64 = forge.util.encode64(iv);
+    const ciphertextBase64 = forge.util.encode64(ciphertext);
+
+    return forge.util.encode64(
+      JSON.stringify({ iv: ivBase64, value: ciphertextBase64 })
+    );
   }
 
   // Función para encriptar la llave aleatoria con la llave pública usando RSA
@@ -264,72 +265,72 @@ export const PSE = () => {
     const publicKey = forge.pki.publicKeyFromPem(publicKeyBase64); // Crear la llave pública RSA
 
     const encryptedKey = publicKey.encrypt(key, "RSA-OAEP", {
-      md: forge.md.sha256.create(),
+      md: forge.md.sha1.create(),
       mgf1: {
-      md: forge.md.sha1.create()
-      }
-      }) // Encriptar con RSA-OAEP
-    return forge.util.encode64(encryptedKey)
+        md: forge.md.sha1.create(),
+      },
+    }); // Encriptar con RSA-OAEP
+    return forge.util.encode64(encryptedKey);
   }
 
   const manejarEncriptacion = async () => {
     try {
       // Paso 1: Obtener la llave pública desde la API
-      const publicKeyBase64 = megaPagos.publicKey
-      console.log("Publica ñero", publicKeyBase64)
-      const derBytes = Buffer.from(publicKeyBase64, 'base64').toString('ascii')
-      console.log("Publica decode ", derBytes)
+      const publicKeyBase64 = megaPagos.publicKey;
+      const derBytes = Buffer.from(publicKeyBase64, "base64").toString("ascii");
+
       // Paso 2: Generar una llave aleatoria de 256 bits
-      const randomKey = generarLlaveAleatoria()
-      console.log("ramdomKey ", randomKey)
+      const randomKey = generarLlaveAleatoria();
 
       // Paso 3: Datos de ejemplo para encriptar
       const data = {
-        extraData: {
-          idusuario: "recaudodefacturas@gmail.com",
-          idtipooperacion: 5,
-          idtiposolicitud: 6,
-          linkcode: "-1",
-          solicitudenvio: "N",
-          externalurl: "https://pagos-rose.vercel.app/",
-        },
-        step1: {
-          name: "Servicios Moviles",
-          description: "Pago Servicios Moviles",
-          value: 10000.58,
-          in_stock: true,
-          idimpuesto: 21,
-          shipping_cost: 0,
-          requested_units: 1,
-          total_amount: 10000.58,
-          payment_amount: 0,
-        },
-        step3: {
-          terms_and_conditions: true,
-          payment_method: "pse",
-          biller_name: formData.nombre,
-          biller_email: formData.email,
-          biller_address: formData.direccion,
-          payment_info: {
-            pse_bank: formData.banco,
-            pse_person_type: "person",
-            pse_document: formData.identificacion,
-            pse_name: formData.nombre,
-            pse_phone: formData.celular,
-            pse_document_type: formData.tipoId,
+        data: {
+          extraData: {
+            idusuario: megaPagos.idCliente, //viene en el login capturar
+            idtipooperacion: 5,
+            idtiposolicitud: 5,
+            linkcode: "-1",
+            solicitudenvio: "N",
+            externalurl: "https://pagos-rose.vercel.app/",
+          },
+          step1: {
+            name: "Servicios Moviles",
+            description: "Pago Servicios Moviles",
+            value: 10000.58,
+            in_stock: true,
+            idimpuesto: 21,
+            shipping_cost: 0,
+            requested_units: 1,
+            total_amount: 10000.58,
+            payment_amount: 0,
+          },
+          step3: {
+            terms_and_conditions: true,
+            payment_method: "pse",
+            biller_name: formData.nombre,
+            biller_email: formData.email,
+            biller_address: formData.direccion,
+            payment_info: {
+              pse_bank: formData.banco,
+              pse_person_type: "person",
+              pse_document: formData.identificacion,
+              pse_name: formData.nombre,
+              pse_phone: formData.celular,
+              pse_document_type: formData.tipoId,
+            },
           },
         },
       }
+
+      console.log(data)
 
       const dataString = JSON.stringify(data)
 
       // Paso 4: Encriptar los datos con AES
       const encryptedData = encriptarAES(dataString, randomKey)
-      console.log("data encriptada", encryptedData)
 
       // Paso 5: Encriptar la llave aleatoria con RSA
       const encryptedKey = encriptarRSA(randomKey, derBytes)
-      console.log("Key encriptada", encryptedKey)
 
       // Construir el objeto final
       const resultadoEncriptado = {
@@ -338,7 +339,9 @@ export const PSE = () => {
       }
 
       // Paso 6: Codificar el resultado en Base64
-      const resultadoBase64 = forge.util.encode64(JSON.stringify(resultadoEncriptado))
+      const resultadoBase64 = forge.util.encode64(
+        JSON.stringify(resultadoEncriptado)
+      )
 
       // Actualizar el estado con el resultado
       setResultado(resultadoBase64)
@@ -355,7 +358,7 @@ export const PSE = () => {
   ) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
-  };
+  }
 
   const clearForm = () =>
     setFormData({
