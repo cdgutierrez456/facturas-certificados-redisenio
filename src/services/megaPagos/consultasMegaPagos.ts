@@ -106,3 +106,32 @@ export const realizarLoging = async (
       console.error("Error:", error);
     }
   }
+
+
+  export const realizarConsultaPagoPSE = async (
+    token: string, 
+    transactionId: string
+    ) => {
+      console.log("data " + transactionId)
+    try {
+      const bodyJSON = JSON.stringify({ transactionId });
+      console.log("bdJ " + bodyJSON)
+      const response = await fetch("/api/proxyStatus", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: "Bearer " + token
+        },body: bodyJSON
+      })
+  
+      if (!response.ok) {
+        throw new Error(`Error en la solicitud: ${response.statusText}`);
+      }
+  
+      const rta = await response.json();
+      console.log("Respuesta:", rta);
+      return rta;
+    } catch (error) {
+      console.error("Error:", error);
+    }
+  }

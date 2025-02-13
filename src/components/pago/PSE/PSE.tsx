@@ -6,6 +6,7 @@ import { TransactionModal } from "../Modal/Modal";
 import {
   consultarBancos,
   consultarLlave,
+  realizarConsultaPagoPSE,
   realizarLoging,
   realizarPagoPSE,
 } from "app/services/megaPagos/consultasMegaPagos";
@@ -161,23 +162,74 @@ export const PSE = () => {
         },
       });
 
-      const resultadoEncriptado = await manejarEncriptacion();
+      // Paso 3: Datos de ejemplo para encriptar
+      const data = {
+        data: {
+          extraData: {
+            idusuario: megaPagos.idCliente, //viene en el login capturar
+            idtipooperacion: 5,
+            idtiposolicitud: 5,
+            linkcode: "-1",
+            solicitudenvio: "N",
+            externalurl: "https://pagos-rose.vercel.app/",
+          },
+          step1: {
+            name: "Servicios Moviles",
+            description: "Pago Servicios Moviles",
+            value: 10000.58,
+            in_stock: true,
+            idimpuesto: 21,
+            shipping_cost: 0,
+            requested_units: 1,
+            total_amount: 10000.58,
+            payment_amount: 0,
+          },
+          step3: {
+            terms_and_conditions: true,
+            payment_method: "pse",
+            biller_name: formData.nombre,
+            biller_email: formData.email,
+            biller_address: formData.direccion,
+            payment_info: {
+              pse_bank: formData.banco,
+              pse_person_type: "person",
+              pse_document: formData.identificacion,
+              pse_name: formData.nombre,
+              pse_phone: formData.celular,
+              pse_document_type: formData.tipoId,
+            },
+          },
+        },
+      }
+
+      console.log("encript 1")
+      const resultadoEncriptado = await manejarEncriptacion(data);
 
       await crearPago(resultadoEncriptado);
 
-      setTimeout(() => {
+      setTimeout(async () => {
         Swal.fire({
-          title: "Formulario enviado",
-          text: "Tu formulario ha sido enviado con éxito.",
+          title: "Transaccion ejecutada",
+          text: "Consultar como va tu transaccion.",
           icon: "success",
-          confirmButtonText: "Aceptar",
+          confirmButtonText: "Consultat",
         });
 
         // Aquí puedes manejar el envío del formulario o limpiar los campos después del éxito
-        console.log("Form data:", formData);
+        console.log("encript 2")
+        const data2 = {
+          transactionId: forge.util.decode64(megaPagos.tansactionId)
+        }
+        const encriptedData = await manejarEncriptacion(data2)
+        
+        if (encriptedData){
+          const consultaInf = await realizarConsultaPagoPSE(megaPagos.bearer, encriptedData)
 
+          console.log(consultaInf)
+        } 
+        
         openModal();
-      }, 5000); // 5 segundos de espera
+      }, 10000); // 5 segundos de espera
     }
   };
 
@@ -197,7 +249,7 @@ export const PSE = () => {
 
     setMegaPagos(megaPagos)
 
-    window.open(megaPagos.pseURL, "_blank", "width=800,height=600,scrollbars=yes,resizable=yes");
+    window.open(megaPagos.pseURL, "_blank", "width=900,height=600,scrollbars=yes,resizable=yes");
 
   }
 
@@ -273,7 +325,7 @@ export const PSE = () => {
     return forge.util.encode64(encryptedKey);
   }
 
-  const manejarEncriptacion = async () => {
+  const manejarEncriptacion = async (data:any) => {
     try {
       // Paso 1: Obtener la llave pública desde la API
       const publicKeyBase64 = megaPagos.publicKey;
@@ -281,46 +333,6 @@ export const PSE = () => {
 
       // Paso 2: Generar una llave aleatoria de 256 bits
       const randomKey = generarLlaveAleatoria();
-
-      // Paso 3: Datos de ejemplo para encriptar
-      const data = {
-        data: {
-          extraData: {
-            idusuario: megaPagos.idCliente, //viene en el login capturar
-            idtipooperacion: 5,
-            idtiposolicitud: 5,
-            linkcode: "-1",
-            solicitudenvio: "N",
-            externalurl: "https://pagos-rose.vercel.app/",
-          },
-          step1: {
-            name: "Servicios Moviles",
-            description: "Pago Servicios Moviles",
-            value: 10000.58,
-            in_stock: true,
-            idimpuesto: 21,
-            shipping_cost: 0,
-            requested_units: 1,
-            total_amount: 10000.58,
-            payment_amount: 0,
-          },
-          step3: {
-            terms_and_conditions: true,
-            payment_method: "pse",
-            biller_name: formData.nombre,
-            biller_email: formData.email,
-            biller_address: formData.direccion,
-            payment_info: {
-              pse_bank: formData.banco,
-              pse_person_type: "person",
-              pse_document: formData.identificacion,
-              pse_name: formData.nombre,
-              pse_phone: formData.celular,
-              pse_document_type: formData.tipoId,
-            },
-          },
-        },
-      }
 
       console.log(data)
 
