@@ -5,7 +5,7 @@ export const dynamic = 'force-dynamic';
 export default function DescripcionPago(){
   return (
     <main className={styles.Container}>
-      <h2>Descripcion del pago</h2>
+      <h2>Descripción del pago</h2>
       <DescriptionP />
     </main>
   ) 

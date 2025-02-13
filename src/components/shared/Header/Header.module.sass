@@ -37,4 +37,41 @@
       background-color: $color-secondary
     & li:active 
       background-color: $color-secondary
-  
+  // Estilos para responsive
+  .MenuButton
+    display: none
+    background: none
+    color: white
+    border: none
+    font-size: 2rem
+    cursor: pointer
+
+  .Nav
+    &__open
+      display: block
+
+  @media (max-width: 768px)
+    .MenuButton
+      display: block
+    &__title
+      width: 70%
+    & nav
+      display: none
+      position: absolute
+      top: 100px
+      right: 0
+      width: 100%
+      height: 240px
+      background-color: #004884
+      box-shadow: 0 2px 4px rgba(154, 79, 79, 0.1)
+
+    .Nav__open
+      display: block
+
+    &__list
+      flex-direction: column
+      padding: 1rem
+      align-items: center
+      height: 200px
+      & li
+        width: 100%

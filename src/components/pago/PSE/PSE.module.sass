@@ -169,8 +169,21 @@
       color: $color-secondary
 
 
-.errorCheckbox 
-  outline: 2px solid red // o el estilo que desees para el checkbox
+  .errorCheckbox 
+    outline: 2px solid red // o el estilo que desees para el checkbox
 
     
-  
+  @media (max-width: 768px)
+    &__title
+      width: 100%
+      padding: 5%
+    &__form
+      flex-direction: column
+      width: 100%
+      padding: 5%
+    &__group
+      width: 90%
+    &__checkbox
+      width: 90%
+    &__button 
+      margin: 5%

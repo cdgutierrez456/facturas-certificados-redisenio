@@ -43,5 +43,37 @@
     background-color: #007BFF
   &__selectedText
     color: black  
+
+
+  @media (max-width: 768px)
+    flex-direction: column
+    &__first
+      display: flex
+      width: 90%
+      & h2
+        width: 30%
+      & h3 
+        width: 60%
+        align-content: center
+    &__line
+      width: 150px 
+      height: 2px
+      border-top: 2px solid $border-color
+      border-left: 0px solid $border-color
+      margin-bottom: 10px
+
+    &__ops
+      width: 100%
+      flex-wrap: wrap
+      justify-content: center
+      gap: 5%
+      & article
+        margin-bottom: 5%
+        width: 23%
+        height: 100px
+        &:hover
+          background-color: #007BFF
+          width: 100px
+
            
 

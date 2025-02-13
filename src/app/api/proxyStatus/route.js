@@ -5,25 +5,19 @@ import axios from "axios" // Importamos axios
 
 export async function POST(req) {
   try {
-    console.log("Iniciando proxy handler...")
     const body = await req.json()
-    console.log("Cuerpo recibido:", body)
     const bearer = await req.headers.get("Authorization")
-    console.log("Token recibido:", bearer)
   
 
-    const { data } = body
+    const { transactionId } = body
 
-    const apiUrl = megaPagosUrls.consult + "transaction/get-inf" // URL al back de Q
-
-    console.log("Preparando solicitud al backend de QA...")
-    console.log("API URL Mega Pagos:", apiUrl)
+    const apiUrl = megaPagosUrls.consult + "transaction/get-info" // URL al back de Q
 
     // Realizamos la solicitud usando axios
     const response = await axios.post(
       apiUrl,
       {
-        data
+        transactionId
       },
       {
         headers: {

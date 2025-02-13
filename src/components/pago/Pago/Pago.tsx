@@ -2,10 +2,15 @@
 import { useEffect, useState } from "react"
 import { useSearchParams } from "next/navigation"
 import styles from "./Pago.module.sass"
+import { useRouter } from "next/navigation";
 
-export const Pago = () => {
+interface PagoProps {
+  onTotalChange: (total: number) => void;
+}
+
+export const Pago = ({ onTotalChange }: PagoProps) => {
   const [facturaData, setFacturaData] = useState<any[]>([]); // Array para almacenar los datos
-
+  const router = useRouter();
   const searchParams = useSearchParams()
   const dataLlegada = searchParams.get("data")
 
@@ -17,7 +22,6 @@ export const Pago = () => {
         if (Array.isArray(parsedData)) {
           console.log("Datos recibidos:", parsedData);
           setFacturaData(parsedData);
-          // Aquí puedes hacer lo que necesites con parsedData
         } else {
           console.error("Los datos no son un array");
         }
@@ -29,8 +33,19 @@ export const Pago = () => {
 
   const totalPagar = facturaData.reduce((total, item) => total + item.amount, 0);
 
+  // Enviar el total al padre cada vez que cambia
+  useEffect(() => {
+    onTotalChange(totalPagar);
+  }, [totalPagar, onTotalChange]);
+
+  const handlerUpdate = () => {
+    router.push(
+      `/descripcion?data=${encodeURIComponent(JSON.stringify(facturaData))}`
+    );
+  }
   return (
     <section className={styles.DescriptionP}>
+      <div className={styles.DescriptionP__table}>
       <table>
         <thead>
           <tr>
@@ -51,9 +66,14 @@ export const Pago = () => {
           ))}
         </tbody>
       </table>
+      </div>
       <div className={styles.DescriptionP__total}>
         <strong>Total a pagar: </strong> ${totalPagar.toLocaleString('es-CO')} COP
       </div>
+      
+        <button onClick={handlerUpdate} className={styles.DescriptionP__add}>
+          Volver
+        </button>
     </section>
-  );
-};
+  )
+}

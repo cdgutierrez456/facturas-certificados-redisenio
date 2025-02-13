@@ -1,4 +1,4 @@
-import styles from './Footer.module.sass';
+import styles from './Footer.module.sass'
 export const Footer = () => {
   return(
     <footer className={styles.Footer}>
@@ -9,9 +9,9 @@ export const Footer = () => {
         <p>Medellin, Antioquia</p>
       </div>
       <div> 
-        <p>Termino y condiciones</p>
-        <p>Politacas de privacidad</p>
+        <p>Terminos y condiciones</p>
+        <p>Politicas de privacidad</p>
       </div>
     </footer>
   )
-};
+}

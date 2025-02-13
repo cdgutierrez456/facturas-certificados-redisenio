@@ -1,10 +1,9 @@
 "use client"
-import { FaEdit, FaTrash } from "react-icons/fa";
-import styles from "./ResumenFactura.module.sass";
-import { realizarConsulta } from "app/services/megaRed/consultaServiciosMoviles";
-import { useRouter } from "next/navigation";
-import React, { useState } from "react";
-import { Loader } from "app/components/shared/Loader";
+import { FaEdit, FaTrash } from "react-icons/fa"
+import styles from "./ResumenFactura.module.sass"
+import { realizarConsulta } from "app/services/megaRed/consultaServiciosMoviles"
+import { useRouter } from "next/navigation"
+import React, { useState } from "react"
 
 export const ResumenFactura = ({ data, onEdit, onDelete, onAdd }: any) => {
   const router = useRouter();
@@ -13,7 +12,7 @@ export const ResumenFactura = ({ data, onEdit, onDelete, onAdd }: any) => {
   const results: results = {
     data: [],
     error: "",
-  };
+  }
 
   const operadoresManual = {
     Claro: "14",
@@ -21,7 +20,7 @@ export const ResumenFactura = ({ data, onEdit, onDelete, onAdd }: any) => {
     Tigo: "299",
     Virgin: "383",
     Wom: "3771",
-  };
+  }
 
   const operadoresAut = {
     Claro: "14",
@@ -29,23 +28,23 @@ export const ResumenFactura = ({ data, onEdit, onDelete, onAdd }: any) => {
     Tigo: "7707316035001",
     Virgin: "NA",
     Wom: "7709998570573",
-  };
+  }
 
   let createConsult = data.map((factura: InfConsult) => {
-    const operadorKey = factura.operator as keyof typeof operadoresManual;
+    const operadorKey = factura.operator as keyof typeof operadoresManual
     return {
-      barcode: factura.method == "reference" ? "" : factura.value,
+      barcode: factura.method == "referencia" || factura.method == "Referencia" 
+        ? "" : factura.value,
       reference: factura.value,
-      method: factura.method == "reference" ? "MANUAL" : "MANUAL",
+      method: factura.method == "referencia" || factura.method == "Referencia" 
+        ? "MANUAL" : "AUTOMATIC",
       code_agreement:
-        factura.method == "reference"
+        factura.method == "referencia" || factura.method == "Referencia"
           ? operadoresManual[operadorKey]
           : operadoresAut[operadorKey],
       code_bank: "0"
-    };
-  });
-
-  const delay = (ms: any) => new Promise(resolve => setTimeout(resolve, ms));
+    }
+  })
 
   const ejecutarConsultas = async () => {
     setIsLoading(true);
@@ -59,22 +58,18 @@ export const ResumenFactura = ({ data, onEdit, onDelete, onAdd }: any) => {
           factura.code_agreement,
           factura.code_bank
         )
-      );
+      )
   
       // Si necesitas manejar errores individualmente
       const resultados = await Promise.allSettled(consultas);
   
-      console.log("Resultados de todas las consultas:", resultados);
-  
       // Filtra solo las consultas exitosas
       const datosExitosos = resultados
         .filter((resultado) => resultado.status === "fulfilled")
-        .map((resultado: any) => resultado.value);
+        .map((resultado: any) => resultado.value)
   
-      results.data = datosExitosos;
-  
-      console.log("Datos exitosos:", results.data);
-  
+      results.data = datosExitosos
+
       // Mapea cada respuesta
       const mappedResponses = datosExitosos.map((response, index) => ({
         method: data[index].method,
@@ -83,65 +78,62 @@ export const ResumenFactura = ({ data, onEdit, onDelete, onAdd }: any) => {
         amount: response.data.data_pay.amount, // Asignamos el `amount` de cada respuesta
       }))
   
-      console.log("Respuestas mapeadas:", mappedResponses);
-  
-      data = mappedResponses; // Actualiza los datos con las respuestas mapeadas
+      data = mappedResponses // Actualiza los datos con las respuestas mapeadas
     } catch (error) {
-      console.error("Error en la ejecución de consultas:", error);
-      results.error = error;
+      results.error = error
     } finally {
-      setIsLoading(false); // Desactiva el loader
-      router.push(`/descripcion?data=${encodeURIComponent(JSON.stringify(data))}`);
+      setIsLoading(false) // Desactiva el loader
+      router.push(`/descripcion?data=${encodeURIComponent(JSON.stringify(data))}`)
     }
   }
 
   const consultaHandler = async () => {
-    await ejecutarConsultas();
-  };
+    await ejecutarConsultas()
+  }
 
   return (
     <section className={styles.ResumenF}>
-      {isLoading ? (
-      <Loader /> // Muestra el loader durante la carga
-    ) : (
-      <><h2>Resumen de facturas</h2><table>
-            <thead>
-              <tr>
-                <th>Operador</th>
-                <th>Método de consulta</th>
-                <th>Número de consulta</th>
-                <th>Editar</th>
-                <th>Eliminar</th>
-              </tr>
-            </thead>
-            <tbody>
-              {data.map((factura: any, index: any) => (
-                <tr key={index}>
-                  <td>{factura.operator}</td>
-                  <td>{factura.method}</td>
-                  <td>{factura.value}</td>
-                  <td>
-                    <button onClick={() => onEdit(index)}>
-                      <FaEdit />
-                    </button>
-                  </td>
-                  <td>
-                    <button onClick={() => onDelete(index)}>
-                      <FaTrash />
-                    </button>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table><div className={styles.ResumenF__actions}>
-              <button onClick={onAdd} className={styles.ResumenF__add}>
-                + Adicionar otra factura
+  <h2>Resumen de facturas</h2>
+  <div className={styles.ResumenF__table}>
+    <table>
+      <thead>
+        <tr>
+          <th>Operador</th>
+          <th>Método de consulta</th>
+          <th>Número de consulta</th>
+          <th>Editar</th>
+          <th>Eliminar</th>
+        </tr>
+      </thead>
+      <tbody>
+        {data.map((factura: any, index: any) => (
+          <tr key={index}>
+            <td>{factura.operator}</td>
+            <td>{factura.method}</td>
+            <td>{factura.value}</td>
+            <td>
+              <button onClick={() => onEdit(index)}>
+                <FaEdit />
               </button>
-              <button className={styles.ResumenF__pay} onClick={consultaHandler}>
-                Pagar
+            </td>
+            <td>
+              <button onClick={() => onDelete(index)}>
+                <FaTrash />
               </button>
-            </div></>
-      )}
-    </section>
-  );
-};
+            </td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  </div>
+  <div className={styles.ResumenF__actions}>
+    <button onClick={onAdd} className={styles.ResumenF__add}>
+      + Adicionar otra factura
+    </button>
+    <button className={styles.ResumenF__pay} onClick={consultaHandler}>
+      Pagar
+    </button>
+  </div>
+</section>
+  )
+}

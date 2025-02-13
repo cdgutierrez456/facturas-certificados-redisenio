@@ -1,5 +1,5 @@
 .ResumenF
-  margin-top: 5% 
+  margin-top: 5%
   background-color: white
   border-radius: 50px
   display: flex
@@ -7,39 +7,59 @@
   align-items: center
   padding: 5%
   flex-direction: column
+
   & h2
     font-size: 50px
     color: $color-primary
     display: flex
     justify-content: flex-start
     width: 90%
-  & table 
-    width: 85%
+
+  &__table
+    width: 100%
+    overflow-x: auto
+    -webkit-overflow-scrolling: touch
+
+    &::-webkit-scrollbar
+      height: 6px
+    &::-webkit-scrollbar-thumb
+      background: #3b82f6
+      border-radius: 10px
+
+  & table
+    width: 100%  // Ahora la tabla ocupa todo el ancho disponible
+    min-width: 600px  // Evita que se colapse en pantallas pequeñas
     border-collapse: collapse
-    & th 
+    white-space: nowrap
+
+    & th
       color: #3b82f6
       font-weight: 600
       text-align: center
       padding-bottom: 0.75rem
-    & td 
+
+    & td
       padding: 0.75rem
       text-align: center
       color: #111827
-      &  button 
+
+      & button
         background: none
         border: none
         cursor: pointer
         color: #111827
         font-size: 1rem
-        &:hover 
+        &:hover
           color: blue
-  &__actions 
+
+  &__actions
     display: flex
     gap: 1rem
     margin-top: 1rem
     width: 90%
     justify-content: center
-  &__add 
+
+  &__add
     background-color: #ffffff
     border: 2px solid #3b82f6
     color: $color-primary
@@ -48,11 +68,11 @@
     border-radius: 100px
     transition: background-color 0.3s ease
     cursor: pointer
-    &:hover 
+    &:hover
       border: 2px solid $color-secondary
       color: $color-secondary
 
-  &__pay 
+  &__pay
     background-color: $color-secondary
     padding: 0.5rem 1rem
     border-radius: 5px
@@ -62,11 +82,17 @@
     transition: background-color 0.3s ease
     cursor: pointer
     color: #000
-    &:hover 
-      background-color: #007BFF // Azul cuando se pasa el cursor
+    &:hover
+      background-color: #007BFF
       color: #fff
-      
-    
-        
-      
-    
+
+  @media (max-width: 768px)
+    border-radius: 10px
+    padding: 3%
+    & h2
+      font-size: 30px
+    &__actions
+      flex-direction: column
+      align-items: center
+    &__add, &__pay
+      width: 100%

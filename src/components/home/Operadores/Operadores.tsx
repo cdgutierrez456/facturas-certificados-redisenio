@@ -3,7 +3,7 @@ import styles from "./Operadores.module.sass"
 import { useState } from "react"
 
 export const Operadores = ({ setSelectedOperator }:any) => {
-  const [selectedOperator, setLocalSelectedOperator] = useState<string | null>(null);
+  const [selectedOperator, setLocalSelectedOperator] = useState<string | null>(null)
 
   const products = [
     { name: "Claro", img: "/images/claro.png" },
@@ -14,8 +14,8 @@ export const Operadores = ({ setSelectedOperator }:any) => {
   ];
 
   const handleOperatorClick = (productName: string) => {
-    setLocalSelectedOperator(productName); 
-    setSelectedOperator(productName);  // Establece el operador seleccionado
+    setLocalSelectedOperator(productName) 
+    setSelectedOperator(productName)  // Establece el operador seleccionado
     //alert(`Operador seleccionado: ${productName}`);  // Muestra el alert con el nombre del operador
   }
 
@@ -42,9 +42,9 @@ export const Operadores = ({ setSelectedOperator }:any) => {
               <img src={imageSrc} alt={product.name} loading="eager" />
               <p className={product.name === selectedOperator ? styles.Operadores__selectedText : ""}>{product.name}</p>
             </article>
-          );
+          )
         })}
       </div>
     </section>
-  );
-};
+  )
+}

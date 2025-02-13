@@ -71,11 +71,11 @@ export const realizarLoging = async (
         throw new Error(`Error en la solicitud: ${response.statusText}`);
       }
   
-      const data = await response.json();
-      console.log("Respuesta:", data);
-      return data;
+      const data = await response.json()
+      console.log("Respuesta:", data)
+      return data
     } catch (error) {
-      console.error("Error:", error);
+      console.error("Error:", error)
     }
   }
 
@@ -85,7 +85,7 @@ export const realizarLoging = async (
     ) => {
       console.log("data " + data)
     try {
-      const bodyJSON = JSON.stringify({ data });
+      const bodyJSON = JSON.stringify({ data })
       console.log("bdJ " + bodyJSON)
       const response = await fetch("/api/proxyPSE", {
         method: "POST",
@@ -96,14 +96,14 @@ export const realizarLoging = async (
       })
   
       if (!response.ok) {
-        throw new Error(`Error en la solicitud: ${response.statusText}`);
+        throw new Error(`Error en la solicitud: ${response.statusText}`)
       }
   
-      const rta = await response.json();
-      console.log("Respuesta:", rta);
-      return rta;
+      const rta = await response.json()
+      console.log("Respuesta:", rta)
+      return rta
     } catch (error) {
-      console.error("Error:", error);
+      console.error("Error:", error)
     }
   }
 
@@ -112,9 +112,8 @@ export const realizarLoging = async (
     token: string, 
     transactionId: string
     ) => {
-      console.log("data " + transactionId)
     try {
-      const bodyJSON = JSON.stringify({ transactionId });
+      const bodyJSON = JSON.stringify({ transactionId })
       console.log("bdJ " + bodyJSON)
       const response = await fetch("/api/proxyStatus", {
         method: "POST",
@@ -125,11 +124,10 @@ export const realizarLoging = async (
       })
   
       if (!response.ok) {
-        throw new Error(`Error en la solicitud: ${response.statusText}`);
+        throw new Error(`Error en la solicitud: ${response.statusText}`)
       }
   
-      const rta = await response.json();
-      console.log("Respuesta:", rta);
+      const rta = await response.json()
       return rta;
     } catch (error) {
       console.error("Error:", error);
