@@ -115,11 +115,11 @@ export default function SuccessPage() {
     }
 
     const nextFactura = () => {
-      setCurrentIndex((prevIndex) => (prevIndex + 1) % lastTransaction.length)
+      setCurrentIndex((prevIndex) => (prevIndex + 1) % lastTransaction.cantidad)
     }
   
     const prevFactura = () => {
-      setCurrentIndex((prevIndex) => (prevIndex - 1 + lastTransaction.length) % lastTransaction.length)
+      setCurrentIndex((prevIndex) => (prevIndex - 1 + lastTransaction.cantidad) % lastTransaction.cantidad)
     }
 
     return (
@@ -193,7 +193,7 @@ export default function SuccessPage() {
                 Comprobante de pago Factura
                 </h3>
             </div>
-            {lastTransaction.length > 0 && (
+            {lastTransaction.cantidad > 0 && (
           <div className={styles.carouselContainer}>
             <button className={styles.navButton} onClick={prevFactura}>&#9664;</button>
             <div className={styles.transactionDetail}>
