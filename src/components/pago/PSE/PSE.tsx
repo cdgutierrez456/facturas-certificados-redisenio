@@ -13,10 +13,11 @@ import { manejarEncriptacion } from "app/utils/encript"
 import { useRouter } from "next/navigation"
 
 interface PSEProps {
-  total: number;
+  total: number
+  cantidad: number
 }
 
-export const PSE = ({ total }: PSEProps) => {
+export const PSE = ({ total, cantidad }: PSEProps) => {
   const router = useRouter()
   const [megaPagos, setMegaPagos] = useState({
     bearer: "",
@@ -31,7 +32,8 @@ export const PSE = ({ total }: PSEProps) => {
     codeTrazabilidad: "",
     pseURL: "",
     tansactionId: "",
-    bank: ""
+    bank: "",
+    cantidad: 0
   })
 
   const [formType, setFormType] = useState<"natural" | "juridica" | "">(
@@ -64,11 +66,6 @@ export const PSE = ({ total }: PSEProps) => {
     banco: false,
     terminos: false,
   })
-
-  const results: results = {
-    data: "",
-    error: "",
-  }
 
   const handleSubmit = async (e: any) => {
     e.preventDefault();
@@ -224,11 +221,14 @@ export const PSE = ({ total }: PSEProps) => {
   }
 
   const crearPago = async (resultadoEncriptado: any) => {
+    console.log("hola ñero",megaPagos.bearer, "ahahahhahahahhahahhah" ,resultadoEncriptado)
     const pago = await realizarPagoPSE(megaPagos.bearer, resultadoEncriptado)
+    console.log("hola ñero II",pago)
     megaPagos.codeTrazabilidad = pago.data.trazabilityCode
     megaPagos.tansactionId = pago.data.transactionId
     megaPagos.pseURL = pago.data.pseURL
     megaPagos.bank = formData.banco
+    megaPagos.cantidad = cantidad
 
     setMegaPagos(megaPagos)
     saveToCache(megaPagos)

@@ -11,6 +11,7 @@ import { useRouter } from "next/navigation"
 export default function SuccessPage() {
   const router = useRouter()
     const [lastTransaction, setLastTransaction] = useState<any>(null)
+    const [currentIndex, setCurrentIndex] = useState(0)
     const [transaction, setTransaction] = useState<any>(
         {
             codigoPago: "",
@@ -113,6 +114,14 @@ export default function SuccessPage() {
         router.push( "https://pagos-rose.vercel.app/")
     }
 
+    const nextFactura = () => {
+      setCurrentIndex((prevIndex) => (prevIndex + 1) % lastTransaction.length)
+    }
+  
+    const prevFactura = () => {
+      setCurrentIndex((prevIndex) => (prevIndex - 1 + lastTransaction.length) % lastTransaction.length)
+    }
+
     return (
         <div className={styles.modalOverlay}>
         <div className={styles.modalContent}>
@@ -184,6 +193,13 @@ export default function SuccessPage() {
                 Comprobante de pago Factura
                 </h3>
             </div>
+            {lastTransaction.length > 0 && (
+          <div className={styles.carouselContainer}>
+            <button className={styles.navButton} onClick={prevFactura}>&#9664;</button>
+            <div className={styles.transactionDetail}>
+              <span className={styles.span}>Cantidad</span>
+              <span className={styles.spanBlack}>{lastTransaction.cantidad}</span>
+            </div>
             <div className={styles.transactionDetail}>
               <span className={styles.span}>Fecha</span>
               <span className={styles.spanBlack}>{transaction.date}</span>
@@ -204,6 +220,9 @@ export default function SuccessPage() {
               <span className={styles.span}>Id Aut</span>
               <span className={styles.spanBlack}>0123456</span>
             </div>
+            <button className={styles.navButton} onClick={nextFactura}>&#9654;</button>
+          </div>
+        )}
           </div>
           <button onClick={onClose} className={styles.closeButton}>
             Finalizar

@@ -155,5 +155,5 @@ export const ModalEditar2 = ({ factura, onSave, onClose }: any) => {
         </div>
       </div>
     </div>
-  );
-};
+  )
+}

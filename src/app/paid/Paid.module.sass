@@ -40,7 +40,7 @@
   color: #000
   margin-right: 5%
   &:hover 
-    background-color: #007BFF // Azul cuando se pasa el cursor
+    background-color: #007BFF
     color: #fff
 
 .transactionDetail
@@ -51,6 +51,39 @@
 .approved
   color: #3DCA75
 
-
 .rejected
   color: red !important
+
+// Estilos para el carrusel de facturas
+.facturaCarousel
+  display: flex
+  align-items: center
+  justify-content: center
+  gap: 10px
+  margin-top: 20px
+
+  .carouselButton
+    width: 0
+    height: 0
+    border-style: solid
+    background: none
+    border-color: transparent
+    cursor: pointer
+    transition: transform 0.2s ease
+
+    &.left
+      border-width: 10px 15px 10px 0
+      border-right-color: #007BFF
+      &:hover
+        transform: scale(1.1)
+
+    &.right
+      border-width: 10px 0 10px 15px
+      border-left-color: #007BFF
+      &:hover
+        transform: scale(1.1)
+
+.facturaSlide
+  display: none
+  &.active
+    display: block

@@ -18,20 +18,20 @@ export const Pago = ({ onTotalChange }: PagoProps) => {
     if (dataLlegada && typeof dataLlegada === "string") {
       try {
         // Parsear y mostrar los datos enviados en la consola
-        const parsedData = JSON.parse(dataLlegada);
+        const parsedData = JSON.parse(dataLlegada)
         if (Array.isArray(parsedData)) {
-          console.log("Datos recibidos:", parsedData);
-          setFacturaData(parsedData);
+          console.log("Datos recibidos:", parsedData)
+          setFacturaData(parsedData)
         } else {
-          console.error("Los datos no son un array");
+          console.error("Los datos no son un array")
         }
       } catch (error) {
-        console.error("Error al parsear los datos:", error);
+        console.error("Error al parsear los datos:", error)
       }
     }
-  }, []);
+  }, [])
 
-  const totalPagar = facturaData.reduce((total, item) => total + item.amount, 0);
+  const totalPagar = facturaData.reduce((total, item) => total + item.amount, 0)
 
   // Enviar el total al padre cada vez que cambia
   useEffect(() => {
