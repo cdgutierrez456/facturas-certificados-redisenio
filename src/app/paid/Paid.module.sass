@@ -54,36 +54,45 @@
 .rejected
   color: red !important
 
-// Estilos para el carrusel de facturas
-.facturaCarousel
+.carouselContainer 
+  display: flex
+  overflow-x: auto
+  scroll-behavior: smooth
+  white-space: nowrap
+  width: 100%
+  padding: 10px 0
+
+  /* Ocultar la barra de desplazamiento */
+  scrollbar-width: none /* Firefox */
+  -ms-overflow-style: none /* Internet Explorer 11 */
+
+
+.carouselContainer::-webkit-scrollbar 
+  display: none /* Chrome, Safari */
+
+
+.facturaSlide 
+  flex: 0 0 auto
+  width: 90%
+  margin-right: 10px
+  padding: 10px
+  border-radius: 10px
+  text-align: center
+
+.carouselControls 
   display: flex
   align-items: center
   justify-content: center
   gap: 10px
-  margin-top: 20px
 
-  .carouselButton
-    width: 0
-    height: 0
-    border-style: solid
-    background: none
-    border-color: transparent
-    cursor: pointer
-    transition: transform 0.2s ease
+.scrollButton 
+  width: 10% 
+  color: white
+  border: none
+  padding: 10px
+  cursor: pointer
+  border-radius: 5px
 
-    &.left
-      border-width: 10px 15px 10px 0
-      border-right-color: #007BFF
-      &:hover
-        transform: scale(1.1)
+.scrollButton:hover 
+  background: #0056b3
 
-    &.right
-      border-width: 10px 0 10px 15px
-      border-left-color: #007BFF
-      &:hover
-        transform: scale(1.1)
-
-.facturaSlide
-  display: none
-  &.active
-    display: block

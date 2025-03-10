@@ -172,8 +172,8 @@ export const PSE = ({ total, cantidad }: PSEProps) => {
             idtiposolicitud: 5,
             linkcode: "-1",
             solicitudenvio: "N",
-            //externalurl: "http://localhost:3000/paid",
-            externalurl: "https://pagos-rose.vercel.app/paid",
+            externalurl: "http://localhost:3000/paid",
+            //externalurl: "https://pagos-rose.vercel.app/paid",
           },
           step1: {
             name: "Servicios Moviles",
@@ -221,9 +221,7 @@ export const PSE = ({ total, cantidad }: PSEProps) => {
   }
 
   const crearPago = async (resultadoEncriptado: any) => {
-    console.log("hola ñero",megaPagos.bearer, "ahahahhahahahhahahhah" ,resultadoEncriptado)
     const pago = await realizarPagoPSE(megaPagos.bearer, resultadoEncriptado)
-    console.log("hola ñero II",pago)
     megaPagos.codeTrazabilidad = pago.data.trazabilityCode
     megaPagos.tansactionId = pago.data.transactionId
     megaPagos.pseURL = pago.data.pseURL
