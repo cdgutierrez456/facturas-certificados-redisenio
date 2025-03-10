@@ -172,8 +172,8 @@ export const PSE = ({ total, cantidad }: PSEProps) => {
             idtiposolicitud: 5,
             linkcode: "-1",
             solicitudenvio: "N",
-            externalurl: "http://localhost:3000/paid",
-            //externalurl: "https://pagos-rose.vercel.app/paid",
+            //externalurl: "http://localhost:3000/paid",
+            externalurl: "https://pagos-rose.vercel.app/paid",
           },
           step1: {
             name: "Servicios Moviles",
