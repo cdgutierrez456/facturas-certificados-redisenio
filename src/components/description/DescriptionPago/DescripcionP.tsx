@@ -36,8 +36,9 @@ export const DescriptionP = () => {
   }
 
   const payHandler = () => {
+    const filteredData = facturaData.filter(item => !isNaN(parseFloat(item.amount)))
     router.push(
-      `/payment?data=${encodeURIComponent(JSON.stringify(facturaData))}`
+      `/payment?data=${encodeURIComponent(JSON.stringify(filteredData))}`
     );
   }
 
@@ -59,7 +60,10 @@ export const DescriptionP = () => {
     }
   }, []);
 
-  const totalPagar = facturaData.reduce((total, item) => total + item.amount, 0)
+  const totalPagar =  facturaData.reduce((total, item) => {
+    const amount = parseFloat(item.amount); // Intenta convertir el valor a número
+    return !isNaN(amount) ? total + amount : total; // Suma solo si es un número válido
+  }, 0)
 
   const handleSaveFactura = (updatedFactura: any) => {
     if (currentFactura != null) {
@@ -96,7 +100,10 @@ export const DescriptionP = () => {
               <td>{factura.operator}</td>
               <td>{factura.method}</td>
               <td>{factura.value}</td>
-              <td>$ {factura.amount}</td>
+              <td>
+                {factura.amount == "" || factura.amount == null 
+                ? "NO DISPONIBLE":"$ "+factura.amount }
+              </td>
               <td>
                 <button onClick={() => handleEdit(index)}>
                   <FaEdit />
@@ -131,5 +138,5 @@ export const DescriptionP = () => {
         />
       )}
     </section>
-  );
-};
+  )
+}
