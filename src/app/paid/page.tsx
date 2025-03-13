@@ -135,13 +135,13 @@ export default function SuccessPage() {
 
   const scrollLeft = () => {
     if (carouselRef.current) {
-      carouselRef.current.scrollBy({ left: -500, behavior: "smooth" });
+      carouselRef.current.scrollBy({ left: -382, behavior: "smooth" });
     }
   }
 
   const scrollRight = () => {
     if (carouselRef.current) {
-      carouselRef.current.scrollBy({ left: 500, behavior: "smooth" });
+      carouselRef.current.scrollBy({ left: 380, behavior: "smooth" });
     }
   }
 

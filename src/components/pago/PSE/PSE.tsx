@@ -161,7 +161,7 @@ export const PSE = ({ total, cantidad }: PSEProps) => {
         didOpen: () => {
           Swal.showLoading(null); // Muestra el spinner
         },
-      });
+      })
 
       // Paso 3: Datos de ejemplo para encriptar
       const data = {
@@ -194,11 +194,11 @@ export const PSE = ({ total, cantidad }: PSEProps) => {
             biller_address: "cra 12345",
             payment_info: {
               pse_bank: formData.banco,
-              pse_person_type: "person",
-              pse_document: formData.identificacion,
+              pse_person_type: formData.tipoId == "0" ? "company" : "person",
+              pse_document: formData.tipoId == "0" ? formData.nit : formData.identificacion,
               pse_name: formData.nombre,
               pse_phone: formData.celular,
-              pse_document_type: formData.tipoId,
+              pse_document_type: formData.tipoId == "0" ? "NIT": formData.tipoId,
             },
           },
         },
