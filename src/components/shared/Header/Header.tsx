@@ -3,30 +3,38 @@
 import Link from 'next/link'
 import { useState } from 'react'
 import styles from './Header.module.sass'
-import { FiMenu, FiX } from 'react-icons/fi'
+
+const menuItems = [
+  { text: 'Paga tu factura en línea', link: '/pagar-factura' },
+  { text: 'Blog', link: '/blog' },
+  { text: 'Preguntas frecuentes', link: '/preguntas-frecuentes' },
+];
 
 export const Header = () => {
-  const [menuOpen, setMenuOpen] = useState(false)
+  const [isMobileMenuOpen, setMobileMenuOpen] = useState(false);
+
+  const toggleMobileMenu = () => {
+    setMobileMenuOpen(!isMobileMenuOpen);
+  };
 
   return (
-    <header className={styles.Header}>
-      <h1 className={styles.Header__title}>Pago de facturas</h1>
-      <button className={styles.MenuButton} onClick={() => setMenuOpen(!menuOpen)}>
-        {menuOpen ? <FiX /> : <FiMenu />}
-      </button>
-      <nav className={`${styles.Nav} ${menuOpen ? styles.Nav__open : ''}`}>
-        <ul className={styles.Header__list}>
-          <li>
-            <Link href="/" className={styles.Nav__link}>Pagar facturas en línea</Link>
-          </li>
-          <li>
-            <Link href="/faqs" className={styles.Nav__link}>Preguntas frecuentes</Link>
-          </li>
-          <li>
-            <Link href="/blogg" className={styles.Nav__link}>Blog</Link>
-          </li>
-        </ul>
-      </nav>
+    <header className={styles.header}>
+      <div className={styles.container}>
+        <h1 className={styles.title}>Pago de facturas</h1>
+        <nav className={`${styles.nav} ${isMobileMenuOpen ? styles.open : ''}`}>
+          {menuItems.map((item, index) => (
+            <Link key={index} href={item.link} className={styles.menuItem}>
+              {item.text}
+            </Link>
+          ))}
+        </nav>
+        {/* Menú hamburguesa */}
+        <div className={styles.hamburger} onClick={toggleMobileMenu}>
+          <span className={styles.bar}></span>
+          <span className={styles.bar}></span>
+          <span className={styles.bar}></span>
+        </div>
+      </div>
     </header>
   )
 }

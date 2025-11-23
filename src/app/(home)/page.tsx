@@ -1,104 +1,112 @@
-"use client"
-import { useEffect, useRef, useState } from "react";
-import { Operadores } from "app/components/home/Operadores"
-import { ConsultaFactura } from "app/components/home/ConsultaFactura"
-import { ResumenFactura } from "app/components/home/ResumenFactura"
-import { ModalEditar } from "app/components/home/ModalEditar";
+import Hero from 'app/components/Hero';
+import Features from 'app/components/Features';
+import Section1 from 'app/components/Section1';
+import Section2 from 'app/components/Section2';
+import Section3 from 'app/components/Section3';
+import ScrollingBanner from 'app/components/ScrollingBanner';
 
 export default function Home() {
-  const [selectedOperator, setSelectedOperator] = useState<string | null>(null)
-  const [consultationMethod, setConsultationMethod] = useState<string>("")
-  const [inputValue, setInputValue] = useState<string>("")
-  const [facturaData, setFacturaData] = useState<any[]>([]) // Array para almacenar los datos
-  const [isEditing, setIsEditing] = useState(false) // Para abrir o cerrar el modal
-  const [currentFactura, setCurrentFactura] = useState(null) // Factura a editar o agregar
+  // Datos dinámicos: los pasos
+  const steps = ['Paso 1 de 3', 'Paso 2 de 3', 'Paso 3 de 3'];
 
-  // Referencia para la sección de ConsultaFactura
-  const consultaFacturaRef = useRef<HTMLDivElement>(null)
+  // Datos dinámicos: los logos de los operadores
+  const logos = [
+    { src: '/images/claro-logo.png', alt: 'Claro', bg: '#D6281D', backgroundImage: '/images/claro-selected.png' },
+    { src: '/images/tigo.png', alt: 'Tigo', bg: '#001EB4', backgroundImage: '/images/tigo-selected.png' },
+    { src: '/images/movistar.png', alt: 'Movistar', bg: '#019DF4', backgroundImage: '/images/movistar-selected.png' },
+    { src: '/images/wom.png', alt: 'WOM', bg: '#5B2583', backgroundImage: '/images/wom-selected.png' },
+    { src: '/images/virgin.png', alt: 'Virgin', bg: '#E10A16', backgroundImage: '/images/virgin-selected.png' },
+  ];
 
-  useEffect(() => {
-    if (selectedOperator && consultaFacturaRef.current) {
-      consultaFacturaRef.current.scrollIntoView({ behavior: "smooth" })
-    }
-  }, [selectedOperator])
+  const bannerTexts = [
+    'Texto 1 que se mueve',
+    'Segundo mensaje',
+    'Tercer texto aquí',
+    'Cuarto mensaje'
+  ];
 
-  useEffect(() => {
-    console.log("Método de consulta actualizado en el padre:", consultationMethod);
-  }, [consultationMethod])
-
-  const handleSaveFactura = (updatedFactura: any) => {
-    if (currentFactura != null) {
-      // Actualiza la factura existente
-      const updatedData = facturaData.map((factura, index) =>
-        index === currentFactura ? updatedFactura : factura
-      )
-
-      setFacturaData(updatedData)
-    } else {
-      // Agrega una nueva factura si currentFactura es null
-      setFacturaData([...facturaData, updatedFactura])
-    }
-    setIsEditing(false) // Cierra el modal después de guardar
-  }
-
-  const handleAddClick = () => {
-    const newEntry = {
-      operator: selectedOperator,
-      method: consultationMethod,
-      value: inputValue,
-    }
-  
-    // Agrega el nuevo objeto al array
-    setFacturaData((prevData) => [...prevData, newEntry])
-  
-    // Limpia los valores después de agregar
-    setInputValue("") // Limpia el input
-  }
-
-  const handleEdit = (index:any) => {
-    setCurrentFactura(index)
-    setIsEditing(true)
-  }
-
-  const handleAdd = () => {
-    setCurrentFactura(null) // null indica que es una nueva factura
-    setIsEditing(true)
-  }
-
-  const handleDelete = (index:any) => {
-    const updatedData = facturaData.filter((_, i) => i !== index)
-    setFacturaData(updatedData)
-  }
-
+  const features = [
+    { number: 1, title: 'Lorem ipsum', description: 'Lorem ipsum dolor sit amet consectetur. Turpis eu ultricies odio sed. Justo at quam ornare' },
+    { number: 2, title: 'Lorem ipsum', description: 'Lorem ipsum dolor sit amet consectetur. Turpis eu ultricies odio sed. Justo at quam ornare' },
+    { number: 3, title: 'Lorem ipsum', description: 'Lorem ipsum dolor sit amet consectetur. Turpis eu ultricies odio sed. Justo at quam ornare' },
+  ];
 
   return (
-    <main>
-      {facturaData.length == 0 ?
-      <Operadores setSelectedOperator={setSelectedOperator} />
-      :null}
+    <div>
+      {/* Componente Hero con props dinámicos */}
+      <Hero
+        mainImage="/images/hero-bg.png" // Imagen principal de fondo
+        title="Selecciona tu operador"   // Título
+        subtitle="Lorem ipsum dolor sit amet consectetur."  // Subtítulo
+        operatorImages={logos}  // Imágenes de los operadores (con logo y color de fondo)
+        step={steps}  // Pasos (ej: "Paso 1 de 3")
+      />
 
-      {facturaData.length === 0 && (
-        <div ref={consultaFacturaRef}>
-          <ConsultaFactura 
-            setConsultationMethod={setConsultationMethod} 
-            setInputValue={setInputValue} 
-            handleAddClick={handleAddClick}
-            selectedOperator={selectedOperator}
-          />
-        </div>
-      )}
+      <ScrollingBanner texts={bannerTexts} />
 
-      {facturaData.length > 0 ? <ResumenFactura data={facturaData} onEdit={handleEdit} 
-        onDelete={handleDelete} 
-        onAdd={handleAdd}/> : <br /> }
+      <Features
+        backgroundColor="#FFFFFF"
+        title="Selecciona tu operador"
+        subtitle="Lorem ipsum dolor sit amet consectetur."
+        imageSrc="/images/rectangle_9061.png" // Aquí puedes poner cualquier imagen
+        steps={features}
+      />
 
-      {isEditing && (
-        <ModalEditar 
-          factura={currentFactura != null ? facturaData[currentFactura] : null}
-          onSave={handleSaveFactura} 
-          onClose={() => setIsEditing(false)} 
-        />
-      )}
-    </main>
-  )
+      <Section1
+        backgroundColor="#F6F6F6"
+        title="Lorem ipsum dolor sit amet consectetur Leo mi nullam"
+        cards={[
+          {
+            iconSrc: '/images/telefono-movil.png',        // coloca tus imágenes en /public/images
+            title: 'Lorem ipsum',
+            description: 'Lorem ipsum dolor sit amet consectetur. Turpis eu ultricies odio sed.',
+          },
+          {
+            iconSrc: '/images/telefono-movil.png',
+            title: 'Lorem ipsum',
+            description: 'Lorem ipsum dolor sit amet consectetur. Turpis eu ultricies odio sed.',
+          },
+          {
+            iconSrc: '/images/telefono-movil.png',
+            title: 'Lorem ipsum',
+            description: 'Lorem ipsum dolor sit amet consectetur. Turpis eu ultricies odio sed.',
+          },
+          {
+            iconSrc: '/images/telefono-movil.png',
+            title: 'Lorem ipsum',
+            description: 'Lorem ipsum dolor sit amet consectetur. Turpis eu ultricies odio sed.',
+          },
+        ]}
+      />
+
+      <Section2
+        backgroundColor="#fff"
+        title="Lorem ipsum dolor sit amet consectetur Leo mi nullam"
+        cards={[
+          {
+            iconSrc: '/images/telefono-movil.png',        // coloca tus imágenes en /public/images
+            title: 'Lorem ipsum',
+            description: 'Lorem ipsum dolor sit amet consectetur. Turpis eu ultricies odio sed.',
+          },
+          {
+            iconSrc: '/images/telefono-movil.png',
+            title: 'Lorem ipsum',
+            description: 'Lorem ipsum dolor sit amet consectetur. Turpis eu ultricies odio sed.',
+          },
+          {
+            iconSrc: '/images/telefono-movil.png',
+            title: 'Lorem ipsum',
+            description: 'Lorem ipsum dolor sit amet consectetur. Turpis eu ultricies odio sed.',
+          },
+          {
+            iconSrc: '/images/telefono-movil.png',
+            title: 'Lorem ipsum',
+            description: 'Lorem ipsum dolor sit amet consectetur. Turpis eu ultricies odio sed.',
+          },
+        ]}
+      />
+      <Section3 title="Conce algunos de lo temas de nuestro Blog" />
+
+    </div>
+  );
 }

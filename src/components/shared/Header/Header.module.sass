@@ -1,77 +1,91 @@
-.Header
+/* Header.module.scss */
+
+/* Estilo base para el header */
+.header
+  position: fixed
+  top: 0
+  left: 0
+  width: 100%
+  height: 110px
+  z-index: 100
+  background: rgba(40, 40, 40, 0.05)
+  box-shadow: 0px 14px 36px rgba(0, 0, 0, 0.25)
   display: flex
-  flex-flow: row nowrap
   align-items: center
-  padding: 0 2rem
   justify-content: space-between
-  height: 100px
-  &__title
-    color: $color-secondary
-    width: 25%
-  & nav
-    display: block
-    height: 100%
-    width: 70%
-  &__list
+  padding: 0 137px
+  box-sizing: border-box
+  backdrop-filter: blur(13.5px)
+
+  /* Contenedor interno del header */
+  .container
     display: flex
-    flex-flow: row nowrap
-    list-style: none
-    height: 100%
-    align-items: center
     justify-content: space-between
-    margin: 0
-    & > li > a
-      color: $text-color
-      text-decoration: none
-      font-size: 1.2rem
+    align-items: center
+    width: 100%
+    height: 100%
+    padding-right: 0px
+
+  /* Título del header */
+  .title
+    font-family: 'Montserrat', sans-serif
+    font-weight: 800
+    font-size: 27px
+    line-height: 33px
+    color: #ffffff
+    flex: 1
+
+  /* Estilos para el menú en el header */
+  .nav
+    display: flex
+    gap: 20px
+    flex: 2
+    justify-content: flex-end
+
+    /* Estilos del item del menú */
+    .menuItem
+      font-family: 'Montserrat', sans-serif
       font-weight: 400
-      height: 100%
-      display: flex     // Flexbox en elementos inline
-      align-items: center       // Centrado vertical
-      justify-content: center   // Centrado horizontal
-      // Efecto hover
-    & li
-      height: 100%
-      width: 33%
-    & li:hover 
-      background-color: $color-secondary
-    & li:active 
-      background-color: $color-secondary
-  // Estilos para responsive
-  .MenuButton
-    display: none
-    background: none
-    color: white
-    border: none
-    font-size: 2rem
-    cursor: pointer
+      font-size: 20px
+      line-height: 24px
+      color: #ffffff
+      text-decoration: none
+      padding: 10px
 
-  .Nav
-    &__open
-      display: block
+      &:hover
+        text-decoration: underline
 
-  @media (max-width: 768px)
-    .MenuButton
-      display: block
-    &__title
-      width: 70%
-    & nav
-      display: none
+    &.open
+      display: flex
+      flex-direction: column
       position: absolute
-      top: 100px
+      top: 110px
       right: 0
       width: 100%
-      height: 240px
-      background-color: #004884
-      box-shadow: 0 2px 4px rgba(154, 79, 79, 0.1)
+      background-color: rgba(40, 40, 40, 0.9)
+      padding: 20px
+      gap: 10px
 
-    .Nav__open
-      display: block
+  /* Estilos del menú hamburguesa */
+  .hamburger
+    display: none
+    flex-direction: column
+    justify-content: space-between
+    width: 30px
+    height: 20px
+    cursor: pointer
 
-    &__list
-      flex-direction: column
-      padding: 1rem
-      align-items: center
-      height: 200px
-      & li
-        width: 100%
+    .bar
+      width: 30px
+      height: 4px
+      background-color: #fff
+      border-radius: 2px
+
+/* Media query para pantallas pequeñas */
+@media (max-width: 1024px)
+  .header
+    .nav
+      display: none
+
+    .hamburger
+      display: flex

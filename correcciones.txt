@@ -1,0 +1,6 @@
+- Implementacion de formularios con hooks
+- Implementación de Metadata
+- Extrapolación del diseño
+- Implementación de filtros
+- Protección de rutas (Panel administrativo)
+- Re Creación del sistema de blog

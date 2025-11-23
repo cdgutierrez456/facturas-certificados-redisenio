@@ -1,0 +1,156 @@
+/* \megapagos\src\components\Hero.module.scss */
+
+.heroContainer
+  position: relative
+  width: 100%
+  min-height: 922px
+  overflow: hidden
+  isolation: isolate
+  padding-top: calc(var(--header-height, 72px) + 24px)
+
+  &::after
+    content: ''
+    position: absolute
+    inset: 0
+    background: linear-gradient(0deg, rgba(0, 0, 0, 0.20) 0%, rgba(0, 0, 0, 0.20) 100%)
+    z-index: 1
+
+  .heroBg
+    position: absolute
+    inset: 0
+    width: 100%
+    height: 100%
+    object-fit: cover
+    z-index: 0
+
+  .content
+    position: relative
+    z-index: 2
+    margin: 0 auto
+    padding: 40px 16px 64px
+    display: flex
+    flex-direction: column
+    align-items: center
+    gap: 12px
+
+    .steps
+      display: flex
+      gap: 16px
+      flex-wrap: wrap
+      justify-content: center
+      margin-bottom: 8px
+
+      .stepIndicator
+        height: 52px
+        padding: 0 28px
+        border-radius: 35px
+        border: 1px solid #FFFFFF
+        background: transparent
+        color: #FFFFFF
+        font-size: 21px
+        font-family: Montserrat, sans-serif
+        font-weight: 700
+        display: flex
+        align-items: center
+        justify-content: center
+
+        &.selected
+          background: #FFBB00
+          border-color: #FFBB00
+          color: #000000
+
+    .title
+      text-align: center
+      color: #FFFFFF
+      font-size: 43px
+      font-family: Montserrat, sans-serif
+      font-weight: 700
+
+    .subtitle
+      text-align: center
+      color: #FFFFFF
+      font-size: 23px
+      font-family: Montserrat, sans-serif
+      font-weight: 500
+      opacity: 0.95
+
+    .operators
+      display: flex
+      flex-wrap: wrap
+      justify-content: center
+      gap: 24px
+      margin-top: 24px
+
+      .operatorCard
+        width: 224px
+        height: 224px
+        border-radius: 50%
+        display: flex
+        align-items: center
+        justify-content: center
+        border: none
+        cursor: pointer
+        transition: all 0.3s ease
+        transform: translateY(20px)
+        opacity: 0
+        animation: slideInUp 0.6s ease forwards
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2)
+
+        &:nth-child(1)
+          animation-delay: 0.1s
+        &:nth-child(2)
+          animation-delay: 0.2s
+        &:nth-child(3)
+          animation-delay: 0.3s
+        &:nth-child(4)
+          animation-delay: 0.4s
+        &:nth-child(5)
+          animation-delay: 0.5s
+
+        &:hover
+          transform: translateY(-8px) scale(1.05)
+          box-shadow: 0 15px 35px rgba(255, 187, 0, 0.8), 0 5px 15px rgba(0, 0, 0, 0.3)
+
+          .operatorLogo
+            transform: scale(1.1)
+
+        .operatorLogo
+          object-fit: contain
+          transition: transform 0.3s ease
+
+
+/* Animación */
+@keyframes slideInUp
+  to
+    transform: translateY(0)
+    opacity: 1
+
+
+/* Responsivo */
+@media (max-width: 992px)
+  .heroContainer
+    .content
+      .operators
+        .operatorCard
+          width: 180px
+          height: 180px
+
+@media (max-width: 768px)
+  .heroContainer
+    .content
+      .title
+        font-size: 30px
+
+      .subtitle
+        font-size: 16px
+
+      .steps
+        .stepIndicator
+          font-size: 16px
+          height: 44px
+          padding: 0 20px
+
+      .operators
+        .operatorCard
+          width: 140px
+          height: 140px

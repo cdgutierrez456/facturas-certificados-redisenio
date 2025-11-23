@@ -1,0 +1,285 @@
+/* \megapagos\src\components\Seccion1.module.scss */
+
+.section
+  width: 100%
+  position: relative
+  padding-bottom: 90px
+  background: #fff
+  padding-top: 5%
+
+  .inner
+    display: flex
+    flex-direction: column
+    align-items: flex-start
+    border: 1px solid #000
+    margin: 0 8%
+    padding: 0
+    position: relative
+    border-radius: 36px
+    min-height: 644px
+    overflow: hidden
+    background: url("/images/rectangle_9066.png")
+
+    .contentContainer
+      margin: auto 0 auto 5%
+
+    .leftContent
+      flex: 1 1 0
+      position: relative
+      display: flex
+      flex-direction: column
+      justify-content: center
+      padding: 64px 48px 64px 64px
+      background: none
+      overflow: hidden
+
+      .gradientOverlay
+        position: absolute
+        left: 0
+        top: 0
+        width: 100%
+        height: 100%
+        background: linear-gradient(90deg, #FFBB00 0%, rgba(255,187,0,0) 100%)
+        z-index: 2
+        pointer-events: none
+
+      .leftContentInner
+        position: relative
+        z-index: 3
+        display: flex
+        flex-direction: column
+        justify-content: center
+        height: 100%
+
+        .title
+          margin: 40px 0 32px 40px
+          width: auto
+          color: #0F0F0F
+          font-family: Montserrat, sans-serif
+          font-size: 2.2rem
+          font-weight: 700
+          line-height: 1.15
+          text-align: left
+
+        .description
+          color: #0F0F0F
+          font-family: Montserrat, sans-serif
+          font-size: 1.1rem
+          font-weight: 500
+          margin: 0 0 32px 40px
+          max-width: 480px
+          text-align: left
+
+        .button
+          background: #fff
+          color: #0F0F0F
+          font-family: Montserrat, sans-serif
+          font-size: 1.1rem
+          font-weight: 700
+          border: none
+          border-radius: 24px
+          padding: 12px 48px
+          margin: 0 0 40px 40px
+          box-shadow: 0px 4px 16px rgba(255, 187, 0, 0.25)
+          cursor: pointer
+          transition: box-shadow 0.2s
+          text-align: left
+
+          &:hover
+            box-shadow: 0px 8px 24px rgba(255, 187, 0, 0.35)
+
+        .carouselControls
+          display: flex
+          align-items: center
+          gap: 16px
+          margin-left: 40px
+
+          .arrow
+            background: #fff
+            border: none
+            border-radius: 50%
+            width: 36px
+            height: 36px
+            font-size: 1.5rem
+            font-weight: bold
+            box-shadow: 0px 2px 8px rgba(0,0,0,0.10)
+            cursor: pointer
+            display: flex
+            align-items: center
+            justify-content: center
+            transition: background 0.2s
+            color: #000
+
+            &:hover
+              background: #FFBB00
+              color: #fff
+
+          .dots
+            display: flex
+            gap: 8px
+
+            .dot
+              width: 10px
+              height: 10px
+              border-radius: 50%
+              border: 2px solid #000
+              display: inline-block
+              transition: background 0.2s
+
+              &.active
+                background: #000
+
+    .rightImage
+      width: 50%
+      min-width: 0
+      position: relative
+      display: flex
+      align-items: stretch
+      justify-content: flex-end
+      overflow: hidden
+
+      .image
+        position: absolute
+        left: 0
+        top: 0
+        width: 100%
+        height: 100%
+        object-fit: cover
+        border-radius: 0 36px 36px 0
+        z-index: 0
+
+      .gradientOverlay
+        position: absolute
+        left: 0
+        top: 0
+        width: 100%
+        height: 100%
+        pointer-events: none
+        background: linear-gradient(90deg, #FFBB00 0%, rgba(255,187,0,0) 100%)
+        z-index: 1
+
+
+/* --- BREAKPOINTS --- */
+
+@media (max-width: 1100px)
+  .section
+    .rightImage
+      width: 100%
+      min-height: 200px
+
+    .inner
+      flex-direction: column
+      min-height: 400px
+
+      .leftContent, .rightImage
+        padding: 32px 16px
+
+      .rightImage .image
+        border-radius: 0 0 36px 36px
+        min-height: 200px
+
+@media (max-width: 640px)
+  .section
+    .inner
+      margin: 0 2%
+      min-height: 200px
+
+      .leftContent
+        padding: 24px 8px
+
+    .title
+      font-size: 1.2rem
+
+    .description
+      font-size: 0.95rem
+
+    .button
+      font-size: 0.95rem
+      padding: 10px 24px
+
+
+/* --- SECCIÓN DE CARDS (MISMA PÁGINA) --- */
+
+.title
+  margin-left: 47.5px
+  width: 798px
+  color: #0F0F0F
+  font-family: Montserrat, sans-serif
+  font-size: 40px
+  font-weight: 700
+  line-height: 1.15
+
+.cards
+  margin-top: 158px
+  display: flex
+  align-items: stretch
+  gap: 37px
+  flex-wrap: wrap
+
+  .card
+    width: 399px
+    height: 424px
+    background: #FFFFFF
+    border-radius: 36px
+    box-shadow: 0px 8px 30px rgba(0, 0, 0, 0.12)
+    display: flex
+    flex-direction: column
+    justify-content: center
+    align-items: center
+    gap: 24px
+    text-align: center
+    padding: 24px
+
+    .icon
+      width: 89px
+      height: 89px
+      object-fit: contain
+      display: block
+
+    .cardTitle
+      width: 100%
+      color: #0F0F0F
+      font-family: Montserrat, sans-serif
+      font-size: 40px
+      font-weight: 700
+      line-height: 1.15
+
+    .cardDesc
+      width: 250px
+      height: 140px
+      color: #0F0F0F
+      font-family: Montserrat, sans-serif
+      font-size: 23px
+      font-weight: 500
+      line-height: 1.35
+
+
+/* RESPONSIVE CARDS */
+
+@media (max-width: 1500px)
+  .cards
+    margin-top: 40px
+
+    .card
+      height: auto
+
+@media (max-width: 1100px)
+  .inner
+    padding-left: 24px
+    padding-right: 24px
+
+  .title
+    margin-left: 0
+    margin-top: 40px
+    width: 100%
+
+  .cards
+    gap: 20px
+
+    .card
+      width: calc(50% - 10px)
+
+@media (max-width: 640px)
+  .cards
+    .card
+      width: 100%
