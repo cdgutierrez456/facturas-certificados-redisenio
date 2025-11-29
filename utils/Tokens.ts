@@ -1,0 +1,1 @@
+export const buttonBaseStyle = 'px-8 py-3 rounded-full text-base font-semibold shadow-md transition-all duration-300'
