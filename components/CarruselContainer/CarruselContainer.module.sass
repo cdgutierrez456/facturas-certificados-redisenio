@@ -1,0 +1,49 @@
+.container
+  display: flex
+  gap: 24px
+  justify-content: center
+  align-items: stretch
+  margin-bottom: 32px
+
+.controls
+  display: flex
+  justify-content: center
+  align-items: center
+  gap: 16px
+
+  .arrow
+    background: #FFBB00
+    color: #111
+    border: none
+    border-radius: 50%
+    width: 36px
+    height: 36px
+    font-size: 1.5rem
+    font-weight: bold
+    display: flex
+    align-items: center
+    justify-content: center
+    cursor: pointer
+    transition: background 0.2s
+
+    &:hover
+      background: #e0a800
+
+  .dots
+    display: flex
+    gap: 8px
+
+    .dot,
+    .dotActive
+      width: 12px
+      height: 12px
+      border-radius: 50%
+      opacity: 1
+      border: 2px solid #000
+      display: inline-block
+      transition: background 0.2s, opacity 0.2s
+      cursor: pointer
+
+    .dotActive
+      background: #000
+      opacity: 1
