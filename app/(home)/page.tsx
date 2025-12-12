@@ -1,9 +1,10 @@
 import Hero from '@/components/Hero';
 import FeaturesHome from '@/components/FeaturesHome';
 import CardGridHome from '@/components/CardGridHome';
-import Section3 from '@/components/Section3';
+import BlogCarousel from '@/components/BlogCarousel';
 import ScrollingBanner from '@/components/ScrollingBanner';
 import CallToAction from '@/components/modules/blog/CallToAction';
+import HeroSectionHome from '@/components/HeroSectionHome';
 
 export default function Home() {
   // Datos dinámicos: los pasos
@@ -44,8 +45,8 @@ export default function Home() {
       <section className="w-full">
         <CallToAction />
       </section>
-      <Section3 title="Conce algunos de lo temas de nuestro Blog" />
-
+      <BlogCarousel />
+      <HeroSectionHome />
     </div>
   );
 }

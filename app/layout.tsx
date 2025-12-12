@@ -1,5 +1,7 @@
 import { Roboto } from 'next/font/google'
-import { Footer } from '@/components/shared/Footer'
+
+import Footer from '@/components/shared/Footer'
+
 import '../sass/globals.sass'
 import '../globals.css'
 
