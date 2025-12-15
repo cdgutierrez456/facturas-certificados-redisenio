@@ -13,12 +13,11 @@ const LoginPage = () => {
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
-    setError(null);  // Limpiar errores previos
+    setError(null);
 
     try {
       await signInWithEmailAndPassword(auth, email, password);
-      // Si la autenticación es exitosa, redirige al panel de administración
-      router.push("/adminQ");  // Asegúrate de que la ruta al panel de administración sea correcta
+      router.push("/adminQ");
     } catch (err) {
       setError("Error de autenticación. Verifica tus credenciales.");
     }

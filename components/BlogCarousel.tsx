@@ -61,7 +61,7 @@ export default function BlogCarousel() {
           {[0, 1, 2, 3, 4].map((i) => (
             <button
               key={i}
-              className={`w-3 h-3 rounded-full ${i === 0 ? "bg-yellow-400" : "bg-gray-400"}`}
+              className={`w-3 h-3 rounded-full ${i === 0 ? "bg-yellow" : "bg-gray-400"}`}
             ></button>
           ))}
         </div>

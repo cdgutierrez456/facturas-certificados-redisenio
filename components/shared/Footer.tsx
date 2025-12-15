@@ -8,7 +8,9 @@ export const Footer = () => {
           <div>
             <h2 className="text-2xl font-bold mb-6">Pago De Factura</h2>
           </div>
-          <p className="text-sm mt-6">&copy; 2025 Todos los derechos reservados</p>
+          <p className="text-sm mt-6">
+            <Link href={'/login'}>&copy;</Link> 2025 Todos los derechos reservados
+          </p>
         </div>
         <div className="hidden md:block w-px bg-white/20 mx-6" />
         <div className="flex flex-col gap-2">
@@ -25,7 +27,7 @@ export const Footer = () => {
           <ul className="space-y-2 text-sm">
             <li><Link href="#" className="hover:underline">Política de privacidad</Link></li>
             <li><Link href="#" className="hover:underline">Términos y condiciones</Link></li>
-            <li><Link href="#" className="hover:underline">Preguntas frecuentes</Link></li>
+            <li><Link href="preguntas-frecuentes" className="hover:underline">Preguntas frecuentes</Link></li>
           </ul>
         </div>
       </div>

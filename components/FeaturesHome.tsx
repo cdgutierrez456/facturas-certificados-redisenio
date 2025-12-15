@@ -22,7 +22,7 @@ export default function FeaturesHome () {
           <ul className="space-y-6">
             {[1, 2, 3].map((num) => (
               <li key={num} className="flex items-start gap-4">
-                <div className="bg-yellow-400 text-black font-bold w-10 h-10 rounded-full flex items-center justify-center text-lg">
+                <div className="bg-yellow text-black font-bold w-10 h-10 rounded-full flex items-center justify-center text-lg">
                   {num}
                 </div>
                 <div>

@@ -1,8 +1,8 @@
 export const env = {
-    MEGARED_TOKEN: process.env.MEGARED_QA_TOKEN || "c2337eca385cb3116b88c3451a86d18d05ba5a04",
-    MEGARED_HOSTNAME: process.env.MEGARED_QA_HOSTNAME || "https://appv2_api.megared.net.co",
-    MEGARED_VERSION: "2.0.3"
-  }
+  MEGARED_TOKEN: process.env.MEGARED_QA_TOKEN || "c2337eca385cb3116b88c3451a86d18d05ba5a04",
+  MEGARED_HOSTNAME: process.env.MEGARED_QA_HOSTNAME || "https://appv2_api.megared.net.co",
+  MEGARED_VERSION: "2.0.3"
+}
 
 export const firebaseConfig1 = {
   apiKey: process.env.MEGARED_API_KEY,
