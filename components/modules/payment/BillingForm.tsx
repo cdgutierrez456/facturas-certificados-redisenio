@@ -27,7 +27,7 @@ export default function BillingForm({ setColorOnStep }: BillingFormProps) {
   };
 
   return (
-    <div className="w-full max-w-3xl bg-white rounded-[40px] p-8 shadow-2xl relative">
+    <div className="w-full max-w-4xl bg-white rounded-[40px] p-8 shadow-2xl relative">
       <button
         className='absolute top-5 right-5 cursor-pointer'
         onClick={() => setColorOnStep('Paso 1 de 3')}
@@ -38,13 +38,13 @@ export default function BillingForm({ setColorOnStep }: BillingFormProps) {
       <div className="flex flex-col md:flex-row gap-4 items-end mb-8">
         <div className="w-full md:w-1/3 space-y-2">
           <label className="text-sm font-bold text-gray-900 ml-1">Operador</label>
-          <button className="w-full bg-white border border-gray-100 shadow-md rounded-full py-3 px-4 flex items-center justify-between hover:bg-gray-50 transition">
+          <button className="w-full bg-white border border-gray-100 shadow-md rounded-full py-2 px-4 flex items-center justify-between hover:bg-gray-50 transition">
             <div className="flex items-center gap-2 w-full">
               <Image
                 src='/images/claro-logo.png'
                 alt="Imagen temporal"
-                height={30}
-                width={30}
+                height={25}
+                width={25}
               />
               <select className="font-semibold text-gray-700 w-full">
                 <option value="">Claro</option>
@@ -53,10 +53,21 @@ export default function BillingForm({ setColorOnStep }: BillingFormProps) {
           </button>
         </div>
         <div className="w-full md:w-1/2">
-          <div className="bg-orange-50/50 border border-yellow-300 rounded-2xl p-2 px-4 relative">
+          <div>
+            <div className="flex items-center gap-2 mb-1">
+              <label className="text-sm font-bold text-gray-900">Método de consulta</label>
+              {/* <Info size={16} className="fill-yellow-500 text-white" /> */}
+            </div>
+            <select className="w-full bg-white border-none rounded-full py-2 px-4 text-gray-600 shadow-sm focus:outline-none focus:ring-2 focus:ring-yellow-400 placeholder-gray-300">
+              <option value="">Número de referencia</option>
+            </select>
+          </div>
+        </div>
+        <div className="w-full md:w-1/2">
+          <div>
             <div className="flex items-center gap-2 mb-1">
               <label className="text-sm font-bold text-gray-900">Número de referencia</label>
-              <Info size={16} className="fill-yellow-500 text-white" />
+              {/* <Info size={16} className="fill-yellow-500 text-white" /> */}
             </div>
             <input
               type="text"
