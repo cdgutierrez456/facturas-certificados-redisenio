@@ -25,9 +25,9 @@ export const Footer = () => {
         <div className="hidden md:block w-px bg-white/20 mx-6" />
         <div className="flex flex-col gap-2">
           <ul className="space-y-2 text-sm">
-            <li><Link href="#" className="hover:underline">Política de privacidad</Link></li>
+            <li><Link href="/politicas-privacidad" className="hover:underline">Política de privacidad</Link></li>
             <li><Link href="#" className="hover:underline">Términos y condiciones</Link></li>
-            <li><Link href="preguntas-frecuentes" className="hover:underline">Preguntas frecuentes</Link></li>
+            <li><Link href="/preguntas-frecuentes" className="hover:underline">Preguntas frecuentes</Link></li>
           </ul>
         </div>
       </div>

@@ -20,10 +20,9 @@ export default function Home() {
   ];
 
   const bannerTexts = [
-    'Facil de pagar',
-    'Paga en 3 pasos',
-    'Al alcance de tu mano',
-    'Paga en 3 pasos'
+    '100% en línea',
+    'Sin costos adicionales',
+    'Todos los operadores en un solo sitio',
   ];
 
   return (

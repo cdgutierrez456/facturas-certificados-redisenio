@@ -3,6 +3,8 @@
 import { useState } from 'react';
 import styles from './Hero.module.sass';
 
+import BillingForm from '../modules/payment/BillingForm';
+
 interface OperatorImage {
   src: string;
   alt: string;
@@ -18,6 +20,8 @@ interface HeroProps {
   step: string[];
 }
 
+type stepsNames = 'Paso 1 de 3' | 'Paso 2 de 3' | 'Paso 3 de 3'
+
 export default function Hero({
   mainImage,
   title,
@@ -25,7 +29,7 @@ export default function Hero({
   operatorImages,
   step
 }: HeroProps) {
-  const [selectedStep, setSelectedStep] = useState(0);
+  const [actualStep, setActualStep] = useState<stepsNames>('Paso 1 de 3')
   const [selectedOperator, setSelectedOperator] = useState<number | null>(null);
 
   const getCurrentBackgroundImage = () => {
@@ -34,6 +38,11 @@ export default function Hero({
     }
     return mainImage;
   };
+
+  const setColorOnStep = (nameStep: stepsNames, index?: number) => {
+    setSelectedOperator(index || 0)
+    setActualStep(nameStep)
+  }
 
   return (
     <section className={styles.heroContainer} data-propiedad-1="Predeterminada">
@@ -44,30 +53,41 @@ export default function Hero({
           {step.map((text, index) => (
             <div
               key={index}
-              className={`${styles.stepIndicator} ${selectedStep === index ? styles.selected : ''}`}
+              className={`${styles.stepIndicator} ${text === actualStep ? styles.selected : ''}`}
             >
               {text}
             </div>
           ))}
         </div>
+        {
+          actualStep === 'Paso 1 de 3' ? (
+            <>
+              <h1 className={styles.title}>{title}</h1>
+              <p className={styles.subtitle}>{subtitle}</p>
 
-        <h1 className={styles.title}>{title}</h1>
-        <p className={styles.subtitle}>{subtitle}</p>
-
-        <div className={styles.operators}>
-          {operatorImages.map((operator, index) => (
-            <button
-              key={index}
-              type="button"
-              className={`${styles.operatorCard} ${selectedOperator === index ? styles.operatorSelected : ''}`}
-              style={{ backgroundColor: operator.bg || 'transparent' }}
-              aria-label={operator.alt}
-              onClick={() => setSelectedOperator(index)}
-            >
-              <img src={operator.src} alt={operator.alt} className={styles.operatorLogo} />
-            </button>
-          ))}
-        </div>
+              <div className={styles.operators}>
+                {operatorImages.map((operator, index) => (
+                  <button
+                    key={index}
+                    type="button"
+                    className={`${styles.operatorCard} ${selectedOperator === index ? styles.operatorSelected : ''}`}
+                    style={{ backgroundColor: operator.bg || 'transparent' }}
+                    aria-label={operator.alt}
+                    onClick={() => setColorOnStep('Paso 2 de 3', index)}
+                  >
+                    <img src={operator.src} alt={operator.alt} className={styles.operatorLogo} />
+                  </button>
+                ))}
+              </div>
+            </>
+          ) : (
+            <>
+              <BillingForm
+                setColorOnStep={setColorOnStep}
+              />
+            </>
+          )
+        }
       </div>
     </section>
   );
