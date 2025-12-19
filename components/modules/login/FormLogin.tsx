@@ -4,6 +4,7 @@ import { useForm } from 'react-hook-form';
 import { useRouter } from "next/navigation";
 import { auth } from "@/services/firebase/serviciosFaqs";
 import { signInWithEmailAndPassword } from "firebase/auth";
+import Swal from 'sweetalert2';
 
 import { zodResolver } from '@hookform/resolvers/zod';
 
@@ -25,7 +26,11 @@ export default function FormLogin() {
       await signInWithEmailAndPassword(auth, email, password);
       router.push("/adminQ");
     } catch (error) {
-
+      Swal.fire({
+        icon: "error",
+        title: "Error",
+        text: "Ha ocurrido un error, intenta nuevamente.",
+      });
     }
   };
 
