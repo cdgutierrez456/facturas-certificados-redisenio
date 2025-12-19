@@ -2,28 +2,58 @@
 
 import { useState } from 'react';
 import Image from 'next/image';
-import { Info, ChevronDown, X } from 'lucide-react';
+
+import { X } from 'lucide-react';
+import { SubmitHandler, useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+
+import { NormalOperator } from '@/interfaces/Operators';
+import { DataInvoiceDTO } from '@/interfaces/Operators';
+import { dataInvoiceSchema } from '@/schemas/operators';
 
 type stepsNames = 'Paso 1 de 3' | 'Paso 2 de 3' | 'Paso 3 de 3'
-const INITIAL_BILLS = [
-  { id: 1, operator: 'Claro', method: 'Número de referencia', number: '12345678' },
-  { id: 2, operator: 'Tigo', method: 'Número de celular', number: '312 345 6789' },
-  { id: 3, operator: 'Wom', method: 'Número de celular', number: '312 345 6789' },
-  { id: 4, operator: 'Movistar', method: 'Número de referencia', number: '12345678' },
-  { id: 5, operator: 'Claro', method: 'Número de referencia', number: '12345678' },
-  { id: 6, operator: 'Tigo', method: 'Número de celular', number: '312 345 6789' },
-];
+
+const operatorList: NormalOperator[] = [
+  { label: 'Claro', value: '14', src: '/images/claro-logo.png' },
+  { label: 'Movistar', value: '17', src: '/images/movistar.png' },
+  { label: 'Tigo', value: '299', src: '/images/tigo.png' },
+  { label: 'Virgin', value: '383', src: '/images/virgin.png' },
+  { label: 'Wom', value: '3771', src: '/images/wom.png' },
+]
 
 interface BillingFormProps {
   setColorOnStep: (nameStep: stepsNames) => void
 }
 
 export default function BillingForm({ setColorOnStep }: BillingFormProps) {
-  const [bills, setBills] = useState(INITIAL_BILLS);
+  const [bills, setBills] = useState<DataInvoiceDTO[]>([]);
+  const [actualOperator, setActualOperator] = useState(operatorList[0])
 
-  // Función para eliminar un item de la lista (interactividad básica)
-  const handleDelete = (id: number) => {
-    setBills(bills.filter(bill => bill.id !== id));
+  const {
+    register,
+    handleSubmit,
+    formState: { errors, isSubmitting }
+  } = useForm<DataInvoiceDTO>({
+    resolver: zodResolver(dataInvoiceSchema),
+    defaultValues: {
+      value: '',
+      operator: '',
+      referenceMethod: '',
+      referenceNumber: ''
+    }
+  });
+
+  const onSubmit: SubmitHandler<DataInvoiceDTO> = (data) => {
+    debugger
+  }
+
+  const onErrors = () => {
+    console.log('Errors', errors);
+    debugger
+  }
+
+  const handleDelete = (value: DataInvoiceDTO['value']) => {
+    setBills(bills.filter(bill => bill.value !== value));
   };
 
   return (
@@ -35,7 +65,7 @@ export default function BillingForm({ setColorOnStep }: BillingFormProps) {
         <X size={20} strokeWidth={3} color='black' />
       </button>
       <h2 className="text-2xl font-bold text-gray-900 mb-8">Digitá los datos de factura</h2>
-      <div className="flex flex-col md:flex-row gap-4 items-end mb-8">
+      <form onSubmit={handleSubmit(onSubmit, onErrors)} className="flex flex-col md:flex-row gap-4 items-end mb-8">
         <div className="w-full md:w-1/3 space-y-2">
           <label className="text-sm font-bold text-gray-900 ml-1">Operador</label>
           <button className="w-full bg-white border border-gray-100 shadow-md rounded-full py-2 px-4 flex items-center justify-between hover:bg-gray-50 transition">
@@ -46,8 +76,15 @@ export default function BillingForm({ setColorOnStep }: BillingFormProps) {
                 height={25}
                 width={25}
               />
-              <select className="font-semibold text-gray-700 w-full">
-                <option value="">Claro</option>
+              <select
+                {...register('operator')}
+                className="font-semibold text-gray-700 w-full"
+              >
+                {
+                  operatorList.map(operator => (
+                    <option key={operator.value} value={operator.value}>{operator.label}</option>
+                  ))
+                }
               </select>
             </div>
           </button>
@@ -56,10 +93,13 @@ export default function BillingForm({ setColorOnStep }: BillingFormProps) {
           <div>
             <div className="flex items-center gap-2 mb-1">
               <label className="text-sm font-bold text-gray-900">Método de consulta</label>
-              {/* <Info size={16} className="fill-yellow-500 text-white" /> */}
             </div>
-            <select className="w-full bg-white border-none rounded-full py-2 px-4 text-gray-600 shadow-sm focus:outline-none focus:ring-2 focus:ring-yellow-400 placeholder-gray-300">
-              <option value="">Número de referencia</option>
+            <select
+              {...register('referenceMethod')}
+              className="w-full bg-white border-none rounded-full py-2 px-4 text-gray-600 shadow-sm focus:outline-none focus:ring-2 focus:ring-yellow-400 placeholder-gray-300"
+            >
+              <option value="referencia">Número de referencia</option>
+              <option value="celular">Número de celular</option>
             </select>
           </div>
         </div>
@@ -67,22 +107,24 @@ export default function BillingForm({ setColorOnStep }: BillingFormProps) {
           <div>
             <div className="flex items-center gap-2 mb-1">
               <label className="text-sm font-bold text-gray-900">Número de referencia</label>
-              {/* <Info size={16} className="fill-yellow-500 text-white" /> */}
             </div>
             <input
+              {...register('referenceNumber')}
               type="text"
               placeholder="12345678"
               className="w-full bg-white border-none rounded-full py-2 px-4 text-gray-600 shadow-sm focus:outline-none focus:ring-2 focus:ring-yellow-400 placeholder-gray-300"
             />
           </div>
         </div>
-
         <div className="w-full md:w-auto">
-          <button className="w-full md:w-auto bg-white border border-gray-100 shadow-md rounded-full py-3.5 px-8 font-bold text-gray-900 hover:bg-gray-50 transition">
+          <button
+            type='submit'
+            className="w-full md:w-auto bg-white border border-gray-100 shadow-md rounded-full py-3.5 px-8 font-bold text-gray-900 hover:bg-gray-50 transition"
+          >
             Agregar
           </button>
         </div>
-      </div>
+      </form>
 
       <div className="bg-gray-50 rounded-3xl p-6 mb-8">
         <div className="grid grid-cols-12 gap-4 mb-4 px-2 text-sm font-bold text-black">
@@ -93,13 +135,13 @@ export default function BillingForm({ setColorOnStep }: BillingFormProps) {
 
         <div className="max-h-48 overflow-y-auto pr-2 space-y-3 custom-scrollbar">
           {bills.map((bill) => (
-            <div key={bill.id} className="grid grid-cols-12 gap-4 items-center text-sm text-gray-600 px-2 py-1">
+            <div key={bill.value} className="grid grid-cols-12 gap-4 items-center text-sm text-gray-600 px-2 py-1">
               <div className="col-span-3 font-medium">{bill.operator}</div>
-              <div className="col-span-5">{bill.method}</div>
+              <div className="col-span-5">{bill.referenceMethod}</div>
               <div className="col-span-4 flex justify-between items-center pl-2">
-                <span>{bill.number}</span>
+                <span>{bill.referenceNumber}</span>
                 <button
-                  onClick={() => handleDelete(bill.id)}
+                  onClick={() => handleDelete(bill.value)}
                   className="p-1 bg-gray-800 rounded text-white hover:bg-gray-700 transition"
                 >
                   <X size={12} strokeWidth={3} />
