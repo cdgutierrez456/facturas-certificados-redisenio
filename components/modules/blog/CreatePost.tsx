@@ -3,11 +3,16 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import EditorJS, { OutputData } from "@editorjs/editorjs";
+// @ts-ignore // Ignoramos tipos estrictos para plugins externos
 import Header from "@editorjs/header";
+// @ts-ignore
 import List from "@editorjs/list";
+// 1. IMPORTAR LA HERRAMIENTA DE IMAGEN
+// @ts-ignore
+import ImageTool from "@editorjs/image";
+
 import axios from "axios";
 
-// Tipos para nuestro formulario
 type FormData = {
   title: string;
   slug: string;
@@ -15,19 +20,15 @@ type FormData = {
 
 const EditorBlock = () => {
   const [isSaving, setIsSaving] = useState(false);
-
-  // 1. Refs para controlar la instancia de EditorJS
   const editorInstance = useRef<EditorJS | null>(null);
   const holderRef = useRef<HTMLDivElement>(null);
 
-  // 2. React Hook Form setup
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm<FormData>();
 
-  // 3. Inicialización del Editor
   useEffect(() => {
     if (!editorInstance.current && holderRef.current) {
       const editor = new EditorJS({
@@ -46,9 +47,46 @@ const EditorBlock = () => {
             class: List,
             inlineToolbar: true,
           },
-          // Aquí agregarías ImageTool, Quote, etc.
+          // 2. CONFIGURACIÓN DE LA IMAGEN
+          image: {
+            class: ImageTool,
+            config: {
+              // Aquí definimos cómo se suben las imágenes
+              uploader: {
+                /**
+                 * Función de subida por archivo (Drag & Drop o Click)
+                 * @param {File} file - El archivo seleccionado
+                 */
+                async uploadByFile(file: File) {
+
+                  // --- AQUI DEBE IR TU LLAMADA REAL A LA API ---
+                  // Ejemplo real:
+                  // const formData = new FormData();
+                  // formData.append("file", file);
+                  // const res = await axios.post("/api/upload", formData);
+                  // return { success: 1, file: { url: res.data.url } };
+
+                  // --- SIMULACIÓN (Para que veas que funciona ya mismo) ---
+                  return new Promise((resolve) => {
+                    const reader = new FileReader();
+                    reader.onload = () => {
+                      // Simulamos un delay de red y devolvemos la imagen en base64 local
+                      setTimeout(() => {
+                        resolve({
+                          success: 1,
+                          file: {
+                            url: reader.result as string, // URL temporal
+                          },
+                        });
+                      }, 1000);
+                    };
+                    reader.readAsDataURL(file);
+                  });
+                },
+              },
+            },
+          },
         },
-        // Estilos base para que se vea bien dentro del contenedor
         data: {
           time: new Date().getTime(),
           blocks: [
@@ -65,7 +103,6 @@ const EditorBlock = () => {
       editorInstance.current = editor;
     }
 
-    // Cleanup: Destruir instancia si el componente se desmonta
     return () => {
       if (editorInstance.current && editorInstance.current.destroy) {
         editorInstance.current.destroy();
@@ -74,35 +111,26 @@ const EditorBlock = () => {
     };
   }, []);
 
-  // 4. Función de Envío
   const onSubmit = async (data: FormData) => {
     setIsSaving(true);
-
     try {
-      // A. Extraer la data del editor (Esto es asíncrono)
       const editorData: OutputData = await editorInstance.current!.save();
 
-      // B. Validar que no esté vacío
       if (editorData.blocks.length === 0) {
         alert("El post no puede estar vacío");
         setIsSaving(false);
         return;
       }
 
-      // C. Payload final para la API
       const payload = {
         title: data.title,
         slug: data.slug,
-        content: editorData, // Aquí va el JSON limpio de bloques
+        content: editorData,
       };
 
-      console.log("📦 Payload listo para enviar:", payload);
-
-      // D. Simulación de llamada a API
-      // const response = await axios.post('/api/posts', payload)
-      await new Promise((resolve) => setTimeout(resolve, 1500)); // Fake delay
-
-      alert("¡Post guardado con éxito! Revisa la consola para ver el JSON.");
+      console.log("📦 Payload con Imágenes:", payload);
+      await new Promise((resolve) => setTimeout(resolve, 1500));
+      alert("¡Post guardado! Revisa la consola.");
     } catch (error) {
       console.error("Error guardando post:", error);
       alert("Error al guardar");
@@ -121,7 +149,6 @@ const EditorBlock = () => {
       </div>
 
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
-        {/* --- Inputs controlados por React Hook Form --- */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
@@ -153,21 +180,16 @@ const EditorBlock = () => {
           </div>
         </div>
 
-        {/* --- Área de Editor.js --- */}
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-2">
             Contenido
           </label>
 
-          <div
-            className="border border-gray-200 rounded-lg min-h-[400px] p-4 bg-gray-50 prose prose-stone max-w-none text-gray-900"
-          >
-            {/* Agregamos 'text-gray-900' arriba para forzar texto oscuro */}
+          <div className="border border-gray-200 rounded-lg min-h-[400px] p-4 bg-gray-50 prose prose-stone max-w-none text-gray-900">
             <div ref={holderRef} id="editorjs" />
           </div>
         </div>
 
-        {/* --- Footer / Botones --- */}
         <div className="flex justify-end pt-4">
           <button
             type="button"
