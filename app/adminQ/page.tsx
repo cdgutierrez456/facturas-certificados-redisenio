@@ -50,6 +50,7 @@ import {
   Plus,
   LogOut,
 } from "lucide-react";
+import Editor from 'react-simple-wysiwyg';
 
 import DashboardPlaceholder from "@/components/modules/admin/DashboardPlaceholder";
 import SidebarItem from "@/components/modules/admin/SidebarItem";
@@ -75,8 +76,13 @@ const mockPosts: PostItem[] = [
 type ModuleType = "dashboard" | "faqs" | "blog";
 
 export default function AdminPanelComponent() {
+  const [html, setHtml] = useState('my <b>HTML</b>');
   const [showModal, setShowModal] = useState(false)
   const [activeModule, setActiveModule] = useState<ModuleType>("faqs");
+
+  function onChange(e: any) {
+    setHtml(e.target.value);
+  }
 
   const onToggleModal = (show: boolean) => {
     setShowModal(show)
@@ -154,9 +160,11 @@ export default function AdminPanelComponent() {
           </div>
         </div>
       </section>
-      {/* <section className="bg-black/50 fixed top-0 right-0 w-full h-dvh flex justify-center items-center z-50">
-        <p className="bg-white text-black">Contenido</p>
-      </section> */}
+      <section className="bg-black/50 fixed top-0 right-0 w-full h-dvh flex justify-center items-center z-50">
+        <section className="bg-white text-black">
+          <Editor value={html} onChange={onChange} />
+        </section>
+      </section>
     </main>
   );
 }
