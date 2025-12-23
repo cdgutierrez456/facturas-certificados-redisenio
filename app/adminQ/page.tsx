@@ -8,12 +8,14 @@ import {
   FileText,
   Plus,
   LogOut,
+  X,
 } from "lucide-react";
 
 import DashboardPlaceholder from "@/components/modules/admin/DashboardPlaceholder";
 import SidebarItem from "@/components/modules/admin/SidebarItem";
 import BlogTable from "@/components/modules/admin/BlogTable";
 import FaqsTable from "@/components/modules/admin/FaqsTable";
+import CreatePost from "@/components/modules/blog/CreatePost";
 
 // Definimos los módulos disponibles
 type ModuleType = "dashboard" | "faqs" | "blog";
@@ -104,9 +106,17 @@ export default function AdminPanelComponent() {
           </div>
         </div>
       </section>
-      {/* <section className="bg-black/50 fixed top-0 right-0 w-full h-dvh flex justify-center items-center z-50">
-        <p className="bg-white text-black">Contenido</p>
-      </section> */}
+      {showModal && (
+        <section className="bg-black/50 fixed top-0 right-0 w-full h-dvh flex justify-center items-center z-50">
+          <div className="bg-slate-800 rounded-2xl p-5 relative w-full max-w-4xl">
+            <button onClick={() => onToggleModal(false)} className="absolute top-3 right-3 cursor-pointer">
+              <X color="#fff"/>
+            </button>
+            <p className="text-center mb-5 text-2xl">Crea tu POST</p>
+            <CreatePost />
+          </div>
+        </section>
+      )}
     </main>
   );
 }
