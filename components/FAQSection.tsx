@@ -1,12 +1,10 @@
 'use client'
 import { useState } from "react";
 import { Plus, Minus } from "lucide-react";
+import { FaqList } from "@/utils/faqsListData";
 
 export default function FAQSection() {
-  const faqs = new Array(12).fill({
-    title: "Lorem ipsum dolor",
-    content: "Lorem ipsum dolor sit amet consectetur. Sit sed odio habitant mattis. Nec urna est sed mi.",
-  });
+  const faqs = FaqList;
 
   const [openIndex, setOpenIndex] = useState<number | null>(null);
 
@@ -58,7 +56,7 @@ export default function FAQSection() {
                       </svg>
                     </div>
                     <p className="text-sm font-medium text-gray-900">
-                      {faq.title}
+                      {faq.question}
                     </p>
                   </div>
 
@@ -83,7 +81,7 @@ export default function FAQSection() {
                   }`}
                 >
                   <div className="pl-10 pr-2 text-sm text-gray-700">
-                    {faq.content}
+                    {faq.answer}
                   </div>
                 </div>
               </div>

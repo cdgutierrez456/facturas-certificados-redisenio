@@ -1,48 +1,7 @@
 'use client'
-// import {AdminPanel} from '@/components/questions/Admin';
-// import withAuth from '@/services/firebase/withAut';
 
-// const AdminPage = () => {
-//   return (
-//     <div className={styles.Container}>
-//       <h2>Panel de Administración</h2>
-//       <AdminPanel />
-//     </div>
-//   )
-// }
-
-// import { FAQForm, FAQList } from "@/components/modules/admin/FAQ"
-// import { BlogForm, BlogList } from "@/components/modules/admin/Blog"
-
-// function AdminPage() {
-//   return (
-//     <section className="min-h-screen bg-[#f4f6fa] py-10 px-6 md:px-10">
-//       <h1 className="text-3xl font-bold text-gray-800 mb-10">Panel de Administración</h1>
-
-//       <div className="grid md:grid-cols-2 gap-10">
-//         {/* FAQ Management */}
-//         <div className="bg-white p-6 rounded-lg shadow">
-//           <h2 className="text-xl font-semibold mb-4">Gestión de Preguntas Frecuentes</h2>
-//           <FAQForm />
-//           <hr className="my-4" />
-//           <FAQList />
-//         </div>
-
-//         {/* Blog Management */}
-//         <div className="bg-white p-6 rounded-lg shadow">
-//           <h2 className="text-xl font-semibold mb-4">Gestión de Blog</h2>
-//           <BlogForm />
-//           <hr className="my-4" />
-//           <BlogList />
-//         </div>
-//       </div>
-//     </section>
-//   )
-// }
-
-// export default withAuth(AdminPage);
-
-import React, { useState } from "react";
+import { useState } from "react";
+import { useRouter } from "next/navigation";
 import {
   LayoutDashboard,
   HelpCircle,
@@ -56,30 +15,21 @@ import SidebarItem from "@/components/modules/admin/SidebarItem";
 import BlogTable from "@/components/modules/admin/BlogTable";
 import FaqsTable from "@/components/modules/admin/FaqsTable";
 
-import { FaqItem } from "@/interfaces/Faqs";
-import { PostItem } from "@/interfaces/Post";
-
-const mockFaqs: FaqItem[] = [
-  { id: 1, question: "¿Cómo restablezco mi contraseña?", status: "Published" },
-  { id: 2, question: "¿Cuáles son los métodos de pago aceptados?", status: "Published" },
-  { id: 3, question: "Política de devoluciones durante días festivos", status: "Draft" },
-];
-
-const mockPosts: PostItem[] = [
-  { id: 1, title: "Nuevas funcionalidades de la plataforma v2.0", author: "Admin", date: "2023-10-25" },
-  { id: 2, title: "Guía de seguridad para usuarios", author: "Soporte", date: "2023-10-20" },
-  { id: 3, title: "Resumen del mes de Octubre", author: "Marketing", date: "2023-11-01" },
-];
-
 // Definimos los módulos disponibles
 type ModuleType = "dashboard" | "faqs" | "blog";
 
 export default function AdminPanelComponent() {
+  const router = useRouter()
   const [showModal, setShowModal] = useState(false)
   const [activeModule, setActiveModule] = useState<ModuleType>("faqs");
 
   const onToggleModal = (show: boolean) => {
     setShowModal(show)
+  }
+
+  const closeSesion = () => {
+    localStorage.clear()
+    router.replace('/')
   }
 
   return (
@@ -114,7 +64,7 @@ export default function AdminPanelComponent() {
         </nav>
 
         <div className="p-4 border-t border-slate-700">
-          <button className="flex items-center w-full px-4 py-2 text-sm font-medium text-slate-300 rounded-lg hover:bg-slate-700 hover:text-white transition-colors">
+          <button onClick={closeSesion} className="flex items-center w-full px-4 py-2 text-sm font-medium text-slate-300 rounded-lg hover:bg-slate-700 hover:text-white transition-colors">
             <LogOut size={18} className="mr-3" />
             Cerrar Sesión
           </button>
@@ -148,8 +98,8 @@ export default function AdminPanelComponent() {
           </header>
 
           <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
-            {activeModule === "faqs" && <FaqsTable data={mockFaqs} />}
-            {activeModule === "blog" && <BlogTable data={mockPosts} />}
+            {activeModule === "faqs" && <FaqsTable />}
+            {activeModule === "blog" && <BlogTable />}
             {activeModule === "dashboard" && <DashboardPlaceholder />}
           </div>
         </div>
