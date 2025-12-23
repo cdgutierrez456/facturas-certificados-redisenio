@@ -4,6 +4,7 @@ import { useState } from 'react';
 import styles from './Hero.module.sass';
 
 import BillingForm from '../modules/payment/BillingForm';
+import Image from 'next/image';
 
 interface OperatorImage {
   src: string;
@@ -46,7 +47,7 @@ export default function Hero({
 
   return (
     <section className={styles.heroContainer} data-propiedad-1="Predeterminada">
-      <img className={styles.heroBg} src={getCurrentBackgroundImage()} alt="" aria-hidden="true" />
+      <Image className={styles.heroBg} src={getCurrentBackgroundImage()} alt="" aria-hidden="true" fill />
 
       <div className={styles.content}>
         <div className={styles.steps}>
@@ -75,7 +76,7 @@ export default function Hero({
                     aria-label={operator.alt}
                     onClick={() => setColorOnStep('Paso 2 de 3', index)}
                   >
-                    <img src={operator.src} alt={operator.alt} className={styles.operatorLogo} />
+                    <Image src={operator.src} alt={operator.alt} className={styles.operatorLogo} fill />
                   </button>
                 ))}
               </div>

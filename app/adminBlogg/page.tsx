@@ -11,6 +11,7 @@ import {
 } from "firebase/firestore";
 import styles from "./AdminBlogg.module.sass";
 import { PostList } from "@/components/blogg/PostCards";
+import Image from "next/image";
 
 const AdminPanel = () => {
   const [formattedContent, setFormattedContent] = useState<string>("");
@@ -217,10 +218,11 @@ const AdminPanel = () => {
         <div className={styles.preview}>
           <h3>Post Preview</h3>
           {imgUri && (
-            <img
+            <Image
               src={imgUri}
               alt="Preview of Post"
               className={styles.cardImage}
+              fill
             />
           )}
           <div className={styles.cardContent}>

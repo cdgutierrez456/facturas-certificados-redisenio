@@ -1,4 +1,5 @@
 "use client"
+import Image from "next/image"
 import styles from "./Operadores.module.sass"
 import { useState } from "react"
 
@@ -38,7 +39,7 @@ export const Operadores = ({ setSelectedOperator }:any) => {
               }
               onClick={() => handleOperatorClick(product.name)}
             >
-              <img src={imageSrc} alt={product.name} loading="eager" />
+              <Image src={imageSrc} alt={product.name} loading="eager" fill />
               <p className={product.name === selectedOperator ? styles.Operadores__selectedText : ""}>{product.name}</p>
             </article>
           )

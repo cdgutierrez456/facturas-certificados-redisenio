@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import dynamic from "next/dynamic";
 import {
   LayoutDashboard,
   HelpCircle,
@@ -15,7 +16,12 @@ import DashboardPlaceholder from "@/components/modules/admin/DashboardPlaceholde
 import SidebarItem from "@/components/modules/admin/SidebarItem";
 import BlogTable from "@/components/modules/admin/BlogTable";
 import FaqsTable from "@/components/modules/admin/FaqsTable";
-import CreatePost from "@/components/modules/blog/CreatePost";
+// import CreatePost from "@/components/modules/blog/CreatePost";
+
+const CreatePost = dynamic(() => import("@/components/modules/blog/CreatePost"), {
+  ssr: false,
+  loading: () => <div className="text-white text-center p-10">Loading...</div>
+});
 
 // Definimos los módulos disponibles
 type ModuleType = "dashboard" | "faqs" | "blog";

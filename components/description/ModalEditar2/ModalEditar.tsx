@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import styles from "./ModalEditar.module.sass";
 import { realizarConsulta } from "@/services/megaRed/consultaServiciosMoviles";
 import Swal from "sweetalert2";
+import Image from "next/image";
 
 export const ModalEditar2 = ({ factura, onSave, onClose }: any) => {
   const [operator, setOperador] = useState(factura?.operator || "");
@@ -110,7 +111,7 @@ export const ModalEditar2 = ({ factura, onSave, onClose }: any) => {
               }
               onClick={() => handleOperatorClick(product.name)}
             >
-              <img src={product.img} alt={product.name} loading="eager" />
+              <Image src={product.img} alt={product.name} loading="eager" fill />
               <p
                 className={
                   product.name === operator ? styles.Operadores__selectedText : ""

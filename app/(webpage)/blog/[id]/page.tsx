@@ -2,6 +2,7 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useParams } from "next/navigation";
+import Image from "next/image";
 
 import { db } from "@/services/firebase/serviciosFaqs";
 import { doc, getDoc } from "firebase/firestore";
@@ -43,10 +44,11 @@ const PostPage = () => {
     <div className={styles.post}>
       <div className={styles.post2}>
         {post.imgUri && (
-          <img
+          <Image
             src={post.imgUri}
             alt={post.mainTitle}
             className={styles.image}
+            fill
           />
         )}
         <h1>{post.mainTitle}</h1>

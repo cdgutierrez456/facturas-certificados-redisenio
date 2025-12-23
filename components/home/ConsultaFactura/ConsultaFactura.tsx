@@ -1,4 +1,5 @@
 "use client"
+import Image from "next/image"
 import styles from "./ConsultaFactura.module.sass"
 import { useEffect, useState } from "react"
 
@@ -73,13 +74,13 @@ export const ConsultaFactura = ({ setConsultationMethod, setInputValue, handleAd
 
   const handleOptionChange = (event: any) => {
     const value = event.target.value;
-  
+
     // Verifica si la opción seleccionada es "Número de Celular" y si el operador lo permite
     if (value === "Numero de Celular" && !operadoresConAmbosMetodos.includes(selectedOperator)) {
       setErrorMessage(`El operador ${selectedOperator} solo acepta referencia.`);
       return;
     }
-  
+
     setSelectedOption(value)
     setConsultationMethod(value) // Asegura que el método de consulta se actualiza correctamente
     setErrorMessage("")
@@ -151,11 +152,11 @@ export const ConsultaFactura = ({ setConsultationMethod, setInputValue, handleAd
             Agregar
           </button>
         </div>
-        
+
         {selectedOption === "Referencia"? <div className={styles.ConsultaF__barCode}>
           <h4>¿Donde encontrar la referencia?</h4>
           <p>El numero de referencia lo encuentras en el codigo de barras entre los numeros (8020) y (3900)</p>
-          <img src="/images/9185570.png" alt="codigo Barras" />
+          <Image src="/images/9185570.png" alt="codigo Barras" fill />
           <p className={styles.ConsultaF__barCode__pCode}>
             (415)999999999999999(820)
             <span>12345678</span>

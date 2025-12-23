@@ -1,5 +1,6 @@
 import { useState } from "react";
 import styles from "./PostCards.module.sass";
+import Image from "next/image";
 
 export const PostList = ({ posts, onEdit, onDelete }: any) => {
   const [isPanelOpen, setIsPanelOpen] = useState(false);
@@ -32,10 +33,11 @@ export const PostList = ({ posts, onEdit, onDelete }: any) => {
               {filteredPosts.map((post: any) => (
                 <div key={post.id} className={styles.postCard}>
                   {post.imgUri && (
-                    <img
+                    <Image
                       src={post.imgUri}
                       alt="Post Image"
                       className={styles.postCardImage}
+                      fill
                     />
                   )}
                   <div className={styles.postCardContent}>
