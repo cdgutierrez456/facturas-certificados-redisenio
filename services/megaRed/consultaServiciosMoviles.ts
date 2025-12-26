@@ -1,12 +1,12 @@
 export const realizarConsulta = async (
-  barcodigo: string, 
-  referencia: string, 
-  metodo: string, 
-  codigoA: string, 
+  barcodigo: string,
+  referencia: string,
+  metodo: string,
+  codigoA: string,
   codigoB: string
-  ) => {
-  try {
-    const response = await fetch("/api/proxy", {
+) => {
+  return new Promise<any>((resolve, reject) => {
+    fetch("/api/proxy", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -18,16 +18,9 @@ export const realizarConsulta = async (
         code_agreement: codigoA,
         code_bank: codigoB,
       }),
-    });
-
-    if (!response.ok) {
-      throw new Error(`Error en la solicitud: ${response.statusText}`);
-    }
-
-    const data = await response.json();
-    console.log("Respuesta:", data);
-    return data;
-  } catch (error) {
-    console.error("Error:", error);
-  }
+    })
+    .then(data => data.json())
+    .then(data => resolve(data))
+    .catch(e => reject(e))
+  })
 }

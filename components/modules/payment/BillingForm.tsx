@@ -6,12 +6,15 @@ import Image from 'next/image';
 import { X } from 'lucide-react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { Loader2 } from 'lucide-react';
+
+import { realizarConsulta } from '@/services/megaRed/consultaServiciosMoviles';
 
 import { NormalOperator } from '@/interfaces/Operators';
 import { DataInvoiceDTO } from '@/interfaces/Operators';
 import { dataInvoiceSchema } from '@/schemas/operators';
 
-import { showToast } from '@/utils/alerts';
+import { showToast, showAlert } from '@/utils/alerts';
 
 type stepsNames = 'Paso 1 de 3' | 'Paso 2 de 3' | 'Paso 3 de 3'
 
@@ -29,6 +32,7 @@ interface BillingFormProps {
 
 export default function BillingForm({ setColorOnStep }: BillingFormProps) {
   const [bills, setBills] = useState<DataInvoiceDTO[]>([]);
+  const [totalAmount, setTotalAmount] = useState(0)
 
   const {
     register,
@@ -44,14 +48,32 @@ export default function BillingForm({ setColorOnStep }: BillingFormProps) {
   });
   const operatorValue = watch("operator");
 
-  const onSubmit: SubmitHandler<DataInvoiceDTO> = (data) => {
+  const selectedOperatorObj = operatorList.find(op => op.value === operatorValue) || operatorList[0];
+
+  const onSubmit: SubmitHandler<DataInvoiceDTO> = async (data) => {
     const bill: DataInvoiceDTO = {
       operator: selectedOperatorObj.label,
       referenceMethod: data.referenceMethod || 'referencia',
       referenceNumber: data.referenceNumber
     }
-    setBills([...bills, bill])
-    reset()
+    try {
+      const response: any = await realizarConsulta(
+        data.referenceMethod === 'celular' ? data.referenceNumber : '',
+        data.referenceNumber,
+        data.referenceMethod === 'referencia' ? 'MANUAL' : 'AUTOMATIC',
+        selectedOperatorObj.value,
+        '0'
+      );
+      if (response.error) {
+        showAlert({ type: 'error', message: 'Error en la consulta de la referencia, verifica la información.' });
+        return;
+      }
+      setBills((prev) => [...prev, bill]);
+      reset();
+    } catch (error) {
+      console.error(error);
+      showAlert({ type: 'error', message: 'Error en la consulta de la referencia, verifica la información.' });
+    }
   }
 
   const onErrors = () => {
@@ -61,8 +83,6 @@ export default function BillingForm({ setColorOnStep }: BillingFormProps) {
   const handleDelete = (index: number) => {
     setBills(bills.filter((_, idx) => idx !== index));
   };
-
-  const selectedOperatorObj = operatorList.find(op => op.value === operatorValue) || operatorList[0];
 
   return (
     <div className="w-full max-w-4xl bg-white rounded-[40px] p-8 shadow-2xl relative">
@@ -134,9 +154,16 @@ export default function BillingForm({ setColorOnStep }: BillingFormProps) {
         <div className="w-full md:w-auto">
           <button
             type='submit'
+            disabled={isSubmitting}
             className="w-full md:w-auto bg-white border border-gray-100 shadow-md rounded-full py-2 px-4 font-bold text-gray-900 hover:bg-gray-50 transition"
           >
-            Agregar
+            {isSubmitting ? (
+              <Loader2 className="animate-spin" size={20} />
+            ) : (
+              <>
+                Agregar
+              </>
+            )}
           </button>
         </div>
       </form>
@@ -169,7 +196,7 @@ export default function BillingForm({ setColorOnStep }: BillingFormProps) {
 
       <div className="flex flex-col md:flex-row justify-between items-center pt-2 gap-4">
         <div className="text-xl font-bold text-black">
-          Total a pagar: $000,000
+          Total a pagar: $ { totalAmount } COP
         </div>
 
         <button className="w-full md:w-auto bg-yellow hover:bg-yellow-500 text-black font-bold py-3 px-12 rounded-full shadow-lg shadow-yellow-400/20 transition hover:scale-105">
