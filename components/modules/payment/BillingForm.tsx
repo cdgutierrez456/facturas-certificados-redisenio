@@ -11,6 +11,8 @@ import { NormalOperator } from '@/interfaces/Operators';
 import { DataInvoiceDTO } from '@/interfaces/Operators';
 import { dataInvoiceSchema } from '@/schemas/operators';
 
+import { showToast } from '@/utils/alerts';
+
 type stepsNames = 'Paso 1 de 3' | 'Paso 2 de 3' | 'Paso 3 de 3'
 
 const operatorList: NormalOperator[] = [
@@ -27,34 +29,40 @@ interface BillingFormProps {
 
 export default function BillingForm({ setColorOnStep }: BillingFormProps) {
   const [bills, setBills] = useState<DataInvoiceDTO[]>([]);
-  const [actualOperator, setActualOperator] = useState(operatorList[0])
 
   const {
     register,
+    watch,
+    reset,
     handleSubmit,
     formState: { errors, isSubmitting }
   } = useForm<DataInvoiceDTO>({
     resolver: zodResolver(dataInvoiceSchema),
     defaultValues: {
-      value: '',
-      operator: '',
-      referenceMethod: '',
-      referenceNumber: ''
+      operator: operatorList[0].value
     }
   });
+  const operatorValue = watch("operator");
 
   const onSubmit: SubmitHandler<DataInvoiceDTO> = (data) => {
-    debugger
+    const bill: DataInvoiceDTO = {
+      operator: selectedOperatorObj.label,
+      referenceMethod: data.referenceMethod || 'referencia',
+      referenceNumber: data.referenceNumber
+    }
+    setBills([...bills, bill])
+    reset()
   }
 
   const onErrors = () => {
-    console.log('Errors', errors);
-    debugger
+    showToast('error', 'Todos los campos son requeridos')
   }
 
-  const handleDelete = (value: DataInvoiceDTO['value']) => {
-    setBills(bills.filter(bill => bill.value !== value));
+  const handleDelete = (index: number) => {
+    setBills(bills.filter((_, idx) => idx !== index));
   };
+
+  const selectedOperatorObj = operatorList.find(op => op.value === operatorValue) || operatorList[0];
 
   return (
     <div className="w-full max-w-4xl bg-white rounded-[40px] p-8 shadow-2xl relative">
@@ -64,15 +72,15 @@ export default function BillingForm({ setColorOnStep }: BillingFormProps) {
       >
         <X size={20} strokeWidth={3} color='black' />
       </button>
-      <h2 className="text-2xl font-bold text-gray-900 mb-8">Digitá los datos de factura</h2>
+      <h2 className="text-2xl font-bold text-gray-900 mb-8">Digita los datos de factura</h2>
       <form onSubmit={handleSubmit(onSubmit, onErrors)} className="flex flex-col md:flex-row gap-4 items-end mb-8">
         <div className="w-full md:w-1/3 space-y-2">
           <label className="text-sm font-bold text-gray-900 ml-1">Operador</label>
-          <button className="w-full bg-white border border-gray-100 shadow-md rounded-full py-2 px-4 flex items-center justify-between hover:bg-gray-50 transition">
+          <div className="w-full bg-white border border-gray-100 shadow-md rounded-full py-2 px-4 flex items-center justify-between hover:bg-gray-50 transition">
             <div className="flex items-center gap-2 w-full">
               <Image
-                src='/images/claro-logo.png'
-                alt="Imagen temporal"
+                src={selectedOperatorObj.src}
+                alt={selectedOperatorObj.label}
                 height={25}
                 width={25}
               />
@@ -87,22 +95,24 @@ export default function BillingForm({ setColorOnStep }: BillingFormProps) {
                 }
               </select>
             </div>
-          </button>
-        </div>
-        <div className="w-full md:w-1/2">
-          <div>
-            <div className="flex items-center gap-2 mb-1">
-              <label className="text-sm font-bold text-gray-900">Método de consulta</label>
-            </div>
-            <select
-              {...register('referenceMethod')}
-              className="w-full bg-white border-none rounded-full py-2 px-4 text-gray-600 shadow-sm focus:outline-none focus:ring-2 focus:ring-yellow-400 placeholder-gray-300"
-            >
-              <option value="referencia">Número de referencia</option>
-              <option value="celular">Número de celular</option>
-            </select>
           </div>
         </div>
+        {operatorValue === '3771' && (
+          <div className="w-full md:w-1/2">
+            <div>
+              <div className="flex items-center gap-2 mb-1">
+                <label className="text-sm font-bold text-gray-900">Método de consulta</label>
+              </div>
+              <select
+                {...register('referenceMethod')}
+                className="w-full bg-white border-none rounded-full py-2 px-4 text-gray-600 shadow-sm focus:outline-none focus:ring-2 focus:ring-yellow-400 placeholder-gray-300"
+              >
+                <option value="referencia">Número de referencia</option>
+                <option value="celular">Número de celular</option>
+              </select>
+            </div>
+          </div>
+        )}
         <div className="w-full md:w-1/2">
           <div>
             <div className="flex items-center gap-2 mb-1">
@@ -115,11 +125,16 @@ export default function BillingForm({ setColorOnStep }: BillingFormProps) {
               className="w-full bg-white border-none rounded-full py-2 px-4 text-gray-600 shadow-sm focus:outline-none focus:ring-2 focus:ring-yellow-400 placeholder-gray-300"
             />
           </div>
+          {errors.referenceNumber && (
+            <span className="text-red-500 text-sm -mt-2">
+              { errors.referenceNumber.message }
+            </span>
+          )}
         </div>
         <div className="w-full md:w-auto">
           <button
             type='submit'
-            className="w-full md:w-auto bg-white border border-gray-100 shadow-md rounded-full py-3.5 px-8 font-bold text-gray-900 hover:bg-gray-50 transition"
+            className="w-full md:w-auto bg-white border border-gray-100 shadow-md rounded-full py-2 px-4 font-bold text-gray-900 hover:bg-gray-50 transition"
           >
             Agregar
           </button>
@@ -134,14 +149,14 @@ export default function BillingForm({ setColorOnStep }: BillingFormProps) {
         </div>
 
         <div className="max-h-48 overflow-y-auto pr-2 space-y-3 custom-scrollbar">
-          {bills.map((bill) => (
-            <div key={bill.value} className="grid grid-cols-12 gap-4 items-center text-sm text-gray-600 px-2 py-1">
+          {bills.map((bill, idx) => (
+            <div key={idx} className="grid grid-cols-12 gap-4 items-center text-sm text-gray-600 px-2 py-1">
               <div className="col-span-3 font-medium">{bill.operator}</div>
-              <div className="col-span-5">{bill.referenceMethod}</div>
+              <div className="col-span-5">{bill.referenceMethod === 'referencia' ? 'Número de referencia' : 'Número de celular'}</div>
               <div className="col-span-4 flex justify-between items-center pl-2">
                 <span>{bill.referenceNumber}</span>
                 <button
-                  onClick={() => handleDelete(bill.value)}
+                  onClick={() => handleDelete(idx)}
                   className="p-1 bg-gray-800 rounded text-white hover:bg-gray-700 transition"
                 >
                   <X size={12} strokeWidth={3} />

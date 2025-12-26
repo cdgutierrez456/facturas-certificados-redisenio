@@ -5,8 +5,7 @@ export interface NormalOperator {
 }
 
 export interface DataInvoiceDTO {
-  value: string
   operator: string
-  referenceMethod: string
+  referenceMethod?: string
   referenceNumber: string
 }
