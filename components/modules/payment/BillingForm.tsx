@@ -60,7 +60,7 @@ export default function BillingForm({ setColorOnStep }: BillingFormProps) {
       const response: any = await realizarConsulta(
         data.referenceMethod === 'celular' ? data.referenceNumber : '',
         data.referenceNumber,
-        data.referenceMethod === 'referencia' ? 'MANUAL' : 'AUTOMATIC',
+        data.referenceMethod === 'celular' ? 'AUTOMATIC' : 'MANUAL',
         selectedOperatorObj.value,
         '0'
       );
