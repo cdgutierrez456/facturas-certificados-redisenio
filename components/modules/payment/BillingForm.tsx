@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Image from 'next/image';
 
 import { X } from 'lucide-react';
@@ -28,9 +28,10 @@ const operatorList: NormalOperator[] = [
 
 interface BillingFormProps {
   setColorOnStep: (nameStep: stepsNames) => void
+  infoOperator: any
 }
 
-export default function BillingForm({ setColorOnStep }: BillingFormProps) {
+export default function BillingForm({ setColorOnStep, infoOperator }: BillingFormProps) {
   const [bills, setBills] = useState<DataInvoiceDTO[]>([]);
   const [totalAmount, setTotalAmount] = useState(0)
 
@@ -39,6 +40,7 @@ export default function BillingForm({ setColorOnStep }: BillingFormProps) {
     watch,
     reset,
     handleSubmit,
+    setValue,
     formState: { errors, isSubmitting }
   } = useForm<DataInvoiceDTO>({
     resolver: zodResolver(dataInvoiceSchema),
@@ -47,8 +49,11 @@ export default function BillingForm({ setColorOnStep }: BillingFormProps) {
     }
   });
   const operatorValue = watch("operator");
-
   const selectedOperatorObj = operatorList.find(op => op.value === operatorValue) || operatorList[0];
+
+  useEffect(() => {
+    setValue('operator', infoOperator.value)
+  }, [])
 
   const onSubmit: SubmitHandler<DataInvoiceDTO> = async (data) => {
     const bill: DataInvoiceDTO = {
@@ -56,6 +61,15 @@ export default function BillingForm({ setColorOnStep }: BillingFormProps) {
       referenceMethod: data.referenceMethod || 'referencia',
       referenceNumber: data.referenceNumber
     }
+    const isDuplicate = bills.some(actBill =>
+      actBill.referenceNumber === data.referenceNumber &&
+      actBill.operator === selectedOperatorObj.label
+    );
+    if (isDuplicate) {
+      showToast('warning', 'Este número de referencia ya ha sido agregado a la lista.');
+      return;
+    }
+
     try {
       const response: any = await realizarConsulta(
         data.referenceMethod === 'celular' ? data.referenceNumber : '',
@@ -68,13 +82,22 @@ export default function BillingForm({ setColorOnStep }: BillingFormProps) {
         showAlert({ type: 'error', message: 'Error en la consulta de la referencia, verifica la información.' });
         return;
       }
+      setTotalAmount((actVal) => actVal += response.data?.data_pay?.amount || 0)
       setBills((prev) => [...prev, bill]);
       reset();
     } catch (error) {
-      console.error(error);
       showAlert({ type: 'error', message: 'Error en la consulta de la referencia, verifica la información.' });
     }
   }
+
+  const formatCurrency = (value: number) => {
+    return new Intl.NumberFormat('es-CO', {
+      style: 'currency',
+      currency: 'COP',
+      minimumFractionDigits: 2, // Asegura 2 decimales siempre
+      maximumFractionDigits: 2,
+    }).format(value);
+  };
 
   const onErrors = () => {
     showToast('error', 'Todos los campos son requeridos')
@@ -196,7 +219,7 @@ export default function BillingForm({ setColorOnStep }: BillingFormProps) {
 
       <div className="flex flex-col md:flex-row justify-between items-center pt-2 gap-4">
         <div className="text-xl font-bold text-black">
-          Total a pagar: $ { totalAmount } COP
+          Total a pagar: { formatCurrency(totalAmount) } COP
         </div>
 
         <button className="w-full md:w-auto bg-yellow hover:bg-yellow-500 text-black font-bold py-3 px-12 rounded-full shadow-lg shadow-yellow-400/20 transition hover:scale-105">

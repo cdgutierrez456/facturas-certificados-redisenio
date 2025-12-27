@@ -12,11 +12,11 @@ export default function Home() {
 
   // Datos dinámicos: los logos de los operadores
   const logos = [
-    { src: '/images/claro-logo.png', alt: 'Claro', bg: '#D6281D', backgroundImage: '/images/claro-selected.png' },
-    { src: '/images/tigo.png', alt: 'Tigo', bg: '#001EB4', backgroundImage: '/images/tigo-selected.png' },
-    { src: '/images/movistar.png', alt: 'Movistar', bg: '#019DF4', backgroundImage: '/images/movistar-selected.png' },
-    { src: '/images/wom.png', alt: 'WOM', bg: '#5B2583', backgroundImage: '/images/wom-selected.png' },
-    { src: '/images/virgin.png', alt: 'Virgin', bg: '#E10A16', backgroundImage: '/images/virgin-selected.png' },
+    { src: '/images/claro-logo.png', alt: 'Claro', bg: '#D6281D', backgroundImage: '/images/claro-selected.png', value: '14' },
+    { src: '/images/movistar.png', alt: 'Movistar', bg: '#019DF4', backgroundImage: '/images/movistar-selected.png', value: '17' },
+    { src: '/images/tigo.png', alt: 'Tigo', bg: '#001EB4', backgroundImage: '/images/tigo-selected.png', value: '299' },
+    { src: '/images/virgin.png', alt: 'Virgin', bg: '#E10A16', backgroundImage: '/images/virgin-selected.png', value: '383' },
+    { src: '/images/wom.png', alt: 'WOM', bg: '#5B2583', backgroundImage: '/images/wom-selected.png', value: '3771' },
   ];
 
   const bannerTexts = [
