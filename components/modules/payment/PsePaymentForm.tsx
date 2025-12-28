@@ -13,18 +13,6 @@ import { paymentSchema } from '@/schemas/paymentSchema';
 // Inferir el tipo de datos desde el schema
 type PaymentFormData = z.infer<typeof paymentSchema>;
 
-// --- 2. DATOS MOCK (Bancos) ---
-const bankList = [
-  { id: '1', name: 'Bancolombia' },
-  { id: '2', name: 'Banco de Bogotá' },
-  { id: '3', name: 'Davivienda' },
-  { id: '4', name: 'Banco BBVA' },
-  { id: '5', name: 'Banco de Occidente' },
-  { id: '6', name: 'Scotiabank Colpatria' },
-  { id: '7', name: 'Nequi' },
-  { id: '8', name: 'Daviplata' },
-];
-
 type stepsNames = 'Paso 1 de 3' | 'Paso 2 de 3' | 'Paso 3 de 3';
 
 interface PsePaymentFormProps {
@@ -177,8 +165,10 @@ export default function PsePaymentForm({ setColorOnStep }: PsePaymentFormProps) 
                 <div className="relative">
                   <select {...register('bank')} className={`${inputClasses} appearance-none`}>
                     <option value="">Seleccione su banco</option>
-                    {bankList.map((bank) => (
-                      <option key={bank.id} value={bank.id}>{bank.name}</option>
+                    {banks.map((bank) => (
+                      <option key={bank.financialInstitutionCode} value={bank.financialInstitutionCode}>
+                        {bank.financialInstitutionName}
+                      </option>
                     ))}
                   </select>
                   <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-4 text-gray-700">

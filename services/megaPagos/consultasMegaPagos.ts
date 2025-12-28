@@ -12,18 +12,16 @@ export const realizarLoging = async (
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-        user:usuario,
-        pass:pase,
-        tokens: token,
-        loginDirecto: login,
-        client: cliente
+          user:usuario,
+          pass:pase,
+          tokens: token,
+          loginDirecto: login,
+          client: cliente
         }),
       });
-
       if (!response.ok) {
         throw new Error(`Error en la solicitud: ${response.statusText}`);
       }
-
       const data = await response.json();
       return data;
     } catch (error) {
@@ -33,7 +31,7 @@ export const realizarLoging = async (
 
   export const consultarBancos = async (
     token: string,
-    ) => {
+  ) => {
     try {
       const response = await fetch("/api/proxyPagos", {
         method: "GET",

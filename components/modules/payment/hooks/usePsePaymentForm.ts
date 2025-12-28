@@ -15,8 +15,9 @@ export const usePsePaymentForm = () => {
   const getListBanks = async () => {
     const consulta = await realizarLoging();
     setAccessToken(`${consulta.data?.token?.accessToken}`)
-    const bankResponse = await consultarBancos(accessToken)
-    // console.log('bankResponse', bankResponse);
+
+    const bankResponse = await consultarBancos(consulta.data.token.accessToken)
+    setBanks(bankResponse.data)
   }
 
   return {

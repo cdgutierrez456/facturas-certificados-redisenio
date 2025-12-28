@@ -45,32 +45,29 @@ export async function POST(req) {
 }
 
 export async function GET(req) {
+  try {
+    const bearer = await req.headers.get("Authorization")
+    const apiUrl = megaPagosUrls.consult + "transaction/get-banks"
+    const apiToken = bearer
 
-  const bearer = await req.headers.get("Authorization")
-  const apiUrl = megaPagosUrls.consult + "transaction/get-banks" // URL al back de Q
-  const apiToken = bearer
-
-  // Realizamos la solicitud usando axios
-  const response = await axios.get(
-    apiUrl,
-    {
-      headers: {
-        "Content-Type": "application/json",
-        "accept": "application/json",
-        Authorization: apiToken
-      },
-      // Desactiva la verificación SSL sin la necesidad de configurar un agente https
-      httpsAgent: new (require('https').Agent)({
-        rejectUnauthorized: false,
-      }),
-    }
-  )
-  return NextResponse.json(response.data)
-    try {
-    } catch (error) {
-      return NextResponse.json(
-        { error: "Error interno del servidor", detalles: error.message },
-        { status: error.response.status }
-      )
-    }
+    const response = await axios.get(
+      apiUrl,
+      {
+        headers: {
+          "Content-Type": "application/json",
+          "accept": "application/json",
+          Authorization: apiToken
+        },
+        httpsAgent: new (require('https').Agent)({
+          rejectUnauthorized: false,
+        }),
+      }
+    )
+    return NextResponse.json(response.data)
+  } catch (error) {
+    return NextResponse.json(
+      { error: "Error interno del servidor", detalles: error.message },
+      { status: error.response.status }
+    )
+  }
   }
