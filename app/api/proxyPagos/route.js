@@ -5,9 +5,7 @@ import axios from "axios" // Importamos axios
 
 export async function POST(req) {
   try {
-    console.log("Iniciando proxy handler...")
     const body = await req.json()
-    console.log("Cuerpo recibido:", body)
 
     const { user,
         pass,
@@ -17,10 +15,6 @@ export async function POST(req) {
 
     const apiUrl = megaPagosUrls.consult + "user/login-comercio" // URL al back de Q
 
-    console.log("Preparando solicitud al backend de QA...")
-    console.log("API URL Mega Pagos:", apiUrl)
-
-    // Realizamos la solicitud usando axios
     const response = await axios.post(
       apiUrl,
       {
@@ -35,62 +29,48 @@ export async function POST(req) {
           "Content-Type": "application/json",
           "accept": "application/json"
         },
-        // Desactiva la verificación SSL sin la necesidad de configurar un agente https
         httpsAgent: new (require('https').Agent)({
           rejectUnauthorized: false,
         }),
       }
     )
 
-    console.log("Respuesta del backend de QA:", response.data)
-
     return NextResponse.json(response.data)
   } catch (error) {
-    console.error("Error en el proxy handler:", error)
     return NextResponse.json(
       { error: "Error interno del servidor", detalles: error.message },
-      { status: 500 }
+      { status: error.response.status }
     )
   }
 }
 
 export async function GET(req) {
+
+  const bearer = await req.headers.get("Authorization")
+  const apiUrl = megaPagosUrls.consult + "transaction/get-banks" // URL al back de Q
+  const apiToken = bearer
+
+  // Realizamos la solicitud usando axios
+  const response = await axios.get(
+    apiUrl,
+    {
+      headers: {
+        "Content-Type": "application/json",
+        "accept": "application/json",
+        Authorization: apiToken
+      },
+      // Desactiva la verificación SSL sin la necesidad de configurar un agente https
+      httpsAgent: new (require('https').Agent)({
+        rejectUnauthorized: false,
+      }),
+    }
+  )
+  return NextResponse.json(response.data)
     try {
-      console.log("Iniciando proxy handler...")
-      const bearer = await req.headers.get("Authorization")
-      console.log("Cuerpo recibido:", bearer)
-
-      const apiUrl = megaPagosUrls.consult + "transaction/get-banks" // URL al back de Q
-      const apiToken = bearer
-
-      console.log("Preparando solicitud al backend de QA...")
-      console.log("API URL Mega Pagos:", apiUrl)
-      console.log("Token", apiToken)
-
-      // Realizamos la solicitud usando axios
-      const response = await axios.get(
-        apiUrl,
-        {
-          headers: {
-            "Content-Type": "application/json",
-            "accept": "application/json",
-            Authorization: apiToken
-          },
-          // Desactiva la verificación SSL sin la necesidad de configurar un agente https
-          httpsAgent: new (require('https').Agent)({
-            rejectUnauthorized: false,
-          }),
-        }
-      )
-
-      console.log("Respuesta del backend de QA:", response.data)
-
-      return NextResponse.json(response.data)
     } catch (error) {
-      console.error("Error en el proxy handler:", error)
       return NextResponse.json(
         { error: "Error interno del servidor", detalles: error.message },
-        { status: 500 }
+        { status: error.response.status }
       )
     }
   }

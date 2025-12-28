@@ -20,7 +20,6 @@ export const Pago = ({ onTotalChange }: PagoProps) => {
         // Parsear y mostrar los datos enviados en la consola
         const parsedData = JSON.parse(dataLlegada)
         if (Array.isArray(parsedData)) {
-          console.log("Datos recibidos:", parsedData)
           setFacturaData(parsedData)
         } else {
           console.error("Los datos no son un array")
@@ -70,7 +69,7 @@ export const Pago = ({ onTotalChange }: PagoProps) => {
       <div className={styles.DescriptionP__total}>
         <strong>Total a pagar: </strong> ${totalPagar.toLocaleString('es-CO')} COP
       </div>
-      
+
         <button onClick={handlerUpdate} className={styles.DescriptionP__add}>
           Volver
         </button>

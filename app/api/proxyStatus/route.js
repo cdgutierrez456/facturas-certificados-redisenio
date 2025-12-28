@@ -32,11 +32,8 @@ export async function POST(req) {
       }
     )
 
-    console.log("Respuesta del backend de QA:", response.data)
-
     return NextResponse.json(response.data)
   } catch (error) {
-    console.error("Error en el proxy handler:", error)
     return NextResponse.json(
       { error: "Error interno del servidor", detalles: error.message },
       { status: 500 }

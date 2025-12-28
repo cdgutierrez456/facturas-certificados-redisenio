@@ -3,6 +3,8 @@
 import { useState } from 'react';
 import styles from './Hero.module.sass';
 
+import { PSE } from '../pago/PSE';
+import PsePaymentForm from '../modules/payment/PsePaymentForm';
 import BillingForm from '../modules/payment/BillingForm';
 import Image from 'next/image';
 
@@ -62,36 +64,38 @@ export default function Hero({
             </div>
           ))}
         </div>
-        {
-          actualStep === 'Paso 1 de 3' ? (
-            <>
-              <h1 className={styles.title}>{title}</h1>
-              <p className={styles.subtitle}>{subtitle}</p>
+        {actualStep === 'Paso 1 de 3' && (
+          <>
+            <h1 className={styles.title}>{title}</h1>
+            <p className={styles.subtitle}>{subtitle}</p>
 
-              <div className={styles.operators}>
-                {operatorImages.map((operator, index) => (
-                  <button
-                    key={index}
-                    type="button"
-                    className={`${styles.operatorCard} ${selectedOperator === index ? styles.operatorSelected : ''}`}
-                    style={{ backgroundColor: operator.bg || 'transparent' }}
-                    aria-label={operator.alt}
-                    onClick={() => setColorOnStep('Paso 2 de 3', index)}
-                  >
-                    <Image src={operator.src} alt={operator.alt} className={styles.operatorLogo} fill />
-                  </button>
-                ))}
-              </div>
-            </>
-          ) : (
-            <>
-              <BillingForm
-                setColorOnStep={setColorOnStep}
-                infoOperator={infoOperator}
-              />
-            </>
-          )
-        }
+            <div className={styles.operators}>
+              {operatorImages.map((operator, index) => (
+                <button
+                  key={index}
+                  type="button"
+                  className={`${styles.operatorCard} ${selectedOperator === index ? styles.operatorSelected : ''}`}
+                  style={{ backgroundColor: operator.bg || 'transparent' }}
+                  aria-label={operator.alt}
+                  onClick={() => setColorOnStep('Paso 2 de 3', index)}
+                >
+                  <Image src={operator.src} alt={operator.alt} className={styles.operatorLogo} fill />
+                </button>
+              ))}
+            </div>
+          </>
+        )}
+        {actualStep === 'Paso 2 de 3' && (
+          <BillingForm
+            setColorOnStep={setColorOnStep}
+            infoOperator={infoOperator}
+          />
+        )}
+        {actualStep === 'Paso 3 de 3' && (
+          <PsePaymentForm
+            setColorOnStep={setColorOnStep}
+          />
+        )}
       </div>
     </section>
   );

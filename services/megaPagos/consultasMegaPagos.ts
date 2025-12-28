@@ -1,11 +1,10 @@
 export const realizarLoging = async (
-    usuario: string = "recaudodefacturas@gmail.com", 
-    pase: string = "fac-7jRB&brx", 
-    token = null, 
-    login: boolean = true, 
-    cliente: string = "api"
-  
-    ) => {
+  usuario: string = "recaudodefacturas@gmail.com",
+  pase: string = "fac-7jRB&brx",
+  token = null,
+  login: boolean = true,
+  cliente: string = "api"
+) => {
     try {
       const response = await fetch("/api/proxyPagos", {
         method: "POST",
@@ -20,21 +19,20 @@ export const realizarLoging = async (
         client: cliente
         }),
       });
-  
+
       if (!response.ok) {
         throw new Error(`Error en la solicitud: ${response.statusText}`);
       }
-  
+
       const data = await response.json();
-      console.log("Respuesta:", data);
       return data;
     } catch (error) {
-      console.error("Error:", error);
+      console.error("Error realizarLoging");
     }
   }
 
   export const consultarBancos = async (
-    token: string, 
+    token: string,
     ) => {
     try {
       const response = await fetch("/api/proxyPagos", {
@@ -44,16 +42,15 @@ export const realizarLoging = async (
           Authorization: "Bearer " + token
         },
       })
-  
+
       if (!response.ok) {
         throw new Error(`Error en la solicitud: ${response.statusText}`);
       }
-  
+
       const data = await response.json();
-      console.log("Respuesta:", data);
       return data;
     } catch (error) {
-      console.error("Error:", error);
+      console.error("Error consultarBancos");
     }
   }
 
@@ -66,27 +63,21 @@ export const realizarLoging = async (
           "Content-Type": "application/json"
         },
       })
-  
+
       if (!response.ok) {
         throw new Error(`Error en la solicitud: ${response.statusText}`);
       }
-  
+
       const data = await response.json()
-      console.log("Respuesta:", data)
       return data
     } catch (error) {
-      console.error("Error:", error)
+      console.error("Error consultarLlave")
     }
   }
 
-  export const realizarPagoPSE = async (
-    token: string, 
-    data: string
-    ) => {
-      console.log("data " + data)
+  export const realizarPagoPSE = async (token: string, data: string) => {
     try {
       const bodyJSON = JSON.stringify({ data })
-      console.log("bdJ " + bodyJSON)
       const response = await fetch("/api/proxyPSE", {
         method: "POST",
         headers: {
@@ -94,27 +85,22 @@ export const realizarLoging = async (
           Authorization: "Bearer " + token
         },body: bodyJSON
       })
-  
+
       if (!response.ok) {
         throw new Error(`Error en la solicitud: ${response.statusText}`)
       }
-  
+
       const rta = await response.json()
-      console.log("Respuesta:", rta)
       return rta
     } catch (error) {
-      console.error("Error:", error)
+      console.error("Error realizarPagoPSE")
     }
   }
 
 
-  export const realizarConsultaPagoPSE = async (
-    token: string, 
-    transactionId: string
-    ) => {
+  export const realizarConsultaPagoPSE = async (token: string, transactionId: string) => {
     try {
       const bodyJSON = JSON.stringify({ transactionId })
-      console.log("bdJ " + bodyJSON)
       const response = await fetch("/api/proxyStatus", {
         method: "POST",
         headers: {
@@ -122,14 +108,14 @@ export const realizarLoging = async (
           Authorization: "Bearer " + token
         },body: bodyJSON
       })
-  
+
       if (!response.ok) {
         throw new Error(`Error en la solicitud: ${response.statusText}`)
       }
-  
+
       const rta = await response.json()
       return rta;
     } catch (error) {
-      console.error("Error:", error);
+      console.error("Error realizarConsultaPagoPSE");
     }
   }

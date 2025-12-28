@@ -19,7 +19,6 @@ export default function DescripcionPago() {
         // Parsear y mostrar los datos enviados en la consola
         const parsedData = JSON.parse(dataLlegada)
         if (Array.isArray(parsedData)) {
-          console.log("Cantiadad Datos recibidos:", parsedData.length)
           parsedData.length
           setCantidad(parsedData.length)
         } else {

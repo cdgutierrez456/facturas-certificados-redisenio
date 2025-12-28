@@ -113,10 +113,6 @@ const AdminPanel = () => {
   };
 
   const handleAddPost = async () => {
-    console.log(imgUri,
-      mainTitle,
-      briefDescription,
-      formattedContent,)
     try {
       if (!mainTitle || !formatContent || !briefDescription) {
         alert("Please fill in all the fields.");

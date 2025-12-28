@@ -128,7 +128,6 @@ const EditorBlock = () => {
         content: editorData,
       };
 
-      console.log("📦 Payload con Imágenes:", payload);
       await new Promise((resolve) => setTimeout(resolve, 1500));
       alert("¡Post guardado! Revisa la consola.");
     } catch (error) {

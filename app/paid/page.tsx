@@ -44,7 +44,6 @@ export default function SuccessPage() {
     const data = getLastTransaction()
     if (data) {
       setLastTransaction(data)
-      console.log("oeoeoeo",data)
       const cantidad = data.cantidad;
       const facturasMap = Array.from({ length: cantidad }, (_, i) => ({
         fecha: transaction.date,
@@ -71,12 +70,10 @@ export default function SuccessPage() {
           lastTransaction.bearer,
           encriptedData
         );
-        console.log(lastTransaction);
-        console.log(consultaInf);
         mapearTransaction(consultaInf);
       }
     } catch (error) {
-      console.error("Error procesando la transacción:", error);
+      console.error("Error procesando la transacción:");
     }
   }
 
@@ -97,7 +94,6 @@ export default function SuccessPage() {
       sucursal: data.externalDetails.entity_franquise,
     };
 
-    console.log(nuevaTransaccion);
     setTransaction(nuevaTransaccion);
   }
 

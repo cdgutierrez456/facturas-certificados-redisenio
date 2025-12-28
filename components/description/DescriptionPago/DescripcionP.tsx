@@ -45,17 +45,14 @@ export const DescriptionP = () => {
   useEffect(() => {
     if (dataLlegada && typeof dataLlegada === "string") {
       try {
-        // Parsear y mostrar los datos enviados en la consola
         const parsedData = JSON.parse(dataLlegada);
         if (Array.isArray(parsedData)) {
-          console.log("Datos recibidos:", parsedData);
           setFacturaData(parsedData);
-          // Aquí puedes hacer lo que necesites con parsedData
         } else {
           console.error("Los datos no son un array");
         }
       } catch (error) {
-        console.error("Error al parsear los datos:", error);
+        console.error("Error al parsear los datos:");
       }
     }
   }, []);
@@ -101,7 +98,7 @@ export const DescriptionP = () => {
               <td>{factura.method}</td>
               <td>{factura.value}</td>
               <td>
-                {factura.amount == "" || factura.amount == null 
+                {factura.amount == "" || factura.amount == null
                 ? "NO DISPONIBLE":"$ "+factura.amount }
               </td>
               <td>
@@ -131,10 +128,10 @@ export const DescriptionP = () => {
         </button>
       </div>
       {isEditing && (
-        <ModalEditar2 
+        <ModalEditar2
           factura={currentFactura != null ? facturaData[currentFactura] : null}
-          onSave={handleSaveFactura} 
-          onClose={() => setIsEditing(false)} 
+          onSave={handleSaveFactura}
+          onClose={() => setIsEditing(false)}
         />
       )}
     </section>
