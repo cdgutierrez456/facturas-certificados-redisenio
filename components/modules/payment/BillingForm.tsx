@@ -9,10 +9,11 @@ type stepsNames = 'Paso 1 de 3' | 'Paso 2 de 3' | 'Paso 3 de 3';
 
 interface BillingFormProps {
   setColorOnStep: (nameStep: stepsNames) => void;
+  setTotalToPay: (value: string) => void;
   infoOperator: any;
 }
 
-export default function BillingForm({ setColorOnStep, infoOperator }: BillingFormProps) {
+export default function BillingForm({ setColorOnStep, setTotalToPay, infoOperator }: BillingFormProps) {
   // Consumimos toda la lógica desde el Hook
   const {
     register,
@@ -30,6 +31,7 @@ export default function BillingForm({ setColorOnStep, infoOperator }: BillingFor
   } = useBillingForm(infoOperator);
 
   const onChangePage = () => {
+    setTotalToPay(totalAmountFormatted)
     setColorOnStep('Paso 3 de 3')
   }
 

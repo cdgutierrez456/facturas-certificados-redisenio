@@ -22,8 +22,8 @@ const operatorList: NormalOperator[] = [
 export const useBillingForm = (initialOperator: any) => {
   const [bills, setBills] = useState<DataInvoiceDTO[]>([]);
   const [totalAmount, setTotalAmount] = useState(0);
+  const [lastValueFromService, setLastValueFromService] = useState(0)
 
-  // 1. Configuración del Formulario
   const {
     register,
     watch,
@@ -80,10 +80,10 @@ export const useBillingForm = (initialOperator: any) => {
       }
 
       setTotalAmount((actVal) => actVal + (response.data?.data_pay?.amount || 0));
+      setLastValueFromService(response.data?.data_pay?.amount || 0)
       setBills((prev) => [...prev, bill]);
       reset();
     } catch (error) {
-      console.error(error);
       showAlert({ type: 'error', message: 'Error en la consulta de la referencia, verifica la información.' });
     }
   };
@@ -94,6 +94,7 @@ export const useBillingForm = (initialOperator: any) => {
 
   const handleDelete = (index: number) => {
     setBills(bills.filter((_, idx) => idx !== index));
+    setTotalAmount((actVal) => actVal - lastValueFromService)
   };
 
   const formatCurrency = (value: number) => {
@@ -106,19 +107,15 @@ export const useBillingForm = (initialOperator: any) => {
   };
 
   return {
-    // Formulario
     register,
     handleSubmit,
     errors,
     isSubmitting,
-    // Data Derivada
     operatorList,
     operatorValue,
     selectedOperatorObj,
-    // Estado
     bills,
     totalAmountFormatted: formatCurrency(totalAmount),
-    // Handlers
     onSubmit,
     onErrors,
     handleDelete

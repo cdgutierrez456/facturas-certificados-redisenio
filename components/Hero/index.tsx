@@ -35,6 +35,7 @@ export default function Hero({
   const [actualStep, setActualStep] = useState<stepsNames>('Paso 1 de 3')
   const [selectedOperator, setSelectedOperator] = useState<number | null>(null);
   const [infoOperator, setInfoOperator] = useState<any>({})
+  const [totalToPay, setTotalToPay] = useState('')
 
   const getCurrentBackgroundImage = () => {
     if (selectedOperator !== null && operatorImages[selectedOperator]?.backgroundImage) {
@@ -48,6 +49,8 @@ export default function Hero({
     setSelectedOperator(index || 0)
     setActualStep(nameStep)
   }
+
+
 
   return (
     <section className={styles.heroContainer} data-propiedad-1="Predeterminada">
@@ -89,11 +92,13 @@ export default function Hero({
           <BillingForm
             setColorOnStep={setColorOnStep}
             infoOperator={infoOperator}
+            setTotalToPay={setTotalToPay}
           />
         )}
         {actualStep === 'Paso 3 de 3' && (
           <PsePaymentForm
             setColorOnStep={setColorOnStep}
+            totalToPay={totalToPay}
           />
         )}
       </div>

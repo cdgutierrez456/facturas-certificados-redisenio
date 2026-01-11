@@ -1,12 +1,17 @@
 "use client";
+
 import { useEffect, useRef, useState } from "react";
+import { useRouter } from "next/navigation";
 import forge from "node-forge";
+import Swal from "sweetalert2";
+
+import Header from "@/components/shared/Header/Header";
+
+import { consultarLlave, realizarConsultaPagoPSE } from "@/services/megaPagos/consultasMegaPagos";
 import { getLastTransaction } from "@/utils/storage";
 import { manejarEncriptacion } from "@/utils/encript";
-import { realizarConsultaPagoPSE } from "@/services/megaPagos/consultasMegaPagos";
-import Swal from "sweetalert2";
+
 import styles from "./Paid.module.sass";
-import { useRouter } from "next/navigation";
 
 export default function SuccessPage() {
   const router = useRouter();
@@ -36,35 +41,39 @@ export default function SuccessPage() {
     sucursal: "",
   })
 
-  useEffect(() => {
-    consultarT();
-  }, [lastTransaction])
+  // useEffect(() => {
+  //   consultarT();
+  // }, [lastTransaction])
 
   useEffect(() => {
-    const data = getLastTransaction()
-    if (data) {
-      setLastTransaction(data)
-      const cantidad = data.cantidad;
-      const facturasMap = Array.from({ length: cantidad }, (_, i) => ({
-        fecha: transaction.date,
-        sucursal: transaction.sucursal,
-        dispositivo: `Disp-${i + 1}`,
-        idTrx: `Trx-${i + 1}`,
-        idAut: `Aut-${i + 1}`,
-      }));
+    // const data = getLastTransaction()
+    // if (data) {
+    //   setLastTransaction(data)
+    //   const cantidad = data.cantidad;
+    //   const facturasMap = Array.from({ length: cantidad }, (_, i) => ({
+    //     fecha: transaction.date,
+    //     sucursal: transaction.sucursal,
+    //     dispositivo: `Disp-${i + 1}`,
+    //     idTrx: `Trx-${i + 1}`,
+    //     idAut: `Aut-${i + 1}`,
+    //   }));
 
-      setFacturas(facturasMap);
-    }
+    //   setFacturas(facturasMap);
+    // }
+    procesar()
   }, [])
 
   const procesar = async () => {
-    if (!lastTransaction) return;
+    const tansactionId = localStorage.getItem('transactionId')
+    debugger
+    if (!tansactionId) return;
     try {
+      const keysResponse = await consultarLlave();
+      const publicKey = keysResponse.data.public_key;
       const encriptedData = await manejarEncriptacion(
-        parseInt(forge.util.decode64(lastTransaction.tansactionId)),
-        lastTransaction.publicKey
+        parseInt(forge.util.decode64(tansactionId)),
+        publicKey
       );
-
       if (encriptedData) {
         const consultaInf = await realizarConsultaPagoPSE(
           lastTransaction.bearer,
@@ -144,6 +153,7 @@ export default function SuccessPage() {
 
   return (
     <div className={styles.modalOverlay}>
+      <Header />
       <div className={styles.modalContent}>
         <div className={styles.modalHeader}>
           <h3

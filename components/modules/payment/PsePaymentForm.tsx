@@ -2,6 +2,8 @@
 
 import Image from 'next/image';
 import { useForm, SubmitHandler } from 'react-hook-form';
+import { useRouter } from 'next/navigation';
+
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Loader2, AlertCircle, X } from 'lucide-react';
 import { z } from 'zod'
@@ -10,17 +12,28 @@ import { usePsePaymentForm } from './hooks/usePsePaymentForm';
 
 import { paymentSchema } from '@/schemas/paymentSchema';
 
+import { consultarLlave, realizarPagoPSE } from '@/services/megaPagos/consultasMegaPagos';
+import { manejarEncriptacion } from '@/utils/encript';
+import { showToast } from '@/utils/alerts';
+
 // Inferir el tipo de datos desde el schema
 type PaymentFormData = z.infer<typeof paymentSchema>;
 
 type stepsNames = 'Paso 1 de 3' | 'Paso 2 de 3' | 'Paso 3 de 3';
 
 interface PsePaymentFormProps {
+  totalToPay: string;
   setColorOnStep: (nameStep: stepsNames) => void;
 }
 
-export default function PsePaymentForm({ setColorOnStep }: PsePaymentFormProps) {
-  const { banks } = usePsePaymentForm()
+export default function PsePaymentForm({ totalToPay, setColorOnStep }: PsePaymentFormProps) {
+  const router = useRouter()
+  const {
+    banks,
+    idUsuario,
+    accessToken,
+    parseCurrencyToNumber
+  } = usePsePaymentForm()
   const {
     register,
     handleSubmit,
@@ -30,15 +43,68 @@ export default function PsePaymentForm({ setColorOnStep }: PsePaymentFormProps) 
     mode: 'onBlur',
     defaultValues: {
       userType: 'person',
-      idType: 'CedulaDeCiudadania'
+      idType: 'CedulaDeCiudadania',
+      bank: '0'
     }
   });
 
-  const onSubmit: SubmitHandler<PaymentFormData> = async (data) => {
+  const onSubmit: SubmitHandler<PaymentFormData> = async (infoForm) => {
     console.log('Datos válidos para enviar a PSE:');
-    await new Promise((resolve) => setTimeout(resolve, 2000));
-    alert('¡Formulario validado y enviado correctamente!');
+    const data = {
+      data: {
+        extraData: {
+          idusuario: idUsuario,
+          idtipooperacion: 5,
+          idtiposolicitud: 5,
+          linkcode: "-1",
+          solicitudenvio: "N",
+          externalurl: "http://localhost:3000/paid",
+          // externalurl: "https://pagos-rose.vercel.app/paid",
+        },
+        step1: {
+          name: "Servicios Moviles",
+          description: "Pago Servicios Moviles",
+          value: parseCurrencyToNumber(totalToPay),
+          in_stock: true,
+          idimpuesto: 21,
+          shipping_cost: 0,
+          requested_units: 1,
+          total_amount: parseCurrencyToNumber(totalToPay),
+          payment_amount: 0,
+        },
+        step3: {
+          terms_and_conditions: true,
+          payment_method: "pse",
+          biller_name: infoForm.fullName,
+          biller_email: infoForm.email,
+          biller_address: "Colombia",
+          payment_info: {
+            pse_bank: infoForm.bank,
+            pse_person_type: infoForm.userType,
+            pse_document: infoForm.idNumber,
+            pse_name: infoForm.fullName,
+            pse_phone: infoForm.cellphone,
+            pse_document_type: infoForm.idType,
+          },
+        },
+      },
+    };
+    const dataString = JSON.stringify(data);
+    const keysResponse = await consultarLlave();
+    const publicKey = keysResponse.data.public_key;
+    const resultadoEncriptado = await manejarEncriptacion(dataString, publicKey)
+    if (resultadoEncriptado) {
+      const pago = await realizarPagoPSE(accessToken, resultadoEncriptado)
+      const { pseURL, transactionId } = pago.data
+      debugger
+      localStorage.setItem('transactionId', transactionId)
+      router.push(pseURL)
+    }
   };
+
+  const onErrors = () => {
+    showToast('error', 'Verifica la información del formulario')
+  }
 
   const inputClasses = "w-full bg-white border-none rounded-full py-2 px-4 text-gray-600 shadow-sm focus:outline-none focus:ring-2 focus:ring-yellow-400 placeholder-gray-300";
   const labelClasses = "block text-sm font-bold text-gray-800 mb-1 ml-1";
@@ -67,7 +133,7 @@ export default function PsePaymentForm({ setColorOnStep }: PsePaymentFormProps) 
             <h1 className="text-2xl font-bold text-gray-900">Realiza tu pago por PSE</h1>
           </div>
 
-          <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+          <form onSubmit={handleSubmit(onSubmit, onErrors)} className="space-y-6">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-5">
 
               <div>
@@ -133,7 +199,8 @@ export default function PsePaymentForm({ setColorOnStep }: PsePaymentFormProps) 
                   type="tel"
                   {...register('cellphone')}
                   className={inputClasses}
-                  placeholder="+57 300 000 0000"
+                  placeholder="3123456789"
+                  maxLength={10}
                 />
                 {errors.cellphone && <p className={errorClasses}><AlertCircle size={12}/> {errors.cellphone.message}</p>}
               </div>
@@ -164,7 +231,6 @@ export default function PsePaymentForm({ setColorOnStep }: PsePaymentFormProps) 
                 <label className={labelClasses}>Banco</label>
                 <div className="relative">
                   <select {...register('bank')} className={`${inputClasses} appearance-none`}>
-                    <option value="">Seleccione su banco</option>
                     {banks.map((bank) => (
                       <option key={bank.financialInstitutionCode} value={bank.financialInstitutionCode}>
                         {bank.financialInstitutionName}
@@ -198,7 +264,7 @@ export default function PsePaymentForm({ setColorOnStep }: PsePaymentFormProps) 
 
             <div className="flex flex-col md:flex-row justify-between items-center pt-8 mt-4 border-t border-gray-100 gap-4">
               <div className="text-xl font-bold text-gray-900">
-                Total a pagar: $000,000
+                Total a pagar: {totalToPay}
               </div>
 
               <button

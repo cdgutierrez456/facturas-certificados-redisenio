@@ -14,6 +14,7 @@ export const paymentSchema = z.object({
   cellphone: z
     .string()
     .min(10, 'El celular debe tener al menos 10 dígitos')
+    .max(10, 'El campo debe tener máximo 10 dígitos')
     .regex(/^\d+$/, 'El celular debe contener solo números'),
   email: z
     .email('Ingresa un correo electrónico válido'),
@@ -21,7 +22,7 @@ export const paymentSchema = z.object({
     .string()
     .min(1, 'Confirma tu correo'),
   bank: z.string().min(1, 'Campo requerido'),
-  terms: z.literal(true),
+  terms: z.literal(true, 'Campo requerido'),
 }).refine((data) => data.email === data.confirmEmail, {
   message: "Los correos electrónicos no coinciden",
   path: ["confirmEmail"],
