@@ -113,9 +113,7 @@ export default function AdminPanelComponent() {
               <X color="#fff"/>
             </button>
             <p className="text-center mb-5 text-2xl bg-slate-800 fixed right-[43%] px-2 rounded-sm">Crea tu POST</p>
-            <CreatePost
-              onToggleModal={onToggleModal}
-            />
+            <CreatePost onToggleModal={onToggleModal} />
           </div>
         </section>
       )}
