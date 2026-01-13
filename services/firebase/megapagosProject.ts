@@ -1,25 +1,28 @@
-import { initializeApp } from "firebase/app";
+import { initializeApp, getApps, getApp } from "firebase/app"; // 1. Agregamos getApps y getApp
 import { getDatabase, ref, set, remove, update, push } from "firebase/database";
 import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
 import { getStorage, ref as refStorage, uploadBytes, getDownloadURL } from "firebase/storage";
 
 import { firebaseConfig, passwordFirebase, userFirebase } from "@/config/firebaseMegapagos";
 
-export const app = initializeApp(firebaseConfig);
+export const app = getApps().length > 0 ? getApp() : initializeApp(firebaseConfig);
+
 const db = getDatabase(app);
 const auth = getAuth(app);
 const storage = getStorage(app);
 
 function loginUser(email: string, password: string): void {
-  signInWithEmailAndPassword(auth, email, password)
-  .then((userCredential) => {
-    const user = userCredential.user;
-  })
-  .catch((error) => {
-    const errorCode = error.code;
-    const errorMessage = error.message;
-    console.error("Error al iniciar sesión:", errorCode, errorMessage);
-  });
+  if (!auth.currentUser) {
+     signInWithEmailAndPassword(auth, email, password)
+    .then((userCredential) => {
+      const user = userCredential.user;
+    })
+    .catch((error) => {
+      const errorCode = error.code;
+      const errorMessage = error.message;
+      console.error("Error al iniciar sesión:", errorCode, errorMessage);
+    });
+  }
 }
 
 export function createPostService(postData: any): Promise<void> {
@@ -29,7 +32,7 @@ export function createPostService(postData: any): Promise<void> {
     const newPostRef = push(postRef);
     return set(newPostRef, postData);
   } else {
-    return Promise.reject("Usuario no autenticado.");
+    return Promise.reject("Usuario no autenticado (o inicializando). Intenta nuevamente.");
   }
 }
 
