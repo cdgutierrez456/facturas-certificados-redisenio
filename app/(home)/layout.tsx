@@ -24,7 +24,6 @@ export const metadata: Metadata = {
 export default function HomeLayout({ children }: { children: React.ReactNode }) {
   return (
     <div>
-      <h1 className="text-2xl text-blue-600">Gran data set</h1>
       <Header />
       {children}
     </div>

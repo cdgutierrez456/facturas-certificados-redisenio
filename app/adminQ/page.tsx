@@ -16,12 +16,12 @@ import DashboardPlaceholder from "@/components/modules/admin/DashboardPlaceholde
 import SidebarItem from "@/components/modules/admin/SidebarItem";
 import BlogTable from "@/components/modules/admin/BlogTable";
 import FaqsTable from "@/components/modules/admin/FaqsTable";
-// import CreatePost from "@/components/modules/blog/CreatePost";
+import CreatePost from "@/components/modules/blog/CreatePost";
 
-const CreatePost = dynamic(() => import("@/components/modules/blog/CreatePost"), {
-  ssr: false,
-  loading: () => <div className="text-white text-center p-10">Loading...</div>
-});
+// const CreatePost = dynamic(() => import("@/components/modules/blog/CreatePost"), {
+//   ssr: false,
+//   loading: () => <div className="text-white text-center p-10">Loading...</div>
+// });
 
 // Definimos los módulos disponibles
 type ModuleType = "dashboard" | "faqs" | "blog";
@@ -29,7 +29,7 @@ type ModuleType = "dashboard" | "faqs" | "blog";
 export default function AdminPanelComponent() {
   const router = useRouter()
   const [showModal, setShowModal] = useState(false)
-  const [activeModule, setActiveModule] = useState<ModuleType>("faqs");
+  const [activeModule, setActiveModule] = useState<ModuleType>("blog");
 
   const onToggleModal = (show: boolean) => {
     setShowModal(show)
@@ -55,12 +55,6 @@ export default function AdminPanelComponent() {
               label="Dashboard General"
               isActive={activeModule === "dashboard"}
               onClick={() => setActiveModule("dashboard")}
-            />
-            <SidebarItem
-              icon={<HelpCircle size={20} />}
-              label="Preguntas Frecuentes"
-              isActive={activeModule === "faqs"}
-              onClick={() => setActiveModule("faqs")}
             />
             <SidebarItem
               icon={<FileText size={20} />}
@@ -114,12 +108,14 @@ export default function AdminPanelComponent() {
       </section>
       {showModal && (
         <section className="bg-black/50 fixed top-0 right-0 w-full h-dvh flex justify-center items-center z-50">
-          <div className="bg-slate-800 rounded-2xl p-5 relative w-full max-w-4xl">
+          <div className="bg-slate-800 rounded-2xl p-5 relative w-full max-w-4xl overflow-auto max-h-[95dvh]">
             <button onClick={() => onToggleModal(false)} className="absolute top-3 right-3 cursor-pointer">
               <X color="#fff"/>
             </button>
-            <p className="text-center mb-5 text-2xl">Crea tu POST</p>
-            <CreatePost />
+            <p className="text-center mb-5 text-2xl bg-slate-800 fixed right-[43%] px-2 rounded-sm">Crea tu POST</p>
+            <CreatePost
+              onToggleModal={onToggleModal}
+            />
           </div>
         </section>
       )}
