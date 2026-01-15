@@ -24,6 +24,8 @@ type FormData = {
   dateModified: string;
 };
 
+const API_KEY_TINYMCE = process.env.NEXT_PUBLIC_API_KEY_TINYMCE || '';
+
 const EditorBlock = ({ onToggleModal }: EditorBlockProps) => {
   const [isSaving, setIsSaving] = useState(false);
   const [image, setImage] = useState<File | null>(null)
@@ -169,7 +171,7 @@ const EditorBlock = ({ onToggleModal }: EditorBlockProps) => {
             Contenido
           </label>
           <Editor
-            apiKey='k19if96znk4dpwkc9bu8n5jyytqwu8o6rbg9t4kwzwqdfxdo' // Consíguela gratis en tiny.cloud
+            apiKey={`${API_KEY_TINYMCE}`}
             onInit={(evt: any, editor: any) => editorRef.current = editor}
             initialValue="<p>Escribe tu POST aquí...</p>"
             init={{

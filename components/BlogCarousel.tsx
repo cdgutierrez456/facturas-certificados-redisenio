@@ -1,27 +1,7 @@
-import Image from "next/image";
+'use client'
 
-const blogs = [
-  {
-    title: "Lorem ipsum",
-    description: "Lorem ipsum dolor sit amet consectetur. Turpis eu ultricies odio sed.",
-    image: "/images/rectangle_9063.png",
-  },
-  {
-    title: "Lorem ipsum",
-    description: "Lorem ipsum dolor sit amet consectetur. Turpis eu ultricies odio sed.",
-    image: "/images/rectangle_9063.png",
-  },
-  {
-    title: "Lorem ipsum",
-    description: "Lorem ipsum dolor sit amet consectetur. Turpis eu ultricies odio sed.",
-    image: "/images/rectangle_9063.png",
-  },
-  {
-    title: "Lorem ipsum",
-    description: "Lorem ipsum dolor sit amet consectetur. Turpis eu ultricies odio sed.",
-    image: "/images/rectangle_9063.png",
-  },
-];
+import Image from "next/image";
+import BlogPostGrid from "./modules/blog/BlogPostGrid";
 
 export default function BlogCarousel() {
   return (
@@ -31,7 +11,8 @@ export default function BlogCarousel() {
           Conoce algunos de lo temas <br /> de nuestro <span className="text-black">Blog</span>
         </h2>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-8">
+        <BlogPostGrid />
+        {/* <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-8">
           {blogs.map((blog, idx) => (
             <div
               key={idx}
@@ -55,16 +36,16 @@ export default function BlogCarousel() {
               </button>
             </div>
           ))}
-        </div>
+        </div> */}
 
-        <div className="flex justify-center items-center gap-3 mt-8">
+        {/* <div className="flex justify-center items-center gap-3 mt-8">
           {[0, 1, 2, 3, 4].map((i) => (
             <button
               key={i}
               className={`w-3 h-3 rounded-full ${i === 0 ? "bg-yellow" : "bg-gray-400"}`}
             ></button>
           ))}
-        </div>
+        </div> */}
       </section>
     </section>
   );
