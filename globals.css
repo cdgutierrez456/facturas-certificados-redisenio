@@ -1,5 +1,7 @@
 @import "tailwindcss";
 
+@plugin "@tailwindcss/typography";
+
 @theme {
   --color-yellow: #FFBB00;
   --color-grey-light: #F9F9F9;

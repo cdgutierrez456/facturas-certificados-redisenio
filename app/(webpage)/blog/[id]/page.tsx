@@ -1,65 +1,27 @@
-"use client";
-import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
-import { useParams } from "next/navigation";
-import Image from "next/image";
+import React from 'react';
+import { notFound } from 'next/navigation';
+import { getPostById } from '@/services/postService'; // Importa tu función
+import PostDetail from '@/components/modules/blog/PostDetail';
 
-import { db } from "@/services/firebase/serviciosFaqs";
-import { doc, getDoc } from "firebase/firestore";
-import styles from "./Post.module.sass";
-
-type Post = {
-  id: string;
-  imgUri: string;
-  mainTitle: string;
-  briefDescription: string;
-  formattedContent: string;
-};
-
-const PostPage = () => {
-  const params = useParams();
-  const router = useRouter();
-  const [post, setPost] = useState<Post | null>(null);
-  const id = Array.isArray(params?.id) ? params.id[0] : params.id;
-
-  useEffect(() => {
-    if (!id) return;
-
-    const fetchPost = async () => {
-      const postRef = doc(db, "posts", id);
-      const postSnap = await getDoc(postRef);
-      if (postSnap.exists()) {
-        setPost({ id: postSnap.id, ...postSnap.data() } as Post);
-      } else {
-        router.push("/404"); // Redirigir a una página 404 si no se encuentra el post
-      }
-    };
-
-    fetchPost();
-  }, [id, router]);
-
-  if (!post) return <p>Loading...</p>;
-
-  return (
-    <div className={styles.post}>
-      <div className={styles.post2}>
-        {post.imgUri && (
-          <Image
-            src={post.imgUri}
-            alt={post.mainTitle}
-            className={styles.image}
-            fill
-          />
-        )}
-        <h1>{post.mainTitle}</h1>
-        <p>{post.briefDescription}</p>
-        <div
-          className={styles.content}
-          dangerouslySetInnerHTML={{ __html: post.formattedContent }}
-        />
-      </div>
-    </div>
-  )
+interface PageProps {
+  params: {
+    id: string;
+  };
 }
 
-export default PostPage;
+// Esta función es asíncrona porque vamos a esperar los datos de Firebase
+export default async function BlogDetailPage({ params }: PageProps) {
+  // 1. Obtenemos el ID de la URL
+  const { id } = params;
+
+  // 2. Buscamos los datos en Firebase Realtime Database
+  const post = await getPostById(id);
+
+  // 3. Si no existe el post, mostramos la página 404 de Next.js
+  if (!post) {
+    notFound();
+  }
+
+  // 4. Renderizamos tu componente visual pasándole los datos
+  return <PostDetail post={post} />;
+}

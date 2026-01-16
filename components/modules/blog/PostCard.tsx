@@ -1,6 +1,7 @@
 'use client'
 
 import Image from "next/image"
+import Link from "next/link";
 
 import CustomButton from "@/components/shared/CustomButton"
 
@@ -18,7 +19,7 @@ export interface PostCardProps {
   titleUrl: string;
 }
 
-export default function PostCard({ title, img }: PostCardProps) {
+export default function PostCard({ id, title, img }: PostCardProps) {
   return (
     <article className="flex flex-col h-[430px] w-[290px] justify-between pb-4">
       <div className="relative rounded-3xl overflow-hidden h-[70%]">
@@ -33,6 +34,7 @@ export default function PostCard({ title, img }: PostCardProps) {
       </p>
       <div className="flex items-center justify-center">
         <CustomButton
+          href={`/blog/${id}`}
           text='Ver más...'
           variant="white"
         />
