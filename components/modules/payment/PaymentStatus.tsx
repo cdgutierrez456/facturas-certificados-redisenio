@@ -26,7 +26,7 @@ export default function PaymentStatus({ infoTransaction }: PaymentStatusProps) {
     17: { value: 17, text: 'Anulada', class: 'failed' }
   }
 
-  if (!info || !banks?.length) return (
+  if (!info || !Object.entries(info).length || !banks?.length) return (
     <div className="min-h-screen relative flex items-center justify-center z-10 pt-[110px]">
       <div className="bg-white w-full max-w-2xl rounded-[30px] shadow-2xl p-8 md:p-12 animate-in fade-in zoom-in duration-300">
         <p className='text-black'>Cargando datos...</p>
