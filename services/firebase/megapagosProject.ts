@@ -11,6 +11,8 @@ const db = getDatabase(app);
 const auth = getAuth(app);
 const storage = getStorage(app);
 
+console.log("Bucket actual:", firebaseConfig.storageBucket);
+
 function loginUser(email: string, password: string): void {
   if (!auth.currentUser) {
      signInWithEmailAndPassword(auth, email, password)
