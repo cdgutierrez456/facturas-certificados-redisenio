@@ -5,13 +5,11 @@ import { getStorage, ref as refStorage, uploadBytes, getDownloadURL } from "fire
 
 import { firebaseConfig, passwordFirebase, userFirebase } from "@/config/firebaseMegapagos";
 
-export const app = getApps().length > 0 ? getApp() : initializeApp(firebaseConfig);
+export const app = !getApps().length ? initializeApp(firebaseConfig) : getApp();
 
 const db = getDatabase(app);
 const auth = getAuth(app);
-const storage = getStorage(app);
-
-console.log("Bucket actual:", firebaseConfig.storageBucket);
+const storage = getStorage(app, "gs://blog-megapagos.appspot.com");
 
 function loginUser(email: string, password: string): void {
   if (!auth.currentUser) {
