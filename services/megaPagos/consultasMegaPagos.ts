@@ -104,7 +104,8 @@ export const realizarLoging = async (
         headers: {
           "Content-Type": "application/json",
           Authorization: "Bearer " + token
-        },body: bodyJSON
+        },
+        body: bodyJSON
       })
 
       if (!response.ok) {

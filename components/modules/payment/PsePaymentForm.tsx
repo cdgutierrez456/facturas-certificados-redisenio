@@ -44,12 +44,16 @@ export default function PsePaymentForm({ totalToPay, setColorOnStep }: PsePaymen
     defaultValues: {
       userType: 'person',
       idType: 'CedulaDeCiudadania',
-      bank: '0'
+      bank: '0',
+      idNumber: '111933594',
+      fullName: 'Cristian David Gutierrez',
+      cellphone: '3128079460',
+      email: 'email@gmail.com',
+      confirmEmail: 'email@gmail.com'
     }
   });
 
   const onSubmit: SubmitHandler<PaymentFormData> = async (infoForm) => {
-    console.log('Datos válidos para enviar a PSE:');
     const data = {
       data: {
         extraData: {
@@ -96,7 +100,6 @@ export default function PsePaymentForm({ totalToPay, setColorOnStep }: PsePaymen
     if (resultadoEncriptado) {
       const pago = await realizarPagoPSE(accessToken, resultadoEncriptado)
       const { pseURL, transactionId } = pago.data
-      debugger
       localStorage.setItem('transactionId', transactionId)
       router.push(pseURL)
     }

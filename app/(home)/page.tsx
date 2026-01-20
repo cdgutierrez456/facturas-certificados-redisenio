@@ -27,13 +27,12 @@ export default function Home() {
 
   return (
     <div>
-      {/* Componente Hero con props dinámicos */}
       <Hero
-        mainImage="/images/hero-bg.png" // Imagen principal de fondo
-        title="Selecciona tu operador"   // Título
-        subtitle="Lorem ipsum dolor sit amet consectetur."  // Subtítulo
-        operatorImages={logos}  // Imágenes de los operadores (con logo y color de fondo)
-        step={steps}  // Pasos (ej: "Paso 1 de 3")
+        mainImage="/images/hero-bg.png"
+        title="Selecciona tu operador"
+        subtitle="Lorem ipsum dolor sit amet consectetur."
+        operatorImages={logos}
+        step={steps}
       />
 
       <ScrollingBanner texts={bannerTexts} />

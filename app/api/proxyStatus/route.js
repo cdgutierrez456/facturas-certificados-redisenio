@@ -7,10 +7,7 @@ export async function POST(req) {
   try {
     const body = await req.json()
     const bearer = await req.headers.get("Authorization")
-
-
     const { transactionId } = body
-
     const apiUrl = megaPagosUrls.consult + "transaction/get-info" // URL al back de Q
 
     // Realizamos la solicitud usando axios
