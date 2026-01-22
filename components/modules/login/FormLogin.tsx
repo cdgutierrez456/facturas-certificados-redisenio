@@ -2,11 +2,10 @@
 import { Mail, Lock, Loader2, ArrowRight } from 'lucide-react';
 import { useForm } from 'react-hook-form';
 import { useRouter } from "next/navigation";
-import { auth } from "@/services/firebase/serviciosFaqs";
-import { signInWithEmailAndPassword } from "firebase/auth";
+import { zodResolver } from '@hookform/resolvers/zod';
 import Swal from 'sweetalert2';
 
-import { zodResolver } from '@hookform/resolvers/zod';
+import { loginUser } from '@/services/firebase/megapagosProject';
 
 import { LoginDTO } from '@/interfaces/Login';
 import { loginSchema } from '@/schemas/login';
@@ -23,7 +22,7 @@ export default function FormLogin() {
 
   const onSubmit = async ({ email, password }: LoginDTO) => {
     try {
-      await signInWithEmailAndPassword(auth, email, password);
+      await loginUser(email, password)
       router.push("/adminQ");
     } catch (error) {
       Swal.fire({

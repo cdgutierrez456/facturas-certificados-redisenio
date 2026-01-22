@@ -11,18 +11,20 @@ const db = getDatabase(app);
 const auth = getAuth(app);
 const storage = getStorage(app, "gs://blog-megapagos.appspot.com");
 
-function loginUser(email: string, password: string): void {
-  if (!auth.currentUser) {
-     signInWithEmailAndPassword(auth, email, password)
-    .then((userCredential) => {
-      const user = userCredential.user;
-    })
-    .catch((error) => {
-      const errorCode = error.code;
-      const errorMessage = error.message;
-      console.error("Error al iniciar sesión:", errorCode, errorMessage);
-    });
-  }
+export async function loginUser(email: string, password: string) {
+  console.log('User', auth.currentUser);
+  console.log('Password', password);
+
+  await signInWithEmailAndPassword(auth, email, password)
+  .then((userCredential) => {
+    const user = userCredential.user;
+    return user;
+  })
+  .catch((error) => {
+    const errorCode = error.code;
+    const errorMessage = error.message;
+    return errorMessage;
+  });
 }
 
 export function createPostService(postData: any): Promise<void> {
@@ -68,4 +70,4 @@ export async function uploadImageService(file: File): Promise<string> {
   return await getDownloadURL(snapshot.ref);
 }
 
-loginUser(userFirebase, passwordFirebase);
+// loginUser(userFirebase, passwordFirebase);
