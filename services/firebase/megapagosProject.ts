@@ -12,9 +12,6 @@ const auth = getAuth(app);
 const storage = getStorage(app, "gs://blog-megapagos.appspot.com");
 
 export async function loginUser(email: string, password: string) {
-  console.log('User', auth.currentUser);
-  console.log('Password', password);
-
   await signInWithEmailAndPassword(auth, email, password)
   .then((userCredential) => {
     const user = userCredential.user;
