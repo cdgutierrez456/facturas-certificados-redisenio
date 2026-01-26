@@ -1,9 +1,11 @@
 'use client'
 
-import React from 'react';
 import { CheckCircle, ClockArrowUp, Ban } from 'lucide-react';
 import Link from 'next/link';
+
 import { usePsePaymentForm } from './hooks/usePsePaymentForm';
+
+import InvoiceViewer from './InvoiceViewer';
 
 interface PaymentStatusProps {
   infoTransaction: any;
@@ -26,7 +28,7 @@ export default function PaymentStatus({ infoTransaction }: PaymentStatusProps) {
     17: { value: 17, text: 'Anulada', class: 'failed' }
   }
 
-  if (!info || !Object.entries(info).length || !banks?.length) return (
+  if (!info.status || !Object.entries(info).length || !banks?.length) return (
     <div className="min-h-screen relative flex items-center justify-center z-10 pt-[110px]">
       <div className="bg-white w-full max-w-2xl rounded-[30px] shadow-2xl p-8 md:p-12 animate-in fade-in zoom-in duration-300">
         <p className='text-black'>Cargando datos...</p>
@@ -42,8 +44,8 @@ export default function PaymentStatus({ infoTransaction }: PaymentStatusProps) {
   );
 
   return (
-    <div className="min-h-screen relative flex items-center justify-center z-10 pt-[110px]">
-      <div className="bg-white w-full max-w-2xl rounded-[30px] shadow-2xl p-8 md:p-12 animate-in fade-in zoom-in duration-300">
+    <div className="min-h-screen relative flex items-center justify-center z-10 pt-[110px] flex-col">
+      <div className="bg-white w-full max-w-2xl rounded-[30px] shadow-2xl px-8 md:px-10 py-5 md:py-8 animate-in fade-in zoom-in duration-300">
 
         {statusInfo[info?.status || '']?.value == 1 && (
           <div className="flex flex-col items-center justify-center mb-8 gap-3">
@@ -67,14 +69,12 @@ export default function PaymentStatus({ infoTransaction }: PaymentStatusProps) {
           </div>
         )}
 
-        <div className="space-y-3 mb-10">
+        <div className="space-y-3 mb-5">
           <InfoRow label="Código de pago:" value={info.externalDetails?.payment_code || ''} />
           <InfoRow label="Estado:" value={statusInfo[info?.status || '']?.text} />
           <InfoRow label="Fecha de pago:" value={info.internalDetails?.date_payment || ''} />
           <InfoRow label="Medio de pago:" value={'PSE'} />
           <InfoRow label="Banco:" value={getNameBank(info.externalDetails?.entity_franquise || '')} />
-          <InfoRow label="Id de pago:" value={info?.paymentId || ''} />
-          <InfoRow label="Id solicitud:" value={info.externalDetails?.entity_franquise || ''} />
           <InfoRow label="Email del pagador:" value={info?.payerDetails?.email || ''} />
         </div>
 
@@ -93,6 +93,10 @@ export default function PaymentStatus({ infoTransaction }: PaymentStatusProps) {
         </div>
 
       </div>
+      {/* {statusInfo[info?.status || '']?.value == 1 && (
+        <InvoiceViewer />
+      )} */}
+      <InvoiceViewer />
     </div>
   );
 }

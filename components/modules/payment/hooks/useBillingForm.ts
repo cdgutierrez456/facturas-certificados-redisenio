@@ -20,6 +20,7 @@ const operatorList: NormalOperator[] = [
 ];
 
 export const useBillingForm = (initialOperator: any) => {
+  const [arrayDataPay, setArrayDataPay] = useState<any[]>([]);
   const [bills, setBills] = useState<DataInvoiceDTO[]>([]);
   const [totalAmount, setTotalAmount] = useState(0);
   const [lastValueFromService, setLastValueFromService] = useState(0)
@@ -47,6 +48,11 @@ export const useBillingForm = (initialOperator: any) => {
       setValue('operator', initialOperator.value);
     }
   }, [initialOperator, setValue]);
+
+  useEffect(() => {
+    localStorage.setItem('bills', JSON.stringify(bills));
+    localStorage.setItem('dataPays', JSON.stringify(arrayDataPay));
+  }, [bills])
 
   const onSubmit: SubmitHandler<DataInvoiceDTO> = async (data) => {
     const bill: DataInvoiceDTO = {
@@ -82,6 +88,7 @@ export const useBillingForm = (initialOperator: any) => {
       setTotalAmount((actVal) => actVal + (response.data?.data_pay?.amount || 0));
       setLastValueFromService(response.data?.data_pay?.amount || 0)
       setBills((prev) => [...prev, bill]);
+      setArrayDataPay((prev) => [...prev, response.data?.data_pay]);
       reset();
     } catch (error) {
       showAlert({ type: 'error', message: 'Error en la consulta de la referencia, verifica la información.' });

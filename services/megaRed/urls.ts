@@ -1,5 +1,6 @@
 import { env } from "@/config/env";
 
 export const megaRedUrls = {
-    consult:`https://appv2_api.megared.net.co/pay_invoices/consult/`
+    consult:`https://appv2_api.megared.net.co/pay_invoices/consult/`,
+    payInvoice: 'https://appv2_api.megared.net.co/pay_invoices/sales/'
 }
