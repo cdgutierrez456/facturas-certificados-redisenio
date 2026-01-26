@@ -8,8 +8,8 @@ export const usePosts = () => {
   const [posts, setPosts] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-
+  const getPost = async () => {
+    setLoading(true);
     fetch(`${firebaseConfig.databaseURL}/facturas.json`)
     .then(data => data.json())
     .then((data: any) => {
@@ -22,7 +22,11 @@ export const usePosts = () => {
       setPosts(postsArray);
       setLoading(false);
     })
+  }
+
+  useEffect(() => {
+    getPost()
   }, []);
 
-  return { posts, loading };
+  return { posts, loading, getPost };
 };

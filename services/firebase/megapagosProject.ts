@@ -1,7 +1,7 @@
 import { initializeApp, getApps, getApp } from "firebase/app"; // 1. Agregamos getApps y getApp
 import { getDatabase, ref, set, remove, update, push } from "firebase/database";
 import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
-import { getStorage, ref as refStorage, uploadBytes, getDownloadURL } from "firebase/storage";
+import { getStorage, ref as refStorage, uploadBytes, getDownloadURL, deleteObject } from "firebase/storage";
 
 import { firebaseConfig, passwordFirebase, userFirebase } from "@/config/firebaseMegapagos";
 
@@ -47,9 +47,19 @@ export function editPostService(postId: string, updatedData: any): Promise<void>
   }
 }
 
-export function deletePostService(postId: string): Promise<void> {
+export async function deletePostService(postId: string, imageUrl?: string): Promise<void> {
   const user = auth.currentUser;
+
   if (user) {
+    if (imageUrl) {
+      try {
+        const fileRef = refStorage(storage, imageUrl);
+        await deleteObject(fileRef);
+        console.log("Imagen eliminada del Storage");
+      } catch (error) {
+        console.warn("No se pudo eliminar la imagen (o no existía):", error);
+      }
+    }
     const postRef = ref(db, 'facturas/' + postId);
     return remove(postRef)
   } else {

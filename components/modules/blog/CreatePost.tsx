@@ -1,16 +1,17 @@
 "use client";
 
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import { Editor } from '@tinymce/tinymce-react';
 
 import { showToast } from "@/utils/alerts";
-import { uploadImageService, createPostService } from "@/services/firebase/megapagosProject";
+import { uploadImageService, createPostService, editPostService } from "@/services/firebase/megapagosProject";
 
 import ImageUploadZone from "./ImageUploadZone";
 
 interface EditorBlockProps {
   onToggleModal: (val: boolean) => void;
+  postToEdit?: any | null;
 }
 
 type FormData = {
@@ -26,7 +27,7 @@ type FormData = {
 
 const API_KEY_TINYMCE = process.env.NEXT_PUBLIC_API_KEY_TINYMCE || '';
 
-const EditorBlock = ({ onToggleModal }: EditorBlockProps) => {
+const EditorBlock = ({ onToggleModal, postToEdit }: EditorBlockProps) => {
   const [isSaving, setIsSaving] = useState(false);
   const [image, setImage] = useState<File | null>(null)
   const editorRef = useRef<any>(null);
@@ -34,15 +35,30 @@ const EditorBlock = ({ onToggleModal }: EditorBlockProps) => {
   const {
     register,
     handleSubmit,
+    setValue,
+    reset,
     formState: { errors },
   } = useForm<FormData>();
+
+  useEffect(() => {
+    if (postToEdit) {
+      setValue("title", postToEdit.title);
+      setValue("titleH1", postToEdit.titleH1);
+      setValue("slug", postToEdit.titleUrl);
+      setValue("introduction", postToEdit.introduction);
+      setValue("descriptionImg", postToEdit.descriptionImg);
+      setValue("hideDate", String(postToEdit.hideDate));
+    } else {
+      reset();
+    }
+  }, [postToEdit, setValue, reset]);
 
   const onSubmit = async (data: FormData) => {
     if (!editorRef.current) return
     setIsSaving(true);
     const content = editorRef.current.getContent();
     let imageUrl = '';
-    if (image) {
+    if (image && !postToEdit?.img) {
       imageUrl = await uploadImageService(image);
     }
     const body = {
@@ -51,21 +67,31 @@ const EditorBlock = ({ onToggleModal }: EditorBlockProps) => {
       titleUrl: data.slug,
       htmlContent: content,
       introduction: data.introduction,
-      img: imageUrl,
+      img: postToEdit?.img || imageUrl,
       hideDate: data.hideDate,
       descriptionImg: data.descriptionImg,
       dateModified: new Date().toISOString(),
       date: new Date().toISOString(),
     }
     try {
-      await createPostService(body)
-      showToast('success', 'POST creado con éxito.')
+      if (postToEdit && postToEdit.id) {
+        await editPostService(postToEdit.id, body)
+      } else {
+        await createPostService(body)
+      }
+      showToast('success', `Post ${postToEdit ? 'actualizado' : 'creado'} correctamente`);
       onToggleModal(false)
     } catch (error) {
       console.log('error', error);
       setIsSaving(false)
     }
   };
+
+  const getContentTextOfButton = () => {
+    if (isSaving) return "Publicando...";
+    if (postToEdit) return "Actualizar Post";
+    return "Publicar Post";
+  }
 
   return (
     <div className="max-w-4xl mx-auto p-6 bg-white rounded-xl shadow-sm border border-gray-100 my-10">
@@ -85,9 +111,6 @@ const EditorBlock = ({ onToggleModal }: EditorBlockProps) => {
               placeholder="El titulo del post para la Factura"
               className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all text-gray-900"
             />
-            {/* {errors.title && (
-              <span className="text-red-500 text-xs mt-1">El título es requerido</span>
-            )} */}
           </div>
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
@@ -136,16 +159,17 @@ const EditorBlock = ({ onToggleModal }: EditorBlockProps) => {
               placeholder="Ej: Introduccion del post"
               className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all text-gray-900"
             />
-            {/* {errors.title && (
-              <span className="text-red-500 text-xs mt-1">El título es requerido</span>
-            )} */}
           </div>
         </div>
         <div>
           <ImageUploadZone
+            urlImage={postToEdit?.img || ''}
             onImageSelect={(file) => {
               if (file) setImage(file)
-              else setImage(null)
+              else {
+                setImage(null)
+                postToEdit!.img = ''
+              }
             }}
           />
         </div>
@@ -160,9 +184,6 @@ const EditorBlock = ({ onToggleModal }: EditorBlockProps) => {
               placeholder="Ej: Introduccion del post"
               className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all text-gray-900"
             />
-            {/* {errors.title && (
-              <span className="text-red-500 text-xs mt-1">El título es requerido</span>
-            )} */}
           </div>
         </div>
 
@@ -173,7 +194,7 @@ const EditorBlock = ({ onToggleModal }: EditorBlockProps) => {
           <Editor
             apiKey={`${API_KEY_TINYMCE}`}
             onInit={(evt: any, editor: any) => editorRef.current = editor}
-            initialValue="<p>Escribe tu POST aquí...</p>"
+            initialValue={postToEdit?.htmlContent ? postToEdit.htmlContent : '<p>Escribe el contenido del post aquí...</p>'}
             init={{
               height: 500,
               menubar: false,
@@ -210,7 +231,7 @@ const EditorBlock = ({ onToggleModal }: EditorBlockProps) => {
                 }
               `}
           >
-            {isSaving ? "Publicando..." : "Publicar Post"}
+            { getContentTextOfButton() }
           </button>
         </div>
       </form>

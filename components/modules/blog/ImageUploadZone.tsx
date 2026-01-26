@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useRef, ChangeEvent, MouseEvent } from 'react';
+import { useState, useRef, ChangeEvent, MouseEvent, useEffect } from 'react';
 import Image from 'next/image';
 import { Plus, X } from 'lucide-react';
 
@@ -9,11 +9,16 @@ import { showToast } from '@/utils/alerts';
 interface ImageUploadZoneProps {
   onImageSelect: (file: File | null) => void;
   error?: string;
+  urlImage?: string;
 }
 
-export default function ImageUploadZone({ onImageSelect, error }: ImageUploadZoneProps) {
+export default function ImageUploadZone({ onImageSelect, error, urlImage }: ImageUploadZoneProps) {
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    if (urlImage) setPreviewUrl(urlImage);
+  }, [])
 
   const handleContainerClick = () => {
     if (previewUrl) return;
