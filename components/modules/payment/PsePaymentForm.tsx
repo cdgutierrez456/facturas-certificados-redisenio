@@ -63,7 +63,7 @@ export default function PsePaymentForm({ totalToPay, setColorOnStep }: PsePaymen
           linkcode: "-1",
           solicitudenvio: "N",
           // externalurl: "http://localhost:3000/paid",
-          externalurl: "https://facturas-certificados-redis-git-b8cf1d-cdgutierrez456s-projects.vercel.app/paid",
+          externalurl: "https://facturas-certificados-redisenio.vercel.app//paid",
         },
         step1: {
           name: "Servicios Moviles",
