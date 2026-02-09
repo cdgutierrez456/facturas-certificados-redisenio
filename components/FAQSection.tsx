@@ -21,12 +21,6 @@ export default function FAQSection() {
       </div>
 
       <div className="max-w-7xl mx-auto px-4 md:px-8 py-7">
-        <div className="text-center mb-10">
-          <h2 className="text-2xl md:text-3xl font-bold text-gray-900">
-            Lorem ipsum dolor sit amet <br />
-            consectetur leo mi nullam
-          </h2>
-        </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           {faqs.map((faq, idx) => {

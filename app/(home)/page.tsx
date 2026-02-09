@@ -30,7 +30,7 @@ export default function Home() {
       <Hero
         mainImage="/images/hero-bg.png"
         title="Selecciona tu operador"
-        subtitle="Lorem ipsum dolor sit amet consectetur."
+        subtitle="Inicia el proceso indicado el operador que vas a pagar."
         operatorImages={logos}
         step={steps}
       />

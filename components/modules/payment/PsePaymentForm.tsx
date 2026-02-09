@@ -15,6 +15,7 @@ import { paymentSchema } from '@/schemas/paymentSchema';
 import { consultarLlave, realizarPagoPSE } from '@/services/megaPagos/consultasMegaPagos';
 import { manejarEncriptacion } from '@/utils/encript';
 import { showToast } from '@/utils/alerts';
+import Link from 'next/link';
 
 // Inferir el tipo de datos desde el schema
 type PaymentFormData = z.infer<typeof paymentSchema>;
@@ -38,6 +39,7 @@ export default function PsePaymentForm({ totalToPay, setColorOnStep }: PsePaymen
   } = useForm<PaymentFormData>({
     resolver: zodResolver(paymentSchema),
     mode: 'onBlur',
+    reValidateMode: 'onChange',
     defaultValues: {
       userType: 'person',
       idType: 'CedulaDeCiudadania',
@@ -218,7 +220,7 @@ export default function PsePaymentForm({ totalToPay, setColorOnStep }: PsePaymen
                 <input
                   type="email"
                   {...register('email', {
-                    onBlur: () => trigger('confirmEmail'),
+                    onChange: () => trigger('confirmEmail'),
                   })}
                   className={inputClasses}
                   placeholder="ejemplo@correo.com"
@@ -231,7 +233,7 @@ export default function PsePaymentForm({ totalToPay, setColorOnStep }: PsePaymen
                 <input
                   type="email"
                   {...register('confirmEmail', {
-                    onBlur: () => trigger('confirmEmail'),
+                    onChange: () => trigger('confirmEmail'),
                   })}
                   className={inputClasses}
                   placeholder="Confirma tu correo"
@@ -267,8 +269,8 @@ export default function PsePaymentForm({ totalToPay, setColorOnStep }: PsePaymen
                 />
               </div>
               <div className="ml-1 text-sm">
-                <label htmlFor="terms" className="font-bold text-yellow-500 cursor-pointer hover:text-yellow-600">
-                  Acepto Términos y condiciones y Políticas de privacidad.
+                <label className="font-bold text-yellow cursor-pointer ">
+                  Acepto <Link href={'/terms'}>Términos y condiciones</Link> y <Link href={'/politicas-privacidad'}>Políticas de privacidad</Link>.
                 </label>
                 {errors.terms && <p className={errorClasses}><AlertCircle size={12}/> {errors.terms.message}</p>}
               </div>

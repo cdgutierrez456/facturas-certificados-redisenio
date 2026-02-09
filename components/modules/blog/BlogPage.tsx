@@ -17,9 +17,6 @@ export default function BlogPage() {
       <section className="bg-white w-full">
         <BlogPostGrid />
       </section>
-      <section className="bg-white w-full">
-        <CallToAction />
-      </section>
     </section>
   )
 }
