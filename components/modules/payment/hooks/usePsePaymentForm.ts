@@ -1,17 +1,33 @@
 'use client'
 
 import { useEffect, useState } from "react"
+import { UseFormSetValue, UseFormWatch } from "react-hook-form"
 import { consultarBancos, realizarLoging } from "@/services/megaPagos/consultasMegaPagos"
 
-export const usePsePaymentForm = () => {
+interface UsePsePaymentFormProps {
+  watch: UseFormWatch<any>
+  setValue: UseFormSetValue<any>
+}
+
+export const usePsePaymentForm = ({ watch, setValue }: UsePsePaymentFormProps) => {
 
   const [banks, setBanks] = useState<any[]>([])
   const [accessToken, setAccessToken] = useState('')
   const [idUsuario, setIdUsuario] = useState('')
 
+  const userType = watch('userType')
+  const isCompany = userType === 'company'
+
   useEffect(() => {
     getListBanks()
   }, [])
+
+  useEffect(() => {
+
+    if (isCompany) setValue('idType', 'NIT')
+    else setValue('idType', 'CedulaDeCiudadania')
+
+  }, [isCompany, setValue])
 
   const getListBanks = async () => {
     const consulta = await realizarLoging();
@@ -35,6 +51,7 @@ export const usePsePaymentForm = () => {
     banks,
     idUsuario,
     accessToken,
-    parseCurrencyToNumber
+    parseCurrencyToNumber,
+    isCompany
   }
 }

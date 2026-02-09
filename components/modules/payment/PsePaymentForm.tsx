@@ -29,14 +29,10 @@ interface PsePaymentFormProps {
 export default function PsePaymentForm({ totalToPay, setColorOnStep }: PsePaymentFormProps) {
   const router = useRouter()
   const {
-    banks,
-    idUsuario,
-    accessToken,
-    parseCurrencyToNumber
-  } = usePsePaymentForm()
-  const {
     register,
     handleSubmit,
+    watch,
+    setValue,
     formState: { errors, isSubmitting },
   } = useForm<PaymentFormData>({
     resolver: zodResolver(paymentSchema),
@@ -52,6 +48,13 @@ export default function PsePaymentForm({ totalToPay, setColorOnStep }: PsePaymen
       confirmEmail: 'email@gmail.com'
     }
   });
+  const {
+    banks,
+    idUsuario,
+    accessToken,
+    parseCurrencyToNumber,
+    isCompany
+  } = usePsePaymentForm({ watch, setValue })
 
   const onSubmit: SubmitHandler<PaymentFormData> = async (infoForm) => {
     const data = {
@@ -157,7 +160,7 @@ export default function PsePaymentForm({ totalToPay, setColorOnStep }: PsePaymen
               <div>
                 <label className={labelClasses}>Tipo de Identificación</label>
                 <div className="relative">
-                  <select {...register('idType')} className={`${inputClasses} appearance-none`}>
+                  <select {...register('idType')} disabled={isCompany} className={`${inputClasses} appearance-none ${isCompany ? 'opacity-60 cursor-not-allowed' : ''}`}>
                     <option value="">Seleccione</option>
                     <option value="RegistroCivilDeNacimiento">Registro Civil de Nacimiento</option>
                     <option value="TarjetaDeIdentidad">Tarjeta de Identidad</option>
@@ -166,6 +169,7 @@ export default function PsePaymentForm({ totalToPay, setColorOnStep }: PsePaymen
                     <option value="CedulaDeExtranjeria">Cédula de Extranjería</option>
                     <option value="Pasaporte">Pasaporte</option>
                     <option value="DocumentoDeIdentificacionExtranjero">Documento de Identificación Extranjero</option>
+                    <option value="NIT">NIT</option>
                   </select>
                   <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-4 text-gray-700">
                     <svg className="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"/></svg>

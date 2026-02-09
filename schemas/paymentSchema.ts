@@ -6,7 +6,7 @@ export const paymentSchema = z.object({
   idNumber: z
     .string()
     .min(1, 'Campo requerido')
-    .regex(/^\d+$/, 'El número de identificación debe contener solo números'),
+    .regex(/^[a-zA-Z0-9]+$/, 'Caracteres inválidos'),
   fullName: z
     .string()
     .min(1, 'Campo requerido')
