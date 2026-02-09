@@ -5,8 +5,8 @@ import { UseFormSetValue, UseFormWatch } from "react-hook-form"
 import { consultarBancos, realizarLoging } from "@/services/megaPagos/consultasMegaPagos"
 
 interface UsePsePaymentFormProps {
-  watch: UseFormWatch<any>
-  setValue: UseFormSetValue<any>
+  watch?: UseFormWatch<any>
+  setValue?: UseFormSetValue<any>
 }
 
 export const usePsePaymentForm = ({ watch, setValue }: UsePsePaymentFormProps) => {
@@ -15,7 +15,7 @@ export const usePsePaymentForm = ({ watch, setValue }: UsePsePaymentFormProps) =
   const [accessToken, setAccessToken] = useState('')
   const [idUsuario, setIdUsuario] = useState('')
 
-  const userType = watch('userType')
+  const userType = watch ? watch('userType') : ''
   const isCompany = userType === 'company'
 
   useEffect(() => {
@@ -23,9 +23,10 @@ export const usePsePaymentForm = ({ watch, setValue }: UsePsePaymentFormProps) =
   }, [])
 
   useEffect(() => {
-
-    if (isCompany) setValue('idType', 'NIT')
-    else setValue('idType', 'CedulaDeCiudadania')
+    if (setValue) {
+      if (isCompany) setValue('idType', 'NIT')
+      else setValue('idType', 'CedulaDeCiudadania')
+    }
 
   }, [isCompany, setValue])
 

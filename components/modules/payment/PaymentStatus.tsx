@@ -12,7 +12,7 @@ interface PaymentStatusProps {
 }
 
 export default function PaymentStatus({ infoTransaction }: PaymentStatusProps) {
-  const { banks } = usePsePaymentForm()
+  const { banks } = usePsePaymentForm({})
 
   const getNameBank = (idBank: any) => {
     const selectedBank = banks.find(item => item.financialInstitutionCode == idBank)
