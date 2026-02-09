@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { useRouter } from 'next/navigation';
 
 // Servicios y Utilidades
 import { realizarConsulta } from '@/services/megaRed/consultaServiciosMoviles';
@@ -19,7 +20,10 @@ const operatorList: NormalOperator[] = [
   { label: 'Wom', value: '3771', src: '/images/wom.png' },
 ];
 
-export const useBillingForm = (initialOperator: any) => {
+type stepsNames = 'Paso 1 de 3' | 'Paso 2 de 3' | 'Paso 3 de 3';
+
+export const useBillingForm = (initialOperator: any, setColorOnStep: (nameStep: stepsNames) => void) => {
+  const router = useRouter()
   const [arrayDataPay, setArrayDataPay] = useState<any[]>([]);
   const [bills, setBills] = useState<DataInvoiceDTO[]>([]);
   const [totalAmount, setTotalAmount] = useState(0);
@@ -34,10 +38,10 @@ export const useBillingForm = (initialOperator: any) => {
     formState: { errors, isSubmitting }
   } = useForm<DataInvoiceDTO>({
     resolver: zodResolver(dataInvoiceSchema),
-    defaultValues: {
-      operator: operatorList[0].value,
-      referenceNumber: '784511440012'
-    }
+    // defaultValues: {
+    //   operator: operatorList[0].value,
+    //   referenceNumber: '784511440012'
+    // }
   });
 
   const operatorValue = watch("operator");
@@ -100,8 +104,10 @@ export const useBillingForm = (initialOperator: any) => {
   };
 
   const handleDelete = (index: number) => {
-    setBills(bills.filter((_, idx) => idx !== index));
+    const newBills = bills.filter((_, idx) => idx !== index);
+    setBills(newBills);
     setTotalAmount((actVal) => actVal - lastValueFromService)
+    if (!newBills.length) setColorOnStep('Paso 1 de 3');
   };
 
   const formatCurrency = (value: number) => {

@@ -28,7 +28,7 @@ export default function BillingForm({ setColorOnStep, setTotalToPay, infoOperato
     onSubmit,
     onErrors,
     handleDelete
-  } = useBillingForm(infoOperator);
+  } = useBillingForm(infoOperator, setColorOnStep);
 
   const onChangePage = () => {
     setTotalToPay(totalAmountFormatted)
