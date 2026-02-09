@@ -33,6 +33,7 @@ export default function PsePaymentForm({ totalToPay, setColorOnStep }: PsePaymen
     handleSubmit,
     watch,
     setValue,
+    trigger,
     formState: { errors, isSubmitting },
   } = useForm<PaymentFormData>({
     resolver: zodResolver(paymentSchema),
@@ -216,7 +217,9 @@ export default function PsePaymentForm({ totalToPay, setColorOnStep }: PsePaymen
                 <label className={labelClasses}>Correo electrónico*</label>
                 <input
                   type="email"
-                  {...register('email')}
+                  {...register('email', {
+                    onBlur: () => trigger('confirmEmail'),
+                  })}
                   className={inputClasses}
                   placeholder="ejemplo@correo.com"
                 />
@@ -227,7 +230,9 @@ export default function PsePaymentForm({ totalToPay, setColorOnStep }: PsePaymen
                 <label className={labelClasses}>Confirmar correo*</label>
                 <input
                   type="email"
-                  {...register('confirmEmail')}
+                  {...register('confirmEmail', {
+                    onBlur: () => trigger('confirmEmail'),
+                  })}
                   className={inputClasses}
                   placeholder="Confirma tu correo"
                 />
