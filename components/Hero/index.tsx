@@ -13,6 +13,7 @@ interface OperatorImage {
   alt: string;
   bg?: string;
   backgroundImage?: string;
+  value?: string;
 }
 
 interface HeroProps {
@@ -48,6 +49,13 @@ export default function Hero({
     index && setInfoOperator(operatorImages[index])
     setSelectedOperator(index || 0)
     setActualStep(nameStep)
+  }
+
+  const handleOperatorChange = (operatorValue: string) => {
+    const index = operatorImages.findIndex(op => op.value === operatorValue);
+    if (index !== -1) {
+      setSelectedOperator(index);
+    }
   }
 
 
@@ -93,6 +101,7 @@ export default function Hero({
             setColorOnStep={setColorOnStep}
             infoOperator={infoOperator}
             setTotalToPay={setTotalToPay}
+            onOperatorChange={handleOperatorChange}
           />
         )}
         {actualStep === 'Paso 3 de 3' && (

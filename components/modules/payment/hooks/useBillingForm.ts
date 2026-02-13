@@ -22,7 +22,7 @@ const operatorList: NormalOperator[] = [
 
 type stepsNames = 'Paso 1 de 3' | 'Paso 2 de 3' | 'Paso 3 de 3';
 
-export const useBillingForm = (initialOperator: any, setColorOnStep: (nameStep: stepsNames) => void) => {
+export const useBillingForm = (initialOperator: any, setColorOnStep: (nameStep: stepsNames) => void, onOperatorChange?: (operatorValue: string) => void) => {
   const router = useRouter()
   const [arrayDataPay, setArrayDataPay] = useState<any[]>([]);
   const [bills, setBills] = useState<DataInvoiceDTO[]>([]);
@@ -52,6 +52,12 @@ export const useBillingForm = (initialOperator: any, setColorOnStep: (nameStep: 
       setValue('operator', initialOperator.value);
     }
   }, [initialOperator, setValue]);
+
+  useEffect(() => {
+    if (operatorValue && onOperatorChange) {
+      onOperatorChange(operatorValue);
+    }
+  }, [operatorValue, onOperatorChange]);
 
   useEffect(() => {
     localStorage.setItem('bills', JSON.stringify(bills));

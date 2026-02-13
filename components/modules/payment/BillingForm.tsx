@@ -11,9 +11,10 @@ interface BillingFormProps {
   setColorOnStep: (nameStep: stepsNames) => void;
   setTotalToPay: (value: string) => void;
   infoOperator: any;
+  onOperatorChange: (operatorValue: string) => void;
 }
 
-export default function BillingForm({ setColorOnStep, setTotalToPay, infoOperator }: BillingFormProps) {
+export default function BillingForm({ setColorOnStep, setTotalToPay, infoOperator, onOperatorChange }: BillingFormProps) {
   // Consumimos toda la lógica desde el Hook
   const {
     register,
@@ -28,7 +29,7 @@ export default function BillingForm({ setColorOnStep, setTotalToPay, infoOperato
     onSubmit,
     onErrors,
     handleDelete
-  } = useBillingForm(infoOperator, setColorOnStep);
+  } = useBillingForm(infoOperator, setColorOnStep, onOperatorChange);
 
   const onChangePage = () => {
     setTotalToPay(totalAmountFormatted)
