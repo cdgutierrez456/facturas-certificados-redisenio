@@ -44,11 +44,12 @@ export default function PsePaymentForm({ totalToPay, setColorOnStep }: PsePaymen
       userType: 'person',
       idType: 'CedulaDeCiudadania',
       bank: '0',
-      idNumber: '111933594',
-      fullName: 'Cristian David Gutierrez',
-      cellphone: '3128079460',
-      email: 'email@gmail.com',
-      confirmEmail: 'email@gmail.com'
+
+      // idNumber: '111933594',
+      // fullName: 'Cristian David Gutierrez',
+      // cellphone: '3128079460',
+      // email: 'email@gmail.com',
+      // confirmEmail: 'email@gmail.com'
     }
   });
   const {
@@ -269,8 +270,8 @@ export default function PsePaymentForm({ totalToPay, setColorOnStep }: PsePaymen
                 />
               </div>
               <div className="ml-1 text-base">
-                <label className="font-bold text-yellow cursor-pointer ">
-                  Acepto <Link href={'/terms'}>Términos y condiciones</Link> y <Link href={'/politicas-privacidad'}>Políticas de privacidad</Link>.
+                <label className="font-bold text-yellow cursor-pointer">
+                  Acepto <Link href={'/terms'} className='underline'>Términos y condiciones</Link> y <Link href={'/politicas-privacidad'} className='underline'>Políticas de privacidad</Link>.
                 </label>
                 {errors.terms && <p className={errorClasses}><AlertCircle size={12}/> {errors.terms.message}</p>}
               </div>
