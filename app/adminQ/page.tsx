@@ -38,7 +38,7 @@ export default function AdminPanelComponent() {
       <aside className="w-64 bg-slate-800 text-white flex flex-col shadow-lg">
         <div className="p-6 border-b border-slate-700">
           <h1 className="text-2xl font-bold tracking-tight">AdminPanel</h1>
-          <p className="text-sm text-slate-400">Gestión de Plataforma</p>
+          <p className="text-base text-slate-400">Gestión de Plataforma</p>
         </div>
 
         <nav className="flex-1 py-4">
@@ -59,7 +59,7 @@ export default function AdminPanelComponent() {
         </nav>
 
         <div className="p-4 border-t border-slate-700">
-          <button onClick={closeSesion} className="flex items-center w-full px-4 py-2 text-sm font-medium text-slate-300 rounded-lg hover:bg-slate-700 hover:text-white transition-colors">
+          <button onClick={closeSesion} className="flex items-center w-full px-4 py-2 text-base font-medium text-slate-300 rounded-lg hover:bg-slate-700 hover:text-white transition-colors">
             <LogOut size={18} className="mr-3" />
             Cerrar Sesión
           </button>

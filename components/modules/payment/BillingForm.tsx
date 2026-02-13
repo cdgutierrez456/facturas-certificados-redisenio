@@ -49,7 +49,7 @@ export default function BillingForm({ setColorOnStep, setTotalToPay, infoOperato
 
       <form onSubmit={handleSubmit(onSubmit, onErrors)} className="flex flex-col md:flex-row gap-4 items-end mb-8">
         <div className="w-full md:w-1/3 space-y-2">
-          <label className="text-sm font-bold text-gray-900 ml-1">Operador</label>
+          <label className="text-base font-bold text-gray-900 ml-1">Operador</label>
           <div className="w-full bg-white border border-gray-100 shadow-md rounded-full py-2 px-4 flex items-center justify-between hover:bg-gray-50 transition">
             <div className="flex items-center gap-2 w-full">
               <Image
@@ -76,7 +76,7 @@ export default function BillingForm({ setColorOnStep, setTotalToPay, infoOperato
           <div className="w-full md:w-1/2">
             <div>
               <div className="flex items-center gap-2 mb-1">
-                <label className="text-sm font-bold text-gray-900">Método de consulta</label>
+                <label className="text-base font-bold text-gray-900">Método de consulta</label>
               </div>
               <select
                 {...register('referenceMethod')}
@@ -92,7 +92,7 @@ export default function BillingForm({ setColorOnStep, setTotalToPay, infoOperato
         <div className="w-full md:w-1/2">
           <div>
             <div className="flex items-center gap-2 mb-1">
-              <label className="text-sm font-bold text-gray-900">Número de referencia</label>
+              <label className="text-base font-bold text-gray-900">Número de referencia</label>
             </div>
             <input
               {...register('referenceNumber')}
@@ -102,7 +102,7 @@ export default function BillingForm({ setColorOnStep, setTotalToPay, infoOperato
             />
           </div>
           {errors.referenceNumber && (
-            <span className="text-red-500 text-xs mt-1 ml-2 flex items-center gap-1">
+            <span className="text-red-500 text-base mt-1 ml-2 flex items-center gap-1">
               <AlertCircle size={12}/> {errors.referenceNumber.message}
             </span>
           )}
@@ -124,7 +124,7 @@ export default function BillingForm({ setColorOnStep, setTotalToPay, infoOperato
       </form>
 
       <div className="bg-gray-50 rounded-3xl p-6 mb-8">
-        <div className="grid grid-cols-12 gap-4 mb-4 px-2 text-sm font-bold text-black">
+        <div className="grid grid-cols-12 gap-4 mb-4 px-2 text-base font-bold text-black">
           <div className="col-span-3">Operador</div>
           <div className="col-span-5">Método de consulta</div>
           <div className="col-span-4 pl-2">Número de consulta</div>
@@ -132,7 +132,7 @@ export default function BillingForm({ setColorOnStep, setTotalToPay, infoOperato
 
         <div className="max-h-48 overflow-y-auto pr-2 space-y-3 custom-scrollbar">
           {bills.map((bill: any, idx: number) => (
-            <div key={idx} className="grid grid-cols-12 gap-4 items-center text-sm text-gray-600 px-2 py-1">
+            <div key={idx} className="grid grid-cols-12 gap-4 items-center text-base text-gray-600 px-2 py-1">
               <div className="col-span-3 font-medium">{bill.operator}</div>
               <div className="col-span-5">
                 {bill.referenceMethod === 'referencia' ? 'Número de referencia' : 'Número de celular'}

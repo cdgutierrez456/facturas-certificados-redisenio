@@ -41,8 +41,8 @@ export default function FeaturesHome () {
                   {index + 1}
                 </div>
                 <div>
-                  <h3 className="font-bold text-lg text-gray-900">{num.title}</h3>
-                  <p className="text-sm text-gray-700">
+                  <h3 className="font-bold text-[18px] text-gray-900">{num.title}</h3>
+                  <p className="text-base text-gray-700">
                     {num.label}
                   </p>
                 </div>

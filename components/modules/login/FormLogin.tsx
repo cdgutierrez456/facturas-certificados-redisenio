@@ -36,7 +36,7 @@ export default function FormLogin() {
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
       <div className="space-y-2">
-        <label className="text-xs font-semibold text-gray-300 ml-1 uppercase tracking-wider">
+        <label className="text-base font-semibold text-gray-300 ml-1 uppercase tracking-wider">
           Correo Electrónico
         </label>
         <div className="relative group">
@@ -56,7 +56,7 @@ export default function FormLogin() {
           />
         </div>
         {errors.email && (
-          <span className="text-xs text-red-400 ml-1 block">
+          <span className="text-base text-red-400 ml-1 block">
             {errors.email.message}
           </span>
         )}
@@ -64,7 +64,7 @@ export default function FormLogin() {
 
       <div className="space-y-2">
         <div className="flex justify-between items-center ml-1">
-            <label className="text-xs font-semibold text-gray-300 uppercase tracking-wider">Contraseña</label>
+            <label className="text-base font-semibold text-gray-300 uppercase tracking-wider">Contraseña</label>
         </div>
         <div className="relative group">
           <div className={`absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none transition-colors
@@ -83,7 +83,7 @@ export default function FormLogin() {
           />
         </div>
           {errors.password && (
-          <span className="text-xs text-red-400 ml-1 block">
+          <span className="text-base text-red-400 ml-1 block">
             {errors.password.message}
           </span>
         )}

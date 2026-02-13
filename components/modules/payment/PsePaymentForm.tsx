@@ -116,8 +116,8 @@ export default function PsePaymentForm({ totalToPay, setColorOnStep }: PsePaymen
   }
 
   const inputClasses = "w-full bg-white border-none rounded-full py-2 px-4 text-gray-600 shadow-sm focus:outline-none focus:ring-2 focus:ring-yellow-400 placeholder-gray-300";
-  const labelClasses = "block text-sm font-bold text-gray-800 mb-1 ml-1";
-  const errorClasses = "text-red-500 text-xs mt-1 ml-2 flex items-center gap-1";
+  const labelClasses = "block text-base font-bold text-gray-800 mb-1 ml-1";
+  const errorClasses = "text-red-500 text-base mt-1 ml-2 flex items-center gap-1";
 
   return (
     <div className="flex flex-col items-center justify-center w-full max-w-4xl relative">
@@ -268,7 +268,7 @@ export default function PsePaymentForm({ totalToPay, setColorOnStep }: PsePaymen
                   className="w-5 h-5 border-gray-300 rounded text-yellow-500 focus:ring-yellow-400 cursor-pointer"
                 />
               </div>
-              <div className="ml-1 text-sm">
+              <div className="ml-1 text-base">
                 <label className="font-bold text-yellow cursor-pointer ">
                   Acepto <Link href={'/terms'}>Términos y condiciones</Link> y <Link href={'/politicas-privacidad'}>Políticas de privacidad</Link>.
                 </label>

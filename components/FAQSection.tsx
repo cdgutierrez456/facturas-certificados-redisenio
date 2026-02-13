@@ -33,7 +33,7 @@ export default function FAQSection() {
               >
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-4">
-                    <p className="text-sm font-medium text-gray-900">
+                    <p className="text-base font-medium text-gray-900">
                       {faq.question}
                     </p>
                   </div>
@@ -58,7 +58,7 @@ export default function FAQSection() {
                       : "max-h-0 opacity-0"
                   }`}
                 >
-                  <div className="pl-10 pr-2 text-sm text-gray-700">
+                  <div className="pl-10 pr-2 text-base text-gray-700">
                     {faq.answer}
                   </div>
                 </div>

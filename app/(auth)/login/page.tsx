@@ -17,7 +17,7 @@ export default function LoginPage() {
 
         <div className="text-center mb-8">
           <h2 className="text-3xl font-bold text-white mb-2">Bienvenid@</h2>
-          <p className="text-gray-400 text-sm">Ingresa tus datos para gestionar la plataforma</p>
+          <p className="text-gray-400 text-base">Ingresa tus datos para gestionar la plataforma</p>
         </div>
 
         <FormLogin />

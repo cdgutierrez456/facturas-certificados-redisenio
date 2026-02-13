@@ -20,7 +20,7 @@ export default function CardGridHome() {
         {cards.map((card, index) => (
           <div key={card.id} className="bg-white shadow-md rounded-2xl p-6 text-center h-52 flex justify-center items-center flex-col">
             <p className="text-yellow text-3xl font-bold">{index + 1}</p>
-            <p className="text-sm text-gray-700 mt-2">{card.text}</p>
+            <p className="text-base text-gray-700 mt-2">{card.text}</p>
           </div>
         ))}
       </div>

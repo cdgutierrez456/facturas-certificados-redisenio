@@ -62,7 +62,7 @@ export default function PostDetail({ post }: PostDetailProps) {
 
           {/* Metadatos (Fecha) */}
           {post.hideDate === 'false' && (
-            <div className="flex items-center justify-center md:justify-start text-gray-500 text-sm gap-4">
+            <div className="flex items-center justify-center md:justify-start text-gray-500 text-base gap-4">
               <div className="flex items-center gap-1">
                 <Calendar size={16} />
                 <time dateTime={post.date}>{formatDate(post.date)}</time>
@@ -118,7 +118,7 @@ export default function PostDetail({ post }: PostDetailProps) {
 
       {/* --- Footer del artículo (Opcional) --- */}
       <div className="max-w-4xl mx-auto px-4 mt-12 border-t pt-8">
-        <p className="text-center text-gray-500 text-sm">
+        <p className="text-center text-gray-500 text-base">
           ¿Te gustó este artículo? ¡Compártelo!
         </p>
         {/* Aquí podrías agregar botones de redes sociales */}

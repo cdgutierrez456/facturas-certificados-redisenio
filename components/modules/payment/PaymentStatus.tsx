@@ -38,8 +38,8 @@ export default function PaymentStatus({ infoTransaction }: PaymentStatusProps) {
 
   const InfoRow = ({ label, value }: { label: string, value: string }) => (
     <div className="flex justify-between items-start py-1 border-b border-gray-50 last:border-0 transition-colors sm:px-2 rounded-lg m-0">
-      <span className="font-bold text-gray-900 text-sm sm:text-base">{label}</span>
-      <span className="text-gray-600 text-right text-sm sm:text-base break-all ml-4">{value}</span>
+      <span className="font-bold text-gray-900 text-base">{label}</span>
+      <span className="text-gray-600 text-right text-base break-all ml-4">{value}</span>
     </div>
   );
 
@@ -79,7 +79,7 @@ export default function PaymentStatus({ infoTransaction }: PaymentStatusProps) {
         </div>
 
         <div className="flex flex-col items-center gap-6">
-          <p className="text-center text-gray-500 text-sm max-w-md">
+          <p className="text-center text-gray-500 text-base max-w-md">
             Estamos finalizando el pago de tu factura, por favor espera.
             Consulta el resultado a través del siguiente botón
           </p>

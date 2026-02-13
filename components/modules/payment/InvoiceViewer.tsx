@@ -48,10 +48,10 @@ export default function InvoiceViewer() {
 
   const DataRow = ({ label, value }: { label: string; value: string | number }) => (
     <div className="flex justify-between items-start py-1 m-0">
-      <span className="font-bold text-gray-900 text-sm sm:text-base">
+      <span className="font-bold text-gray-900 text-base">
         {label}:
       </span>
-      <span className="text-gray-600 text-right text-sm sm:text-base">
+      <span className="text-gray-600 text-right text-base">
         {value}
       </span>
     </div>
@@ -65,7 +65,7 @@ export default function InvoiceViewer() {
             key={i}
             onClick={() => setActiveTab(i)}
             className={`
-              px-8 py-3 rounded-full text-sm font-bold transition-all duration-300 shadow-lg
+              px-8 py-3 rounded-full text-base font-bold transition-all duration-300 shadow-lg
               ${
                 activeTab === i
                   ? "bg-white text-gray-900 scale-110 ring-4 ring-yellow-400 z-10"

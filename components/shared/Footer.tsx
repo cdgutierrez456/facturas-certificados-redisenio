@@ -8,13 +8,13 @@ export const Footer = () => {
           <div>
             <h2 className="text-2xl font-bold mb-6">Pago De Factura</h2>
           </div>
-          <p className="text-sm mt-6">
+          <p className="text-base mt-6">
             <Link href={'/login'}>&copy;</Link> 2025 Todos los derechos reservados
           </p>
         </div>
         <div className="hidden md:block w-px bg-white/20 mx-6" />
         <div className="flex flex-col gap-2">
-          <ul className="space-y-1 text-sm">
+          <ul className="space-y-1 text-base">
             <li>Megapagos.co sas</li>
             <li>Cra 7 4 32, Aguadas, Caldas</li>
             <li>comunicaciones@certificadostradicionylibertad.co</li>
@@ -23,7 +23,7 @@ export const Footer = () => {
         </div>
         <div className="hidden md:block w-px bg-white/20 mx-6" />
         <div className="flex flex-col gap-2">
-          <ul className="space-y-2 text-sm">
+          <ul className="space-y-2 text-base">
             <li><Link href="/politicas-privacidad" className="hover:underline">Política de privacidad</Link></li>
             <li><Link href="/terms" className="hover:underline">Términos y condiciones</Link></li>
             <li><Link href="/preguntas-frecuentes" className="hover:underline">Preguntas frecuentes</Link></li>
