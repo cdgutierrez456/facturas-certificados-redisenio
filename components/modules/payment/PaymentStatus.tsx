@@ -1,11 +1,12 @@
 'use client'
 
 import { CheckCircle, ClockArrowUp, Ban } from 'lucide-react';
-import Link from 'next/link';
 
 import { usePsePaymentForm } from './hooks/usePsePaymentForm';
 
 import InvoiceViewer from './InvoiceViewer';
+
+import { formatDateTime12h } from '@/utils/formatters';
 
 interface PaymentStatusProps {
   infoTransaction: any;
@@ -72,13 +73,13 @@ export default function PaymentStatus({ infoTransaction }: PaymentStatusProps) {
         <div className="space-y-3 mb-5">
           <InfoRow label="Código de pago:" value={info.externalDetails?.payment_code || ''} />
           <InfoRow label="Estado:" value={statusInfo[info?.status || '']?.text} />
-          <InfoRow label="Fecha de pago:" value={info.internalDetails?.date_payment || ''} />
+          <InfoRow label="Fecha de pago:" value={formatDateTime12h(info.internalDetails?.date_payment) || ''} />
           <InfoRow label="Medio de pago:" value={'PSE'} />
           <InfoRow label="Banco:" value={getNameBank(info.externalDetails?.entity_franquise || '')} />
           <InfoRow label="Email del pagador:" value={info?.payerDetails?.email || ''} />
         </div>
 
-        <div className="flex flex-col items-center gap-6">
+        {/* <div className="flex flex-col items-center gap-6">
           <p className="text-center text-gray-500 text-base max-w-md">
             Estamos finalizando el pago de tu factura, por favor espera.
             Consulta el resultado a través del siguiente botón
@@ -90,13 +91,13 @@ export default function PaymentStatus({ infoTransaction }: PaymentStatusProps) {
           >
             Consultar resultado
           </Link>
-        </div>
+        </div> */}
 
       </div>
-      {/* {statusInfo[info?.status || '']?.value == 1 && (
+      {statusInfo[info?.status || '']?.value == 1 && (
         <InvoiceViewer />
-      )} */}
-      <InvoiceViewer />
+      )}
+      {/* <InvoiceViewer /> */}
     </div>
   );
 }

@@ -1,6 +1,13 @@
+'use client'
+
 import Image from "next/image";
 
 export default function HeroSectionHome() {
+
+  const scrollToTop = () => {
+    globalThis.scrollTo({ top: 0, behavior: "smooth" });
+  };
+
   return (
     <section className="w-full bg-white py-12 px-4">
       <div className="relative w-full max-w-7xl mx-auto h-[400px] md:h-[500px] rounded-[24px] overflow-hidden">
@@ -26,7 +33,10 @@ export default function HeroSectionHome() {
           <p className="text-2xl font-light mb-4 leading-tight">
             Empieza ahora - <span className="font-bold">Paga gratis y sin filas</span>
           </p>
-          <button className="bg-white text-black font-semibold px-8 py-2 rounded-full shadow-md hover:scale-105 transition-transform cursor-pointer">
+          <button
+            onClick={scrollToTop}
+            className="bg-white text-black font-semibold px-8 py-2 rounded-full shadow-md hover:scale-105 transition-transform cursor-pointer"
+          >
             Iniciar pago
           </button>
         </div>

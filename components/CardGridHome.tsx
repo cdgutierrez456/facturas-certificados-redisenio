@@ -1,3 +1,4 @@
+'use client'
 
 export default function CardGridHome() {
   const cards = [
@@ -6,6 +7,10 @@ export default function CardGridHome() {
     { id: 3, text: 'Agrega varias facturas si lo necesitas, incluso de diferentes operadores.' },
     { id: 4, text: 'Paga en línea con total seguridad ¡Listo! Recibes la confirmación al instante' },
   ];
+
+  const scrollToTop = () => {
+    globalThis.scrollTo({ top: 0, behavior: "smooth" });
+  };
 
   return (
     <section className="bg-grey-light py-10 px-5">
@@ -23,6 +28,15 @@ export default function CardGridHome() {
             <p className="text-base text-gray-700 mt-2">{card.text}</p>
           </div>
         ))}
+      </div>
+      <div className="flex flex-col items-center mt-7">
+        <p className="text-base text-black mb-4 font-bold">No cobramos comisión ni tarifas adicionales</p>
+        <button
+          onClick={scrollToTop}
+          className="bg-yellow text-black font-semibold px-8 py-2 rounded-full shadow-md hover:scale-105 transition-transform cursor-pointer"
+        >
+          Iniciar el pago
+        </button>
       </div>
     </section>
   );

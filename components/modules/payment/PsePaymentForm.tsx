@@ -45,11 +45,11 @@ export default function PsePaymentForm({ totalToPay, setColorOnStep }: PsePaymen
       idType: 'CedulaDeCiudadania',
       bank: '0',
 
-      // idNumber: '111933594',
-      // fullName: 'Cristian David Gutierrez',
-      // cellphone: '3128079460',
-      // email: 'email@gmail.com',
-      // confirmEmail: 'email@gmail.com'
+      idNumber: '111933594',
+      fullName: 'Cristian David Gutierrez',
+      cellphone: '3128079460',
+      email: 'email@gmail.com',
+      confirmEmail: 'email@gmail.com'
     }
   });
   const {
@@ -69,8 +69,8 @@ export default function PsePaymentForm({ totalToPay, setColorOnStep }: PsePaymen
           idtiposolicitud: 5,
           linkcode: "-1",
           solicitudenvio: "N",
-          // externalurl: "http://localhost:3000/paid",
-          externalurl: "https://facturas-certificados-redisenio.vercel.app/paid",
+          externalurl: "http://localhost:3000/paid",
+          // externalurl: "https://facturas-certificados-redisenio.vercel.app/paid",
         },
         step1: {
           name: "Servicios Moviles",

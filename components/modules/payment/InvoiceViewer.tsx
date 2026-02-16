@@ -8,6 +8,7 @@ import Link from "next/link";
 import { useIvoiceViewer } from "./hooks/useInvoiceViewer";
 
 import { showAlert } from "@/utils/alerts";
+import { formatDateTime12h } from "@/utils/formatters";
 
 export default function InvoiceViewer() {
   const router = useRouter();
@@ -108,51 +109,33 @@ export default function InvoiceViewer() {
           )}
         </div>
 
-        {/* --- CONTENIDO DE LA FACTURA --- */}
         {!loading && currentResult?.status === "success" && voucher && (
           <div className="space-y-3 mb-10" key={activeTab}>
             <DataRow
               label="Convenio"
               value={secondSection?.convenio || "N/A"}
             />
-
-            {/* Si existe el código de pago/factura */}
             <DataRow
               label="Número de referencia"
               value={secondSection?.no_factura || "N/A"}
             />
-
             <DataRow label="Valor" value={secondSection?.valor || "$0"} />
-
-            {/* Nota: En tu JSON la llave tiene dos puntos al final "costo_transaccion:" */}
             <DataRow
               label="Costo de transacción"
               value={secondSection?.["costo_transaccion:"] || "$0"}
             />
-
-            {/* Combinamos Fecha y Hora */}
             <DataRow
               label="Fecha (comprobante)"
-              value={`${firstSection?.fecha || ""} - ${firstSection?.hora || ""}`}
+              value={`${firstSection?.fecha || ""} - ${formatDateTime12h(firstSection?.hora) || ""}`}
             />
-
             <DataRow
               label="Sucursal"
               value={firstSection?.sucursal || "Virtual"}
             />
-            <DataRow
-              label="Dispositivo"
-              value={firstSection?.dispositivo || "N/A"}
-            />
-            <DataRow label="Id Trx" value={firstSection?.id_trx || "N/A"} />
-            <DataRow label="Id Aut" value={firstSection?.id_aut || "N/A"} />
-
-            {/* Email del pagador (Podrías sacarlo de localStorage si no viene en la respuesta del API) */}
             <DataRow label="Email del pagador" value="cliente@megared.co" />
           </div>
         )}
 
-        {/* Logo del Banco */}
         <div className="flex justify-center mb-8 border-t pt-6">
           <div className="flex items-center gap-2">
             <span className="text-xl md:text-2xl font-bold text-blue-900">
@@ -177,7 +160,6 @@ export default function InvoiceViewer() {
             <Download size={20} />
             Descargar comprobante
           </button>
-
           <Link
             href="/"
             className="flex items-center justify-center bg-white border-2 border-gray-200 hover:bg-gray-50 text-black font-bold py-3 px-10 rounded-full shadow-sm w-full sm:w-auto transition-transform active:scale-95"
