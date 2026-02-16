@@ -59,8 +59,6 @@ export const useIvoiceViewer = () => {
       }
     });
     const finalResults = await Promise.all(promises);
-    console.log('Final Results:', finalResults);
-
     setResults(finalResults);
     setLoading(false);
 

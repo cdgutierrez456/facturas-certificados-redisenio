@@ -4,6 +4,7 @@ import { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
 import { CheckCircle, Download, Loader2, XCircle } from "lucide-react";
 import Link from "next/link";
+import { toPng } from 'html-to-image';
 
 import { useIvoiceViewer } from "./hooks/useInvoiceViewer";
 
@@ -18,6 +19,7 @@ export default function InvoiceViewer() {
 
   const activeInvoice = listInvoices.find((_, i) => i === activeTab);
 
+  const receiptRef = useRef<HTMLDivElement>(null);
   const hasProcessed = useRef(false);
 
   useEffect(() => {
@@ -41,6 +43,31 @@ export default function InvoiceViewer() {
     hasProcessed.current = true;
     processBatch(jsonDataPays);
   }, [processBatch]);
+
+  const handleDownload = async () => {
+    if (receiptRef.current === null) return;
+
+    try {
+      const dataUrl = await toPng(receiptRef.current, {
+        cacheBust: true,
+        backgroundColor: "#ffffff",
+        filter: (node) => {
+          return node.id !== "action-buttons";
+        },
+      });
+
+      const link = document.createElement("a");
+      link.download = `comprobante-factura-${activeTab + 1}.png`;
+      link.href = dataUrl;
+      link.click();
+    } catch (err) {
+      console.error("Error al generar la imagen:", err);
+      showAlert({
+        type: "error",
+        message: "Hubo un error al generar el comprobante.",
+      });
+    }
+  };
 
   const currentResult = results[activeTab];
   const voucher = currentResult?.data?.data?.voucher?.detail;
@@ -79,7 +106,10 @@ export default function InvoiceViewer() {
         ))}
       </div>
 
-      <div className="bg-white w-full rounded-[30px] shadow-2xl p-6 md:p-10 transition-all duration-500 animate-in fade-in zoom-in">
+      <div
+        ref={receiptRef}
+        className="bg-white w-full rounded-[30px] shadow-2xl p-6 md:p-10 transition-all duration-500 animate-in fade-in zoom-in"
+      >
         <div className="flex flex-col items-center mb-8">
           {loading ? (
             <div className="flex flex-col items-center gap-2 text-yellow-600">
@@ -152,8 +182,9 @@ export default function InvoiceViewer() {
         </div>
 
         {/* Botones de Acción */}
-        <div className="flex flex-col sm:flex-row items-center justify-center gap-4 w-full">
+        <div id="action-buttons" className="flex flex-col sm:flex-row items-center justify-center gap-4 w-full">
           <button
+            onClick={handleDownload}
             disabled={loading || currentResult?.status !== "success"}
             className="flex items-center justify-center gap-2 bg-yellow-400 hover:bg-yellow-500 disabled:bg-gray-300 disabled:text-gray-500 text-black font-bold py-3 px-6 rounded-full shadow-lg shadow-yellow-400/30 transition-transform transform hover:scale-105 active:scale-95 w-full sm:w-auto"
           >
