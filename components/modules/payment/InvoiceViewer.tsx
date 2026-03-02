@@ -17,8 +17,6 @@ export default function InvoiceViewer() {
   const [listInvoices, setListInvoices] = useState<any[]>([]);
   const { processBatch, loading, results } = useIvoiceViewer();
 
-  const activeInvoice = listInvoices.find((_, i) => i === activeTab);
-
   const receiptRef = useRef<HTMLDivElement>(null);
   const hasProcessed = useRef(false);
 
@@ -191,12 +189,21 @@ export default function InvoiceViewer() {
             <Download size={20} />
             Descargar comprobante
           </button>
-          <Link
-            href="/"
+          <button
+            onClick={() => {
+              const billsString = localStorage.getItem("bills");
+              const bills = billsString ? JSON.parse(billsString) : [];
+              bills.forEach((bill: any) => {
+                localStorage.removeItem(`invoice_result_${bill.AgrmId}_${bill.amount}`);
+              });
+              localStorage.removeItem("bills");
+              localStorage.removeItem("dataPays");
+              router.push("/");
+            }}
             className="flex items-center justify-center bg-white border-2 border-gray-200 hover:bg-gray-50 text-black font-bold py-3 px-10 rounded-full shadow-sm w-full sm:w-auto transition-transform active:scale-95"
           >
             Finalizar
-          </Link>
+          </button>
         </div>
       </div>
     </div>

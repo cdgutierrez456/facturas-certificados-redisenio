@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect } from 'react';
+// import { useEffect } from 'react';
 import { CheckCircle, ClockArrowUp, Ban } from 'lucide-react';
 
 import { usePsePaymentForm } from './hooks/usePsePaymentForm';
@@ -16,9 +16,9 @@ interface PaymentStatusProps {
 export default function PaymentStatus({ infoTransaction }: PaymentStatusProps) {
   const { banks } = usePsePaymentForm({})
 
-  useEffect(() => {
-    return () => { localStorage.clear() };
-  }, []);
+  // useEffect(() => {
+  //   return () => { localStorage.clear() };
+  // }, []);
 
   const getNameBank = (idBank: any) => {
     const selectedBank = banks.find(item => item.financialInstitutionCode == idBank)
